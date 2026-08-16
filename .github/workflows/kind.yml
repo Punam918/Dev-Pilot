@@ -1,0 +1,45 @@
+name: kind-integration
+# Explicit integration exercise; never claims a live cluster was tested by static CI.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cluster:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        with: {persist-credentials: false}
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c
+        with: {python-version: '3.12'}
+      - run: python -m pip install -r requirements/dev.txt && python -m pip install --no-deps -e .
+      - name: Require preinstalled kubectl; install versioned kind and Helm
+        run: |
+          command -v kubectl
+          go install sigs.k8s.io/kind@v0.27.0
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+          bash scripts/install-helm.sh "$RUNNER_TEMP/bin"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+      - run: bash scripts/kind-up.sh
+      - name: Real Job runner workflow and network-denial proof
+        run: |
+          kubectl --context kind-devpilot -n devpilot port-forward svc/devpilot 8088:8080 > /tmp/devpilot-portforward.log 2>&1 &
+          PF=$!; trap 'kill "$PF" || true' EXIT
+          for n in $(seq 1 60); do curl -fsS http://127.0.0.1:8088/readyz && break; sleep 1; done
+          python scripts/http_smoke.py --token-file .secrets/api-token --metrics-token-file .secrets/metrics-token
+          python scripts/cluster-smoke.py --approve-trusted-fixture --out outputs/ci-kind-smoke
+      - name: Scoped cluster diagnostics
+        if: always()
+        run: |
+          mkdir -p outputs
+          kubectl --context kind-devpilot -n devpilot get pods -o wide > outputs/ci-kind-pods.txt || true
+          kubectl --context kind-devpilot -n devpilot-runners get events > outputs/ci-kind-events.txt || true
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4
+        if: always()
+        with:
+          name: kind-evidence
+          path: outputs/ci-kind*
+          retention-days: 14
+      - if: always()
+        run: kind delete cluster --name devpilot
