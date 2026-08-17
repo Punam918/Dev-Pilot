@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: devpilot
+  namespace: argocd
+spec:
+  description: DevPilot control plane and restricted runner RBAC
+  sourceRepos: [https://github.com/REPLACE_OWNER/devpilot.git]
+  destinations:
+    - {server: https://kubernetes.default.svc, namespace: devpilot}
+    - {server: https://kubernetes.default.svc, namespace: devpilot-runners}
+  # No cluster-wide RBAC, privileged namespaces, or broad application permissions.
+  clusterResourceWhitelist:
+    - {group: "", kind: Namespace}
+  namespaceResourceWhitelist:
+    - {group: "", kind: ServiceAccount}
+    - {group: "", kind: ConfigMap}
+    - {group: "", kind: Service}
+    - {group: "", kind: PersistentVolumeClaim}
+    - {group: apps, kind: Deployment}
+    - {group: networking.k8s.io, kind: Ingress}
+    - {group: networking.k8s.io, kind: NetworkPolicy}
+    - {group: rbac.authorization.k8s.io, kind: Role}
+    - {group: rbac.authorization.k8s.io, kind: RoleBinding}
+    - {group: monitoring.coreos.com, kind: ServiceMonitor}

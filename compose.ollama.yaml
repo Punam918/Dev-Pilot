@@ -1,0 +1,10 @@
+name: devpilot-inference
+# Optional local CPU-compatible inference. OLLAMA_IMAGE must be a reviewed tag/digest.
+services:
+  ollama:
+    image: ${OLLAMA_IMAGE:?Set OLLAMA_IMAGE to a reviewed ollama/ollama tag or digest}
+    ports: ["127.0.0.1:11434:11434"]
+    volumes: [ollama-models:/root/.ollama]
+    restart: unless-stopped
+volumes:
+  ollama-models:
