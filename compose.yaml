@@ -1,0 +1,44 @@
+name: devpilot
+# Default: scripted fixtures only. Real-model repair uses host Python + Docker,
+# or the Kubernetes Job runner. There is NO host Docker socket mount here.
+services:
+  devpilot:
+    image: devpilot:local
+    build: .
+    init: true
+    ports: ["127.0.0.1:${DP_HTTP_PORT:-8088}:8080"]
+    environment:
+      DP_PROVIDER: demo
+      DP_RUNNER: host-trusted
+      DP_TRUST_LOCAL_CODE: "true"
+      DP_HOST: 0.0.0.0
+      DP_PORT: "8080"
+      DP_ALLOWED_HOSTS: '["localhost","127.0.0.1","[::1]","devpilot"]'
+      DP_WORKSPACE_DIR: /data/workspace
+      DP_DATA_DIR: /data/state
+      DP_API_TOKEN_FILE: /run/secrets/api-token
+      DP_METRICS_TOKEN_FILE: /run/secrets/metrics-token
+      DP_DOCKER_TOOLS: "false"
+      DP_LOG_JSON: "true"
+    secrets: [api-token, metrics-token]
+    volumes: [devpilot-data:/data]
+    read_only: true
+    tmpfs: ["/tmp:rw,nosuid,nodev,size=128m,mode=1777"]
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    pids_limit: 256
+    mem_limit: 1536m
+    cpus: 2
+    stop_grace_period: 45s
+    restart: unless-stopped
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/livez',timeout=2)"]
+      interval: 15s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
+volumes:
+  devpilot-data:
+secrets:
+  api-token: {file: ./.secrets/api-token}
+  metrics-token: {file: ./.secrets/metrics-token}

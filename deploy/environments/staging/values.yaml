@@ -1,0 +1,10 @@
+# Local lab. Use release devpilot in namespace devpilot.
+replicaCount: 1
+production: false
+image: {repository: devpilot, tag: local, digest: ""}
+config:
+  provider: demo
+  seed: true
+runner:
+  mode: kubernetes
+  image: {repository: devpilot-runner, tag: local, digest: ""}
