@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Dev-Pilot — investigate code, review changes, and verify results in one workspace.">
+  <meta name="theme-color" content="#111827">
+  <title>Dev-Pilot · Engineering workspace</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#workspace">Skip to workspace</a>
+<svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 7-5 5 5 5m8-10 5 5-5 5m-3-14-2 20"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/><path d="m8 12 3 3 5-6"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h5l3 4h6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h7m4 0h5M4 17h3m4 0h9"/><circle cx="13" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></symbol>
+  <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m6 9 3 3-3 3m7 0h5"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 4h7l1 2 1-2h7v15h-7l-1 1-1-1H4V4Zm8 2v14"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M4 16v5h16v-5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/></symbol>
+</defs></svg>
+<div class="shell">
+  <aside class="sidebar" aria-label="Workspace navigation">
+    <a class="brand" href="/" aria-label="Dev-Pilot home"><span class="brand-icon"><svg class="icon" aria-hidden="true"><use href="#i-code"/></svg></span><span>dev-pilot<span class="brand-period">.</span><small>ENGINEERING WORKSPACE</small></span></a>
+    <div class="workspace-switch"><span class="workspace-avatar">DP</span><div><strong>Local workspace</strong><span>Engineering environment</span></div></div>
+    <p class="nav-label">WORKSPACE</p>
+    <nav class="navigation">
+      <a class="nav-item active" href="#workspace" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg>Workbench<span class="nav-dot"></span></a>
+      <a class="nav-item" href="#history-section"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg>Run history</a>
+      <a class="nav-item" href="/docs" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>API reference<span class="external-arrow">↗</span></a>
+    </nav>
+    <section class="access" id="access-panel">
+      <div class="access-title"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><h2>Connect your workspace</h2></div>
+      <p>Enter your access token to start an investigation.</p>
+      <label for="token">Access token</label>
+      <input id="token" type="password" placeholder="Paste your access token" autocomplete="off" spellcheck="false">
+      <button class="button primary full" id="connect">Connect workspace<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      <details class="token-help"><summary>Where do I find my token?</summary><p>Run this in the project directory:</p><code>DP_DATA_DIR=.devpilot-local .venv/bin/python -m devpilot token</code><p>Use the data directory of your running server. The token stays in this browser tab.</p></details>
+    </section>
+    <section class="history-section" id="history-section"><div class="side-section-heading"><h2>RECENT ACTIVITY</h2><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></div><div id="history"><p class="history-empty">Connect to view your recent investigations.</p></div></section>
+    <div class="sidebar-bottom">
+      <details class="runtime-details"><summary><svg class="icon" aria-hidden="true"><use href="#i-sliders"/></svg>Environment details<span>⌄</span></summary><div class="system-info"><div><span>Provider</span><strong id="provider">Not connected</strong></div><div><span>Runner</span><strong id="runner">—</strong></div><div><span>Version</span><strong id="version">—</strong></div><button class="text-button" id="model-check" disabled>Check model connection ↗</button><p id="model-check-result" role="status"></p></div></details>
+      <div class="connection"><span class="dot" id="connection-dot"></span><span id="connection-label">Not connected</span><span class="local-tag">LOCAL</span></div>
+      <div class="privacy-note"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span>Your code. Your control.</span></div>
+    </div>
+  </aside>
+  <main id="workspace" tabindex="-1">
+    <header class="topbar"><div class="breadcrumbs"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg><span>Workspace</span><span class="breadcrumb-divider">/</span><strong>Workbench</strong></div><div class="topbar-right"><span class="review-badge"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg>Human review enabled</span><span class="operator-avatar" aria-label="Local operator">DP</span></div></header>
+    <div class="main-content">
+      <div class="workspace-head"><div><p class="eyebrow">YOUR ENGINEERING WORKSPACE</p><h1>From issue to insight.</h1><p class="page-description">Investigate a bug, review the changes, and verify the result.</p></div><span class="workspace-badge"><span></span>Isolated repository copies</span></div>
+      <div class="workflow" aria-label="Investigation workflow"><div><span class="step-number">01</span><span><strong>Describe the issue</strong><small>Give your investigation a starting point</small></span></div><span class="step-line"></span><div><span class="step-number">02</span><span><strong>Review the changes</strong><small>Stay in control of every action</small></span></div><span class="step-line"></span><div><span class="step-number">03</span><span><strong>Verify the outcome</strong><small>Leave with a patch and test evidence</small></span></div></div>
+      <div class="banner" id="demo-banner" hidden><span class="banner-label">Demo workspace</span><span>Predefined investigations with real tools and tests. No AI model is used in this mode.</span></div>
+      <div class="banner caution" id="runner-warning" hidden><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span><strong>Trusted examples only.</strong> Tests run on this computer. Use an isolated runner for other repositories.</span></div>
+      <div class="error-banner" id="error" role="alert" hidden></div>
+      <section class="task-card" aria-labelledby="task-heading">
+        <div class="section-heading"><div class="heading-with-icon"><span class="section-icon"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg></span><div><h2 id="task-heading">New investigation</h2><p>What would you like to resolve?</p></div></div><span class="micro-label">START HERE</span></div>
+        <div class="task-body"><div class="task-options"><div class="field-group"><label for="repo"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg>Repository</label><select id="repo" disabled><option value="">Connect to select a repository</option></select></div><div class="field-group"><label for="mode"><svg class="icon" aria-hidden="true"><use href="#i-sliders"/></svg>Investigation mode</label><select id="mode"><option value="repair">Investigate & repair</option><option value="diagnose">Diagnose only</option></select></div></div>
+        <div class="task-input"><label class="sr-only" for="task">Describe the issue</label><textarea id="task" rows="3" maxlength="4000" placeholder="Describe the issue, what you expected, and any failing tests…"></textarea><div class="input-caption"><span>Be specific. A good starting point makes a better investigation.</span><span id="task-count">0 / 4,000</span></div></div>
+        <div class="examples"><span>Try an example</span><button data-example="redis">Redis configuration<span>↗</span></button><button data-example="pagination">Pagination bug<span>↗</span></button><button data-example="normalize">Username normalization<span>↗</span></button></div></div>
+        <div class="task-footer"><span class="task-assurance"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg>Your original repository stays unchanged.</span><div class="actions"><button class="button danger" id="cancel" hidden>Cancel run</button><button class="button primary" id="run" disabled>Investigate<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button></div></div>
+      </section>
+      <section id="approval" class="approval-card" hidden aria-live="polite" aria-labelledby="approval-title"><div class="approval-head"><div><p class="eyebrow">YOUR REVIEW IS NEEDED</p><h2 id="approval-title">Approval required</h2></div><span class="pill amber">PAUSED</span></div><p id="approval-warning"></p><code class="hash" id="approval-hash"></code><pre id="approval-preview"></pre><div class="approval-actions"><span>Approval applies only to this action and snapshot.</span><button class="button secondary" id="deny">Decline</button><button class="button primary" id="approve"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Approve action</button></div></section>
+      <div class="results-grid">
+        <section class="trace-panel panel" aria-labelledby="activity-heading"><div class="section-heading"><div><h2 id="activity-heading">Investigation activity</h2><p>A clear record of each step.</p></div><span class="event-badge" id="event-count">0 EVENTS</span></div><div class="trace-toolbar"><div class="trace-tabs" role="group" aria-label="Filter investigation activity"><button class="selected" data-filter="all" aria-pressed="true">All activity</button><button data-filter="tools" aria-pressed="false">Tool calls</button><button data-filter="approvals" aria-pressed="false">Approvals</button></div><span class="trace-label"><span class="live-indicator"></span>Activity log</span></div><div class="trace" id="trace"><div class="empty"><div class="empty-illustration"><span class="empty-orbit"></span><div class="terminal-icon"><svg class="icon" aria-hidden="true"><use href="#i-terminal"/></svg></div><span class="empty-check"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span></div><h3>Every step, in the open.</h3><p>Start an investigation to follow tool calls,<br>review proposed edits, and see test results.</p><span class="empty-caption">Your next breakthrough starts above.</span></div></div></section>
+        <aside class="summary-panel panel" aria-labelledby="summary-heading"><div class="section-heading"><div><h2 id="summary-heading">Run overview</h2><p>The outcome, backed by evidence.</p></div><svg class="icon muted" aria-hidden="true"><use href="#i-clock"/></svg></div><div class="status-row"><span>Run status</span><span class="pill" id="run-status" role="status">IDLE</span></div><div class="metrics"><div><span>Tool calls</span><strong id="metric-tools">—</strong></div><div><span>Elapsed time</span><strong id="metric-time">—</strong></div><div><span>Tool errors</span><strong id="metric-errors">—</strong></div><div><span>Model turns</span><strong id="metric-turns">—</strong></div></div><div class="verification" id="verification"><span class="verify-icon">○</span><div><strong id="verified-title">Awaiting verification</strong><p id="verified-copy">Test results will confirm whether the final changes pass.</p></div></div><h3 class="small-title">FINDINGS & NEXT STEPS</h3><pre id="final" class="final-text">Your investigation summary will appear here when the run is complete.</pre><div class="download-actions" id="downloads" hidden><button class="button secondary full" data-download="patch"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Download patch</button><div><button class="text-button" data-download="report">Download report ↗</button><button class="text-button" data-download="trace">Export trace ↗</button></div></div><p class="summary-note"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span>Verification covers the tested snapshot. Review changes before applying them.</span></p></aside>
+      </div>
+      <footer class="footer"><span><strong>devpilot.</strong> Built for thoughtful engineering.</span><span>Investigate. Review. Verify.</span></footer>
+    </div>
+  </main>
+</div>
+</body>
+</html>
