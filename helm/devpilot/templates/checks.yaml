@@ -1,0 +1,12 @@
+{{- if ne (int .Values.replicaCount) 1 }}{{ fail "DevPilot requires exactly one replica; no shared approval queue exists" }}{{ end -}}
+{{- if eq .Values.runner.mode "kubernetes" -}}
+{{- if lt (int .Values.config.toolTimeout) (add (int .Values.runner.jobTimeout) 15) }}{{ fail "config.toolTimeout must exceed runner.jobTimeout by at least 15s" }}{{ end -}}
+{{- if eq .Values.runner.namespace .Release.Namespace }}{{ fail "Use a separate runner namespace; tests must not share application Secrets" }}{{ end -}}
+{{- end -}}
+{{- if .Values.production -}}
+{{- if not .Values.image.digest }}{{ fail "production requires an immutable app image digest" }}{{ end -}}
+{{- if and (eq .Values.runner.mode "kubernetes") (not .Values.runner.image.digest) }}{{ fail "production requires an immutable runner image digest" }}{{ end -}}
+{{- if eq .Values.config.provider "demo" }}{{ fail "production values must explicitly select the real-model provider" }}{{ end -}}
+{{- end -}}
+{{- if and .Values.ingress.enabled (not .Values.config.publicOrigin) }}{{ fail "Ingress requires config.publicOrigin (exact externally visible origin)" }}{{ end -}}
+{{- if and .Values.production .Values.ingress.enabled (not .Values.ingress.tlsSecretName) }}{{ fail "Production ingress requires an existing TLS Secret" }}{{ end -}}
