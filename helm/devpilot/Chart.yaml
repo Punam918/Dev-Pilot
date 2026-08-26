@@ -1,0 +1,8 @@
+apiVersion: v2
+name: devpilot
+description: Evidence-first AI debugging with a single control plane and isolated test Jobs
+type: application
+version: 0.3.0
+appVersion: "0.3.0"
+kubeVersion: ">=1.30.0-0"
+keywords: [ai, mcp, qwen, devops, debugging]
