@@ -1,0 +1,58 @@
+# The API is deliberately not horizontally scalable: SQLite + in-memory approvals.
+replicaCount: 1
+production: false
+image:
+  repository: devpilot
+  tag: local
+  digest: ""
+  pullPolicy: IfNotPresent
+imagePullSecrets: []
+existingSecret: devpilot-secrets
+service:
+  port: 8080
+persistence:
+  existingClaim: ""
+  storageClass: ""
+  size: 5Gi
+resources:
+  requests: {cpu: 200m, memory: 256Mi}
+  limits: {cpu: "2", memory: 1536Mi}
+config:
+  provider: demo
+  model: qwen3:4b
+  baseUrl: http://ollama:11434/v1
+  allowRemoteModel: false
+  publicOrigin: ""
+  allowedHosts: [localhost, "127.0.0.1", "[::1]", devpilot]
+  seed: true
+  maxRuns: 100
+  maxContextChars: 16000
+  toolTimeout: 240
+  otelEnabled: false
+  otelEndpoint: http://otel-collector:4318/v1/traces
+runner:
+  mode: kubernetes
+  namespace: devpilot-runners
+  # Cluster administrator owns this namespace, its quotas and admission policy.
+  # Bootstrap it with infra/kubernetes/runner-namespace.yaml BEFORE Helm install.
+  image:
+    repository: devpilot-runner
+    tag: local
+    digest: ""
+  jobTimeout: 180
+  runtimeClass: ""
+  imagePullSecret: ""
+ingress:
+  enabled: false
+  className: ""
+  host: devpilot.example.invalid
+  tlsSecretName: ""
+  annotations: {}
+networkPolicy:
+  enabled: true
+  # Ingress must carry the namespace label kubernetes.io/metadata.name=<value>.
+  ingressNamespace: ingress-nginx
+  monitoringNamespace: monitoring
+serviceMonitor:
+  enabled: false
+  labels: {}

@@ -1,0 +1,64 @@
+# Optional model deployment. Requires NVIDIA drivers, GPU device plugin and image review.
+# Replace the image tag with a reviewed digest before production use.
+apiVersion: v1
+kind: Namespace
+metadata: {name: models}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: {name: qwen-model-cache, namespace: models}
+spec:
+  accessModes: [ReadWriteOnce]
+  resources: {requests: {storage: 20Gi}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: vllm, namespace: models}
+spec:
+  replicas: 1
+  strategy: {type: Recreate}
+  selector: {matchLabels: {app: vllm}}
+  template:
+    metadata: {labels: {app: vllm}}
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: vllm
+          image: vllm/vllm-openai:v0.18.2
+          args: ["--model", "Qwen/Qwen3-4B-Instruct-2507", "--host", "0.0.0.0", "--port", "8000", "--max-model-len", "8192", "--gpu-memory-utilization", "0.8", "--enable-auto-tool-choice", "--tool-call-parser", "hermes"]
+          ports: [{name: http, containerPort: 8000}]
+          env:
+            - {name: HF_HOME, value: /cache}
+          resources:
+            requests: {cpu: "2", memory: 8Gi, nvidia.com/gpu: "1"}
+            limits: {cpu: "4", memory: 16Gi, nvidia.com/gpu: "1"}
+          startupProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 10
+            failureThreshold: 180
+          readinessProbe: {httpGet: {path: /health, port: http}, periodSeconds: 10}
+          volumeMounts:
+            - {name: cache, mountPath: /cache}
+            - {name: shm, mountPath: /dev/shm}
+      volumes:
+        - {name: cache, persistentVolumeClaim: {claimName: qwen-model-cache}}
+        - {name: shm, emptyDir: {medium: Memory, sizeLimit: 2Gi}}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: vllm, namespace: models}
+spec:
+  selector: {app: vllm}
+  ports: [{name: http, port: 8000, targetPort: http}]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: private-inference, namespace: models}
+spec:
+  podSelector: {matchLabels: {app: vllm}}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: devpilot}}
+        - namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: monitoring}}
+      ports: [{port: 8000, protocol: TCP}]
