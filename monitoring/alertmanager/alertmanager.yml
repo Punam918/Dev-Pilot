@@ -1,0 +1,9 @@
+# Alerts are visible in the UI. No email/Slack delivery is claimed until configured.
+route:
+  receiver: local-ui-only
+  group_by: [alertname]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+receivers:
+  - name: local-ui-only
