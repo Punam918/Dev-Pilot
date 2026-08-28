@@ -1,0 +1,24 @@
+groups:
+  - name: devpilot
+    rules:
+      - alert: DevPilotDown
+        expr: up{job="devpilot"} == 0
+        for: 2m
+        labels: {severity: critical}
+        annotations:
+          summary: DevPilot metrics target is unavailable
+          runbook: docs/OPERATIONS.md#devpilotdown
+      - alert: DevPilotHTTPErrorRate
+        expr: (sum(rate(devpilot_http_requests_total{status=~"5.."}[5m])) / clamp_min(sum(rate(devpilot_http_requests_total[5m])), 0.001) > 0.05) and (sum(increase(devpilot_http_requests_total[5m])) > 50)
+        for: 5m
+        labels: {severity: warning}
+        annotations:
+          summary: More than 5 percent HTTP server errors with sufficient traffic
+          runbook: docs/OPERATIONS.md#devpilothttperrorrate
+      - alert: DevPilotApprovalWaiting
+        expr: devpilot_pending_approvals > 0
+        for: 2m
+        labels: {severity: info}
+        annotations:
+          summary: An operator approval is waiting
+          runbook: docs/OPERATIONS.md#devpilotapprovalwaiting
