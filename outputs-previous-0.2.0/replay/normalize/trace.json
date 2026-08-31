@@ -1,0 +1,481 @@
+{
+  "schema_version": 1,
+  "project_version": "0.2.0",
+  "python": "3.13.5",
+  "run": {
+    "repo": "demo-normalize",
+    "task": "Fix username normalization for whitespace and Unicode case folding without altering the tests.",
+    "mode": "repair",
+    "provider": "demo",
+    "model": "scripted-fixture-policy (NOT an LLM)",
+    "runner": "host-trusted",
+    "pending_approval": null,
+    "final": "SCRIPTED DEMO - no language model was called.\n\nEvidence: normalize.py and the captured pytest output.\nApplied the fixture's predefined one-line repair after approval.\nBaseline pytest exit code: 1.\nPost-patch pytest exit code: 0.\nThe original repository was not changed. Download and review the patch.\nThese results validate the integration workflow, not autonomous model quality.",
+    "verification": {
+      "verified": true,
+      "tests_executed": true,
+      "last_exit_code": 0,
+      "snapshot_matches_tested": true,
+      "source_unchanged": true,
+      "snapshot_sha256": "2c53e83184080b987d1f35e8af0884c4ddfcb9d025cf486bc8b25f41a99b2cf9"
+    },
+    "metrics": {
+      "model_turns": 8,
+      "tool_calls": 7,
+      "tool_errors": 0,
+      "llm_ms": 0,
+      "tool_ms": 2756,
+      "prompt_tokens": null,
+      "completion_tokens": null,
+      "wall_ms": 10573
+    },
+    "patch_available": true,
+    "id": "be36bf5ab5b34180903e9db763c18dd1",
+    "status": "completed",
+    "created_at": "2026-09-16T16:07:06.562+00:00",
+    "updated_at": "2026-09-16T16:07:17.141+00:00"
+  },
+  "events": [
+    {
+      "seq": 1,
+      "kind": "run_started",
+      "created_at": "2026-09-16T16:07:06.563+00:00",
+      "data": {
+        "provider": "demo",
+        "version": "0.2.0",
+        "note": "Scripted integration replay, not model intelligence"
+      }
+    },
+    {
+      "seq": 2,
+      "kind": "snapshot_created",
+      "created_at": "2026-09-16T16:07:06.577+00:00",
+      "data": {
+        "files": 3,
+        "bytes": 927,
+        "excluded": "symlinks, large files, credentials, caches, .git",
+        "input_sha256": "e39f39e6c78da488cf7992874f6d53085a4e2440729e0c0a54527229150203ac"
+      }
+    },
+    {
+      "seq": 3,
+      "kind": "mcp_connected",
+      "created_at": "2026-09-16T16:07:13.457+00:00",
+      "data": {
+        "servers": [
+          "files",
+          "git",
+          "docs",
+          "terminal",
+          "database"
+        ],
+        "tool_count": 10,
+        "protocol": "2025-06-18 stdio subset"
+      }
+    },
+    {
+      "seq": 4,
+      "kind": "model_request",
+      "created_at": "2026-09-16T16:07:13.457+00:00",
+      "data": {
+        "turn": 1
+      }
+    },
+    {
+      "seq": 5,
+      "kind": "tool_requested",
+      "created_at": "2026-09-16T16:07:13.458+00:00",
+      "data": {
+        "call_id": "demo_1",
+        "tool": "files__list_files",
+        "arguments": {}
+      }
+    },
+    {
+      "seq": 6,
+      "kind": "tool_result",
+      "created_at": "2026-09-16T16:07:13.460+00:00",
+      "data": {
+        "call_id": "demo_1",
+        "tool": "files__list_files",
+        "ok": true,
+        "result": {
+          "files": [
+            "README.md",
+            "normalize.py",
+            "tests/test_normalize.py"
+          ]
+        },
+        "duration_ms": 1
+      }
+    },
+    {
+      "seq": 7,
+      "kind": "model_request",
+      "created_at": "2026-09-16T16:07:13.461+00:00",
+      "data": {
+        "turn": 2
+      }
+    },
+    {
+      "seq": 8,
+      "kind": "tool_requested",
+      "created_at": "2026-09-16T16:07:13.461+00:00",
+      "data": {
+        "call_id": "demo_2",
+        "tool": "docs__search",
+        "arguments": {
+          "limit": 3,
+          "query": "username whitespace unicode casefold"
+        }
+      }
+    },
+    {
+      "seq": 9,
+      "kind": "tool_result",
+      "created_at": "2026-09-16T16:07:13.465+00:00",
+      "data": {
+        "call_id": "demo_2",
+        "tool": "docs__search",
+        "ok": true,
+        "result": {
+          "chunks_indexed": 3,
+          "matches": [
+            {
+              "end_line": 23,
+              "path": "tests/test_normalize.py",
+              "score": 2.57183,
+              "start_line": 1,
+              "symbol": "test_ascii, test_whitespace, test_unicode_casefold, test_empty, test_type_check",
+              "text": "import pytest\nfrom normalize import normalize_username\n\n\ndef test_ascii():\n    assert normalize_username(\"ALICE\") == \"alice\"\n\n\ndef test_whitespace():\n    assert normalize_username(\" Alice \\n\") == \"alice\"\n\n\ndef test_unicode_casefold():\n    assert normalize_username(\"Stra\\u00dfe\") == \"strasse\"\n\n\ndef test_empty():\n    assert normalize_username(\"\") == \"\"\n\n\ndef test_type_check():\n    with pytest.raises(TypeError):\n        normalize_username(42)"
+            },
+            {
+              "end_line": 4,
+              "path": "README.md",
+              "score": 1.42235,
+              "start_line": 1,
+              "symbol": "",
+              "text": "# Username normalization fixture\nNormalize strings by stripping leading/trailing whitespace and applying Unicode\ncase-folding. Do not remove internal whitespace. Non-string input is an error.\nThe current implementation mishandles both whitespace and German sharp-s."
+            },
+            {
+              "end_line": 7,
+              "path": "normalize.py",
+              "score": 0.22279,
+              "start_line": 1,
+              "symbol": "normalize_username",
+              "text": "\"\"\"Normalize a user name for case-insensitive matching.\"\"\"\n\n\ndef normalize_username(value: str) -> str:\n    if not isinstance(value, str):\n        raise TypeError(\"username must be a string\")\n    return value.lower()"
+            }
+          ],
+          "method": "BM25; rebuilt from current snapshot"
+        },
+        "duration_ms": 3
+      }
+    },
+    {
+      "seq": 10,
+      "kind": "model_request",
+      "created_at": "2026-09-16T16:07:13.466+00:00",
+      "data": {
+        "turn": 3
+      }
+    },
+    {
+      "seq": 11,
+      "kind": "tool_requested",
+      "created_at": "2026-09-16T16:07:13.467+00:00",
+      "data": {
+        "call_id": "demo_3",
+        "tool": "files__read_file",
+        "arguments": {
+          "path": "normalize.py"
+        }
+      }
+    },
+    {
+      "seq": 12,
+      "kind": "tool_result",
+      "created_at": "2026-09-16T16:07:13.469+00:00",
+      "data": {
+        "call_id": "demo_3",
+        "tool": "files__read_file",
+        "ok": true,
+        "result": {
+          "content": "\"\"\"Normalize a user name for case-insensitive matching.\"\"\"\n\n\ndef normalize_username(value: str) -> str:\n    if not isinstance(value, str):\n        raise TypeError(\"username must be a string\")\n    return value.lower()",
+          "end_line": 7,
+          "numbered": "1: \"\"\"Normalize a user name for case-insensitive matching.\"\"\"\n2: \n3: \n4: def normalize_username(value: str) -> str:\n5:     if not isinstance(value, str):\n6:         raise TypeError(\"username must be a string\")\n7:     return value.lower()",
+          "path": "normalize.py",
+          "sha256": "d7e44c494a95278798160880de7332260b96d01d1d1888aa585ee18688d3a570",
+          "start_line": 1,
+          "total_lines": 7
+        },
+        "duration_ms": 1
+      }
+    },
+    {
+      "seq": 13,
+      "kind": "model_request",
+      "created_at": "2026-09-16T16:07:13.470+00:00",
+      "data": {
+        "turn": 4
+      }
+    },
+    {
+      "seq": 14,
+      "kind": "tool_requested",
+      "created_at": "2026-09-16T16:07:13.471+00:00",
+      "data": {
+        "call_id": "demo_4",
+        "tool": "terminal__run_tests",
+        "arguments": {}
+      }
+    },
+    {
+      "seq": 15,
+      "kind": "approval_required",
+      "created_at": "2026-09-16T16:07:13.473+00:00",
+      "data": {
+        "id": "6148182d06b447a69e317e40b41c0812",
+        "tool": "terminal__run_tests",
+        "risk": "execute",
+        "arguments": {},
+        "arguments_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "snapshot_sha256": "e39f39e6c78da488cf7992874f6d53085a4e2440729e0c0a54527229150203ac",
+        "preview_diff": "",
+        "expires_in_seconds": 300,
+        "warning": "Tests execute code. Docker isolation is recommended."
+      }
+    },
+    {
+      "seq": 16,
+      "kind": "approval_decision",
+      "created_at": "2026-09-16T16:07:13.516+00:00",
+      "data": {
+        "approval_id": "6148182d06b447a69e317e40b41c0812",
+        "approved": true
+      }
+    },
+    {
+      "seq": 17,
+      "kind": "tool_result",
+      "created_at": "2026-09-16T16:07:15.151+00:00",
+      "data": {
+        "call_id": "demo_4",
+        "tool": "terminal__run_tests",
+        "ok": true,
+        "result": {
+          "command": "python -m pytest -q -p no:cacheprovider -o addopts= -o pythonpath=. tests",
+          "duration_ms": 1627,
+          "exit_code": 1,
+          "output": ".FF..                                                                    [100%]\n=================================== FAILURES ===================================\n_______________________________ test_whitespace ________________________________\n\n    def test_whitespace():\n>       assert normalize_username(\" Alice \\n\") == \"alice\"\nE       AssertionError: assert ' alice \\n' == 'alice'\nE         \nE         - alice\nE         +  alice \nE         ? +     ++\n\ntests/test_normalize.py:10: AssertionError\n____________________________ test_unicode_casefold _____________________________\n\n    def test_unicode_casefold():\n>       assert normalize_username(\"Stra\\u00dfe\") == \"strasse\"\nE       AssertionError: assert 'straße' == 'strasse'\nE         \nE         - strasse\nE         ?     ^^\nE         + straße\nE         ?     ^\n\ntests/test_normalize.py:14: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_normalize.py::test_whitespace - AssertionError: assert ' al...\nFAILED tests/test_normalize.py::test_unicode_casefold - AssertionError: asser...\n2 failed, 3 passed in 0.03s\n",
+          "output_limited": false,
+          "runner": "host-trusted",
+          "snapshot_sha256": "e39f39e6c78da488cf7992874f6d53085a4e2440729e0c0a54527229150203ac",
+          "snapshot_unchanged": true,
+          "timed_out": false
+        },
+        "duration_ms": 1633
+      }
+    },
+    {
+      "seq": 18,
+      "kind": "model_request",
+      "created_at": "2026-09-16T16:07:15.153+00:00",
+      "data": {
+        "turn": 5
+      }
+    },
+    {
+      "seq": 19,
+      "kind": "tool_requested",
+      "created_at": "2026-09-16T16:07:15.154+00:00",
+      "data": {
+        "call_id": "demo_5",
+        "tool": "files__replace_text",
+        "arguments": {
+          "expected_sha256": "d7e44c494a95278798160880de7332260b96d01d1d1888aa585ee18688d3a570",
+          "new": "return value.strip().casefold()",
+          "old": "return value.lower()",
+          "path": "normalize.py"
+        }
+      }
+    },
+    {
+      "seq": 20,
+      "kind": "approval_required",
+      "created_at": "2026-09-16T16:07:15.156+00:00",
+      "data": {
+        "id": "855d9c8559e54928acd19b8e54def6e5",
+        "tool": "files__replace_text",
+        "risk": "write",
+        "arguments": {
+          "expected_sha256": "d7e44c494a95278798160880de7332260b96d01d1d1888aa585ee18688d3a570",
+          "new": "return value.strip().casefold()",
+          "old": "return value.lower()",
+          "path": "normalize.py"
+        },
+        "arguments_sha256": "7053217b59acdd0333727dd9d1ae34d0df8a6435429084f72e4012e64d45fe6a",
+        "snapshot_sha256": "e39f39e6c78da488cf7992874f6d53085a4e2440729e0c0a54527229150203ac",
+        "preview_diff": "--- a/normalize.py\n+++ b/normalize.py\n@@ -4,4 +4,4 @@\n def normalize_username(value: str) -> str:\n     if not isinstance(value, str):\n         raise TypeError(\"username must be a string\")\n-    return value.lower()\n+    return value.strip().casefold()\n",
+        "expires_in_seconds": 300,
+        "warning": "Only the disposable workspace will be edited. Review the exact diff."
+      }
+    },
+    {
+      "seq": 21,
+      "kind": "approval_decision",
+      "created_at": "2026-09-16T16:07:15.185+00:00",
+      "data": {
+        "approval_id": "855d9c8559e54928acd19b8e54def6e5",
+        "approved": true
+      }
+    },
+    {
+      "seq": 22,
+      "kind": "tool_result",
+      "created_at": "2026-09-16T16:07:15.189+00:00",
+      "data": {
+        "call_id": "demo_5",
+        "tool": "files__replace_text",
+        "ok": true,
+        "result": {
+          "diff": "--- a/normalize.py\n+++ b/normalize.py\n@@ -4,4 +4,4 @@\n def normalize_username(value: str) -> str:\n     if not isinstance(value, str):\n         raise TypeError(\"username must be a string\")\n-    return value.lower()\n+    return value.strip().casefold()\n",
+          "path": "normalize.py",
+          "sha256": "a77c68109dcae2b091715328bc5e91a5c3f350d19b7734c6f0e2e2665648f43d"
+        },
+        "duration_ms": 3
+      }
+    },
+    {
+      "seq": 23,
+      "kind": "model_request",
+      "created_at": "2026-09-16T16:07:15.190+00:00",
+      "data": {
+        "turn": 6
+      }
+    },
+    {
+      "seq": 24,
+      "kind": "tool_requested",
+      "created_at": "2026-09-16T16:07:15.191+00:00",
+      "data": {
+        "call_id": "demo_6",
+        "tool": "terminal__run_tests",
+        "arguments": {}
+      }
+    },
+    {
+      "seq": 25,
+      "kind": "approval_required",
+      "created_at": "2026-09-16T16:07:15.192+00:00",
+      "data": {
+        "id": "aae4b7eb964c442aa5e02caea5abf032",
+        "tool": "terminal__run_tests",
+        "risk": "execute",
+        "arguments": {},
+        "arguments_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "snapshot_sha256": "2c53e83184080b987d1f35e8af0884c4ddfcb9d025cf486bc8b25f41a99b2cf9",
+        "preview_diff": "",
+        "expires_in_seconds": 300,
+        "warning": "Tests execute code. Docker isolation is recommended."
+      }
+    },
+    {
+      "seq": 26,
+      "kind": "approval_decision",
+      "created_at": "2026-09-16T16:07:15.237+00:00",
+      "data": {
+        "approval_id": "aae4b7eb964c442aa5e02caea5abf032",
+        "approved": true
+      }
+    },
+    {
+      "seq": 27,
+      "kind": "tool_result",
+      "created_at": "2026-09-16T16:07:16.351+00:00",
+      "data": {
+        "call_id": "demo_6",
+        "tool": "terminal__run_tests",
+        "ok": true,
+        "result": {
+          "command": "python -m pytest -q -p no:cacheprovider -o addopts= -o pythonpath=. tests",
+          "duration_ms": 1110,
+          "exit_code": 0,
+          "output": ".....                                                                    [100%]\n5 passed in 0.01s\n",
+          "output_limited": false,
+          "runner": "host-trusted",
+          "snapshot_sha256": "2c53e83184080b987d1f35e8af0884c4ddfcb9d025cf486bc8b25f41a99b2cf9",
+          "snapshot_unchanged": true,
+          "timed_out": false
+        },
+        "duration_ms": 1112
+      }
+    },
+    {
+      "seq": 28,
+      "kind": "model_request",
+      "created_at": "2026-09-16T16:07:16.352+00:00",
+      "data": {
+        "turn": 7
+      }
+    },
+    {
+      "seq": 29,
+      "kind": "tool_requested",
+      "created_at": "2026-09-16T16:07:16.353+00:00",
+      "data": {
+        "call_id": "demo_7",
+        "tool": "git__diff",
+        "arguments": {}
+      }
+    },
+    {
+      "seq": 30,
+      "kind": "tool_result",
+      "created_at": "2026-09-16T16:07:16.356+00:00",
+      "data": {
+        "call_id": "demo_7",
+        "tool": "git__diff",
+        "ok": true,
+        "result": {
+          "diff": "diff --git a/normalize.py b/normalize.py\nindex 78bb71d..e4b617d 100644\n--- a/normalize.py\n+++ b/normalize.py\n@@ -4,4 +4,4 @@\n def normalize_username(value: str) -> str:\n     if not isinstance(value, str):\n         raise TypeError(\"username must be a string\")\n-    return value.lower()\n+    return value.strip().casefold()\n"
+        },
+        "duration_ms": 3
+      }
+    },
+    {
+      "seq": 31,
+      "kind": "model_request",
+      "created_at": "2026-09-16T16:07:16.358+00:00",
+      "data": {
+        "turn": 8
+      }
+    },
+    {
+      "seq": 32,
+      "kind": "run_finished",
+      "created_at": "2026-09-16T16:07:17.141+00:00",
+      "data": {
+        "status": "completed",
+        "verification": {
+          "verified": true,
+          "tests_executed": true,
+          "last_exit_code": 0,
+          "snapshot_matches_tested": true,
+          "source_unchanged": true,
+          "snapshot_sha256": "2c53e83184080b987d1f35e8af0884c4ddfcb9d025cf486bc8b25f41a99b2cf9"
+        },
+        "metrics": {
+          "model_turns": 8,
+          "tool_calls": 7,
+          "tool_errors": 0,
+          "llm_ms": 0,
+          "tool_ms": 2756,
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "wall_ms": 10573
+        }
+      }
+    }
+  ],
+  "disclaimer": "Demo provider is scripted. Verification means the fixed test command exited zero on the unchanged final snapshot, not proof of general correctness."
+}
