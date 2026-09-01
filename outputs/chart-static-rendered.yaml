@@ -1,0 +1,257 @@
+---
+# Source: helm/devpilot/templates/configmap.yaml (static Go rendering, NOT helm)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: devpilot-config
+  labels:
+    app.kubernetes.io/name: devpilot
+    app.kubernetes.io/instance: devpilot
+    app.kubernetes.io/version: "0.3.0"
+    app.kubernetes.io/managed-by: Helm
+data:
+  DP_PROVIDER: "demo"
+  DP_MODEL: "qwen3:4b"
+  DP_BASE_URL: "http://ollama:11434/v1"
+  DP_ALLOW_REMOTE_MODEL: "false"
+  DP_PUBLIC_ORIGIN: ""
+  DP_ALLOWED_HOSTS: "[\"localhost\",\"127.0.0.1\",\"[::1]\",\"devpilot\"]"
+  DP_HOST: "0.0.0.0"
+  DP_PORT: "8080"
+  DP_DATA_DIR: /data/state
+  DP_WORKSPACE_DIR: /data/workspace
+  DP_RUNNER: "kubernetes"
+  DP_TRUST_LOCAL_CODE: "false"
+  DP_DOCKER_TOOLS: "false"
+  DP_API_TOKEN_FILE: /run/devpilot-secrets/api-token
+  DP_METRICS_TOKEN_FILE: /run/devpilot-secrets/metrics-token
+  DP_RUNNER_IMAGE: "devpilot-runner:local"
+  DP_KUBE_NAMESPACE: "devpilot-runners"
+  DP_KUBE_JOB_TIMEOUT: "180"
+  DP_KUBE_RUNTIME_CLASS: ""
+  DP_KUBE_IMAGE_PULL_SECRET: ""
+  DP_TOOL_TIMEOUT: "240"
+  DP_MAX_RUNS: "100"
+  DP_MAX_CONTEXT_CHARS: "16000"
+  DP_OTEL_ENABLED: "false"
+  DP_OTEL_ENDPOINT: "http://otel-collector:4318/v1/traces"
+  DP_LOG_JSON: "true"
+
+---
+# Source: helm/devpilot/templates/deployment.yaml (static Go rendering, NOT helm)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devpilot
+  labels:
+    app.kubernetes.io/name: devpilot
+    app.kubernetes.io/instance: devpilot
+    app.kubernetes.io/version: "0.3.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: devpilot
+      app.kubernetes.io/instance: devpilot
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: devpilot
+        app.kubernetes.io/instance: devpilot
+      annotations:
+        checksum/config: 3a90d64b334d3a7b440efedfe6da7fcbb5da989736b6d6c12c73af8ecd537399
+    spec:
+      serviceAccountName: devpilot
+      automountServiceAccountToken: true
+      enableServiceLinks: false
+      terminationGracePeriodSeconds: 45
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: devpilot
+          image: "devpilot:local"
+          imagePullPolicy: IfNotPresent
+          command: ["python", "-m", "devpilot", "serve"]
+          args: ["--seed"]
+          ports: [{name: http, containerPort: 8080}]
+          envFrom:
+            - configMapRef: {name: devpilot-config}
+          env:
+            - name: DP_LLM_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: devpilot-secrets
+                  key: llm-api-key
+                  optional: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          resources:
+            limits:
+              cpu: '2'
+              memory: 1536Mi
+            requests:
+              cpu: 200m
+              memory: 256Mi
+          startupProbe:
+            httpGet:
+              path: /livez
+              port: http
+              httpHeaders: [{name: Host, value: localhost}]
+            periodSeconds: 5
+            failureThreshold: 24
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: http
+              httpHeaders: [{name: Host, value: localhost}]
+            periodSeconds: 15
+            timeoutSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+              httpHeaders: [{name: Host, value: localhost}]
+            periodSeconds: 5
+            timeoutSeconds: 3
+          volumeMounts:
+            - {name: data, mountPath: /data}
+            - {name: tmp, mountPath: /tmp}
+            - {name: credentials, mountPath: /run/devpilot-secrets, readOnly: true}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: devpilot-data
+        - name: tmp
+          emptyDir: {medium: Memory, sizeLimit: 128Mi}
+        - name: credentials
+          secret:
+            secretName: devpilot-secrets
+            defaultMode: 288
+            items:
+              - {key: api-token, path: api-token}
+              - {key: metrics-token, path: metrics-token}
+
+---
+# Source: helm/devpilot/templates/networkpolicy.yaml (static Go rendering, NOT helm)
+
+# Control-plane egress is intentionally operator-managed: it needs Kubernetes API,
+# inference, DNS and optionally OTLP. Runner egress is DENIED in a separate namespace.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: devpilot-ingress
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: devpilot
+      app.kubernetes.io/instance: devpilot
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: devpilot
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: monitoring
+      ports: [{protocol: TCP, port: 8080}]
+
+---
+# Source: helm/devpilot/templates/pvc.yaml (static Go rendering, NOT helm)
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: devpilot-data
+  annotations:
+    helm.sh/resource-policy: keep
+    argocd.argoproj.io/sync-options: Prune=false
+  labels:
+    app.kubernetes.io/name: devpilot
+    app.kubernetes.io/instance: devpilot
+    app.kubernetes.io/version: "0.3.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests: {storage: 5Gi}
+
+---
+# Source: helm/devpilot/templates/rbac.yaml (static Go rendering, NOT helm)
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: devpilot
+  labels:
+    app.kubernetes.io/name: devpilot
+    app.kubernetes.io/instance: devpilot
+    app.kubernetes.io/version: "0.3.0"
+    app.kubernetes.io/managed-by: Helm
+automountServiceAccountToken: false
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: devpilot-job-manager
+  namespace: devpilot-runners
+rules:
+  - apiGroups: [batch]
+    resources: [jobs]
+    verbs: [create, get, delete]
+  - apiGroups: [""]
+    resources: [configmaps]
+    verbs: [create]
+  - apiGroups: [""]
+    resources: [pods]
+    verbs: [get, list]
+  - apiGroups: [""]
+    resources: [pods/log]
+    verbs: [get]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: devpilot-job-manager
+  namespace: devpilot-runners
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: devpilot-job-manager
+subjects:
+  - kind: ServiceAccount
+    name: devpilot
+    namespace: devpilot
+
+---
+# Source: helm/devpilot/templates/service.yaml (static Go rendering, NOT helm)
+apiVersion: v1
+kind: Service
+metadata:
+  name: devpilot
+  labels:
+    app.kubernetes.io/name: devpilot
+    app.kubernetes.io/instance: devpilot
+    app.kubernetes.io/version: "0.3.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: devpilot
+    app.kubernetes.io/instance: devpilot
+  ports:
+    - {name: http, port: 8080, targetPort: http}
+

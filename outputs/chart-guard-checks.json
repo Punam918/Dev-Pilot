@@ -1,0 +1,41 @@
+{
+  "method": "Offline Go text/template helper, not Helm or Kubernetes. All-zero digests only in memory are synthetic inputs, NOT deployable release digests.",
+  "checks": [
+    {
+      "case": "default",
+      "expected_render": true,
+      "actual_exit_code": 0,
+      "passed": true
+    },
+    {
+      "case": "refuse_missing_production_digests",
+      "expected_render": false,
+      "actual_exit_code": 2,
+      "passed": true
+    },
+    {
+      "case": "refuse_shared_runner_namespace",
+      "expected_render": false,
+      "actual_exit_code": 2,
+      "passed": true
+    },
+    {
+      "case": "refuse_short_tool_timeout",
+      "expected_render": false,
+      "actual_exit_code": 2,
+      "passed": true
+    },
+    {
+      "case": "refuse_ingress_without_origin",
+      "expected_render": false,
+      "actual_exit_code": 2,
+      "passed": true
+    },
+    {
+      "case": "synthetic_complete_production_values_with_ingress_and_monitor",
+      "expected_render": true,
+      "actual_exit_code": 0,
+      "passed": true
+    }
+  ]
+}
