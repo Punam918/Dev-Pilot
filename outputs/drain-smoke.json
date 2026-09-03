@@ -1,0 +1,9 @@
+{
+  "transport": "real localhost TCP; Uvicorn subprocess",
+  "provider": "scripted demo; no model",
+  "drain_blocks_new_runs": true,
+  "readiness_503_when_drained": true,
+  "resume_ready": true,
+  "metrics_auth": true,
+  "runner": "host-trusted bundled fixture; not Docker or Kubernetes"
+}

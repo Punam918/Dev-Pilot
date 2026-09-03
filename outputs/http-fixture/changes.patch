@@ -1,0 +1,11 @@
+diff --git a/service.py b/service.py
+index e4fb587..10581db 100644
+--- a/service.py
++++ b/service.py
+@@ -1,5 +1,5 @@
+ """Redis endpoint configuration for a Compose-based API."""
+-DEFAULT_REDIS_HOST = "localhost"
++DEFAULT_REDIS_HOST = "redis"
+ 
+ 
+ def redis_url(host: str | None = None, port: int = 6379) -> str:
