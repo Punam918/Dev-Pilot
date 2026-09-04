@@ -1,0 +1,342 @@
+# HELP process_virtual_memory_bytes Virtual memory size in bytes.
+# TYPE process_virtual_memory_bytes gauge
+process_virtual_memory_bytes 7.16632064e+08
+# HELP process_resident_memory_bytes Resident memory size in bytes.
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 1.42041088e+08
+# HELP process_start_time_seconds Start time of the process since unix epoch in seconds.
+# TYPE process_start_time_seconds gauge
+process_start_time_seconds 1.78958010706e+09
+# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
+# TYPE process_cpu_seconds_total counter
+process_cpu_seconds_total 2.9899999999999998
+# HELP process_open_fds Number of open file descriptors.
+# TYPE process_open_fds gauge
+process_open_fds 18.0
+# HELP process_max_fds Maximum number of open file descriptors.
+# TYPE process_max_fds gauge
+process_max_fds 16384.0
+# HELP python_info Python platform information
+# TYPE python_info gauge
+python_info{implementation="CPython",major="3",minor="13",patchlevel="5",version="3.13.5"} 1.0
+# HELP python_gc_objects_collected_total Objects collected during gc
+# TYPE python_gc_objects_collected_total counter
+python_gc_objects_collected_total{generation="0"} 48446.0
+python_gc_objects_collected_total{generation="1"} 6094.0
+python_gc_objects_collected_total{generation="2"} 846.0
+# HELP python_gc_objects_uncollectable_total Uncollectable objects found during GC
+# TYPE python_gc_objects_uncollectable_total counter
+python_gc_objects_uncollectable_total{generation="0"} 0.0
+python_gc_objects_uncollectable_total{generation="1"} 0.0
+python_gc_objects_uncollectable_total{generation="2"} 0.0
+# HELP python_gc_collections_total Number of times this generation was collected
+# TYPE python_gc_collections_total counter
+python_gc_collections_total{generation="0"} 256.0
+python_gc_collections_total{generation="1"} 23.0
+python_gc_collections_total{generation="2"} 2.0
+# HELP devpilot_http_requests_total HTTP responses by route template
+# TYPE devpilot_http_requests_total counter
+devpilot_http_requests_total{method="GET",route="/api/repos",status="401"} 1.0
+devpilot_http_requests_total{method="GET",route="/api/config",status="200"} 2.0
+devpilot_http_requests_total{method="GET",route="/api/repos",status="200"} 1.0
+devpilot_http_requests_total{method="POST",route="/api/runs",status="202"} 1.0
+devpilot_http_requests_total{method="GET",route="/api/runs/{run_id}",status="200"} 27.0
+devpilot_http_requests_total{method="POST",route="/api/runs/{run_id}/approvals/{approval_id}",status="200"} 3.0
+devpilot_http_requests_total{method="GET",route="/api/runs/{run_id}/artifacts/{kind}",status="200"} 3.0
+devpilot_http_requests_total{method="POST",route="/api/admin/drain",status="200"} 1.0
+devpilot_http_requests_total{method="POST",route="/api/runs",status="503"} 1.0
+devpilot_http_requests_total{method="POST",route="/api/admin/resume",status="200"} 1.0
+# HELP devpilot_http_requests_created HTTP responses by route template
+# TYPE devpilot_http_requests_created gauge
+devpilot_http_requests_created{method="GET",route="/api/repos",status="401"} 1.789580112333744e+09
+devpilot_http_requests_created{method="GET",route="/api/config",status="200"} 1.7895801123353121e+09
+devpilot_http_requests_created{method="GET",route="/api/repos",status="200"} 1.789580112337005e+09
+devpilot_http_requests_created{method="POST",route="/api/runs",status="202"} 1.7895801134754124e+09
+devpilot_http_requests_created{method="GET",route="/api/runs/{run_id}",status="200"} 1.789580113478975e+09
+devpilot_http_requests_created{method="POST",route="/api/runs/{run_id}/approvals/{approval_id}",status="200"} 1.789580122589774e+09
+devpilot_http_requests_created{method="GET",route="/api/runs/{run_id}/artifacts/{kind}",status="200"} 1.7895801267777393e+09
+devpilot_http_requests_created{method="POST",route="/api/admin/drain",status="200"} 1.7895801270274596e+09
+devpilot_http_requests_created{method="POST",route="/api/runs",status="503"} 1.789580127030838e+09
+devpilot_http_requests_created{method="POST",route="/api/admin/resume",status="200"} 1.789580127033129e+09
+# HELP devpilot_http_request_duration_seconds HTTP time to response headers; SSE body excluded
+# TYPE devpilot_http_request_duration_seconds histogram
+devpilot_http_request_duration_seconds_bucket{le="0.01",method="GET",route="/api/repos"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="0.05",method="GET",route="/api/repos"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="0.1",method="GET",route="/api/repos"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="0.5",method="GET",route="/api/repos"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="1.0",method="GET",route="/api/repos"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="5.0",method="GET",route="/api/repos"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="15.0",method="GET",route="/api/repos"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="60.0",method="GET",route="/api/repos"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="180.0",method="GET",route="/api/repos"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="600.0",method="GET",route="/api/repos"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="+Inf",method="GET",route="/api/repos"} 2.0
+devpilot_http_request_duration_seconds_count{method="GET",route="/api/repos"} 2.0
+devpilot_http_request_duration_seconds_sum{method="GET",route="/api/repos"} 0.0010120410001945856
+devpilot_http_request_duration_seconds_bucket{le="0.01",method="GET",route="/api/config"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="0.05",method="GET",route="/api/config"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="0.1",method="GET",route="/api/config"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="0.5",method="GET",route="/api/config"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="1.0",method="GET",route="/api/config"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="5.0",method="GET",route="/api/config"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="15.0",method="GET",route="/api/config"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="60.0",method="GET",route="/api/config"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="180.0",method="GET",route="/api/config"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="600.0",method="GET",route="/api/config"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="+Inf",method="GET",route="/api/config"} 2.0
+devpilot_http_request_duration_seconds_count{method="GET",route="/api/config"} 2.0
+devpilot_http_request_duration_seconds_sum{method="GET",route="/api/config"} 0.0011364450001565274
+devpilot_http_request_duration_seconds_bucket{le="0.01",method="POST",route="/api/runs"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="0.05",method="POST",route="/api/runs"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="0.1",method="POST",route="/api/runs"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="0.5",method="POST",route="/api/runs"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="1.0",method="POST",route="/api/runs"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="5.0",method="POST",route="/api/runs"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="15.0",method="POST",route="/api/runs"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="60.0",method="POST",route="/api/runs"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="180.0",method="POST",route="/api/runs"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="600.0",method="POST",route="/api/runs"} 2.0
+devpilot_http_request_duration_seconds_bucket{le="+Inf",method="POST",route="/api/runs"} 2.0
+devpilot_http_request_duration_seconds_count{method="POST",route="/api/runs"} 2.0
+devpilot_http_request_duration_seconds_sum{method="POST",route="/api/runs"} 0.010395983000080378
+devpilot_http_request_duration_seconds_bucket{le="0.01",method="GET",route="/api/runs/{run_id}"} 26.0
+devpilot_http_request_duration_seconds_bucket{le="0.05",method="GET",route="/api/runs/{run_id}"} 27.0
+devpilot_http_request_duration_seconds_bucket{le="0.1",method="GET",route="/api/runs/{run_id}"} 27.0
+devpilot_http_request_duration_seconds_bucket{le="0.5",method="GET",route="/api/runs/{run_id}"} 27.0
+devpilot_http_request_duration_seconds_bucket{le="1.0",method="GET",route="/api/runs/{run_id}"} 27.0
+devpilot_http_request_duration_seconds_bucket{le="5.0",method="GET",route="/api/runs/{run_id}"} 27.0
+devpilot_http_request_duration_seconds_bucket{le="15.0",method="GET",route="/api/runs/{run_id}"} 27.0
+devpilot_http_request_duration_seconds_bucket{le="60.0",method="GET",route="/api/runs/{run_id}"} 27.0
+devpilot_http_request_duration_seconds_bucket{le="180.0",method="GET",route="/api/runs/{run_id}"} 27.0
+devpilot_http_request_duration_seconds_bucket{le="600.0",method="GET",route="/api/runs/{run_id}"} 27.0
+devpilot_http_request_duration_seconds_bucket{le="+Inf",method="GET",route="/api/runs/{run_id}"} 27.0
+devpilot_http_request_duration_seconds_count{method="GET",route="/api/runs/{run_id}"} 27.0
+devpilot_http_request_duration_seconds_sum{method="GET",route="/api/runs/{run_id}"} 0.09759747299972332
+devpilot_http_request_duration_seconds_bucket{le="0.01",method="POST",route="/api/runs/{run_id}/approvals/{approval_id}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="0.05",method="POST",route="/api/runs/{run_id}/approvals/{approval_id}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="0.1",method="POST",route="/api/runs/{run_id}/approvals/{approval_id}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="0.5",method="POST",route="/api/runs/{run_id}/approvals/{approval_id}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="1.0",method="POST",route="/api/runs/{run_id}/approvals/{approval_id}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="5.0",method="POST",route="/api/runs/{run_id}/approvals/{approval_id}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="15.0",method="POST",route="/api/runs/{run_id}/approvals/{approval_id}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="60.0",method="POST",route="/api/runs/{run_id}/approvals/{approval_id}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="180.0",method="POST",route="/api/runs/{run_id}/approvals/{approval_id}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="600.0",method="POST",route="/api/runs/{run_id}/approvals/{approval_id}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="+Inf",method="POST",route="/api/runs/{run_id}/approvals/{approval_id}"} 3.0
+devpilot_http_request_duration_seconds_count{method="POST",route="/api/runs/{run_id}/approvals/{approval_id}"} 3.0
+devpilot_http_request_duration_seconds_sum{method="POST",route="/api/runs/{run_id}/approvals/{approval_id}"} 0.009838823999871238
+devpilot_http_request_duration_seconds_bucket{le="0.01",method="GET",route="/api/runs/{run_id}/artifacts/{kind}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="0.05",method="GET",route="/api/runs/{run_id}/artifacts/{kind}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="0.1",method="GET",route="/api/runs/{run_id}/artifacts/{kind}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="0.5",method="GET",route="/api/runs/{run_id}/artifacts/{kind}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="1.0",method="GET",route="/api/runs/{run_id}/artifacts/{kind}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="5.0",method="GET",route="/api/runs/{run_id}/artifacts/{kind}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="15.0",method="GET",route="/api/runs/{run_id}/artifacts/{kind}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="60.0",method="GET",route="/api/runs/{run_id}/artifacts/{kind}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="180.0",method="GET",route="/api/runs/{run_id}/artifacts/{kind}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="600.0",method="GET",route="/api/runs/{run_id}/artifacts/{kind}"} 3.0
+devpilot_http_request_duration_seconds_bucket{le="+Inf",method="GET",route="/api/runs/{run_id}/artifacts/{kind}"} 3.0
+devpilot_http_request_duration_seconds_count{method="GET",route="/api/runs/{run_id}/artifacts/{kind}"} 3.0
+devpilot_http_request_duration_seconds_sum{method="GET",route="/api/runs/{run_id}/artifacts/{kind}"} 0.006423762999702376
+devpilot_http_request_duration_seconds_bucket{le="0.01",method="POST",route="/api/admin/drain"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="0.05",method="POST",route="/api/admin/drain"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="0.1",method="POST",route="/api/admin/drain"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="0.5",method="POST",route="/api/admin/drain"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="1.0",method="POST",route="/api/admin/drain"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="5.0",method="POST",route="/api/admin/drain"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="15.0",method="POST",route="/api/admin/drain"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="60.0",method="POST",route="/api/admin/drain"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="180.0",method="POST",route="/api/admin/drain"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="600.0",method="POST",route="/api/admin/drain"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="+Inf",method="POST",route="/api/admin/drain"} 1.0
+devpilot_http_request_duration_seconds_count{method="POST",route="/api/admin/drain"} 1.0
+devpilot_http_request_duration_seconds_sum{method="POST",route="/api/admin/drain"} 0.0006619140001475898
+devpilot_http_request_duration_seconds_bucket{le="0.01",method="POST",route="/api/admin/resume"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="0.05",method="POST",route="/api/admin/resume"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="0.1",method="POST",route="/api/admin/resume"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="0.5",method="POST",route="/api/admin/resume"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="1.0",method="POST",route="/api/admin/resume"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="5.0",method="POST",route="/api/admin/resume"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="15.0",method="POST",route="/api/admin/resume"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="60.0",method="POST",route="/api/admin/resume"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="180.0",method="POST",route="/api/admin/resume"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="600.0",method="POST",route="/api/admin/resume"} 1.0
+devpilot_http_request_duration_seconds_bucket{le="+Inf",method="POST",route="/api/admin/resume"} 1.0
+devpilot_http_request_duration_seconds_count{method="POST",route="/api/admin/resume"} 1.0
+devpilot_http_request_duration_seconds_sum{method="POST",route="/api/admin/resume"} 0.0010201319998941472
+# HELP devpilot_http_request_duration_seconds_created HTTP time to response headers; SSE body excluded
+# TYPE devpilot_http_request_duration_seconds_created gauge
+devpilot_http_request_duration_seconds_created{method="GET",route="/api/repos"} 1.7895801123337736e+09
+devpilot_http_request_duration_seconds_created{method="GET",route="/api/config"} 1.789580112335335e+09
+devpilot_http_request_duration_seconds_created{method="POST",route="/api/runs"} 1.7895801134754372e+09
+devpilot_http_request_duration_seconds_created{method="GET",route="/api/runs/{run_id}"} 1.78958011347901e+09
+devpilot_http_request_duration_seconds_created{method="POST",route="/api/runs/{run_id}/approvals/{approval_id}"} 1.7895801225897949e+09
+devpilot_http_request_duration_seconds_created{method="GET",route="/api/runs/{run_id}/artifacts/{kind}"} 1.7895801267777615e+09
+devpilot_http_request_duration_seconds_created{method="POST",route="/api/admin/drain"} 1.7895801270274801e+09
+devpilot_http_request_duration_seconds_created{method="POST",route="/api/admin/resume"} 1.7895801270331473e+09
+# HELP devpilot_runs_total Finished runs; demo is not AI quality
+# TYPE devpilot_runs_total counter
+devpilot_runs_total{provider="demo",status="completed",verified="true"} 1.0
+# HELP devpilot_runs_created Finished runs; demo is not AI quality
+# TYPE devpilot_runs_created gauge
+devpilot_runs_created{provider="demo",status="completed",verified="true"} 1.7895801264311788e+09
+# HELP devpilot_run_duration_seconds Wall time including approval waits
+# TYPE devpilot_run_duration_seconds histogram
+devpilot_run_duration_seconds_bucket{le="0.01",provider="demo",status="completed"} 0.0
+devpilot_run_duration_seconds_bucket{le="0.05",provider="demo",status="completed"} 0.0
+devpilot_run_duration_seconds_bucket{le="0.1",provider="demo",status="completed"} 0.0
+devpilot_run_duration_seconds_bucket{le="0.5",provider="demo",status="completed"} 0.0
+devpilot_run_duration_seconds_bucket{le="1.0",provider="demo",status="completed"} 0.0
+devpilot_run_duration_seconds_bucket{le="5.0",provider="demo",status="completed"} 0.0
+devpilot_run_duration_seconds_bucket{le="15.0",provider="demo",status="completed"} 1.0
+devpilot_run_duration_seconds_bucket{le="60.0",provider="demo",status="completed"} 1.0
+devpilot_run_duration_seconds_bucket{le="180.0",provider="demo",status="completed"} 1.0
+devpilot_run_duration_seconds_bucket{le="600.0",provider="demo",status="completed"} 1.0
+devpilot_run_duration_seconds_bucket{le="+Inf",provider="demo",status="completed"} 1.0
+devpilot_run_duration_seconds_count{provider="demo",status="completed"} 1.0
+devpilot_run_duration_seconds_sum{provider="demo",status="completed"} 12.952
+# HELP devpilot_run_duration_seconds_created Wall time including approval waits
+# TYPE devpilot_run_duration_seconds_created gauge
+devpilot_run_duration_seconds_created{provider="demo",status="completed"} 1.7895801264312015e+09
+# HELP devpilot_tool_calls_total Tool results, including denials and invalid calls
+# TYPE devpilot_tool_calls_total counter
+devpilot_tool_calls_total{outcome="ok",tool="files__list_files"} 1.0
+devpilot_tool_calls_total{outcome="ok",tool="docs__search"} 1.0
+devpilot_tool_calls_total{outcome="ok",tool="files__read_file"} 1.0
+devpilot_tool_calls_total{outcome="ok",tool="terminal__run_tests"} 2.0
+devpilot_tool_calls_total{outcome="ok",tool="files__replace_text"} 1.0
+devpilot_tool_calls_total{outcome="ok",tool="git__diff"} 1.0
+# HELP devpilot_tool_calls_created Tool results, including denials and invalid calls
+# TYPE devpilot_tool_calls_created gauge
+devpilot_tool_calls_created{outcome="ok",tool="files__list_files"} 1.7895801222292514e+09
+devpilot_tool_calls_created{outcome="ok",tool="docs__search"} 1.789580122237611e+09
+devpilot_tool_calls_created{outcome="ok",tool="files__read_file"} 1.7895801222443194e+09
+devpilot_tool_calls_created{outcome="ok",tool="terminal__run_tests"} 1.7895801239011147e+09
+devpilot_tool_calls_created{outcome="ok",tool="files__replace_text"} 1.789580124156717e+09
+devpilot_tool_calls_created{outcome="ok",tool="git__diff"} 1.7895801258149807e+09
+# HELP devpilot_tool_duration_seconds Executed tool duration
+# TYPE devpilot_tool_duration_seconds histogram
+devpilot_tool_duration_seconds_bucket{le="0.01",tool="files__list_files"} 1.0
+devpilot_tool_duration_seconds_bucket{le="0.05",tool="files__list_files"} 1.0
+devpilot_tool_duration_seconds_bucket{le="0.1",tool="files__list_files"} 1.0
+devpilot_tool_duration_seconds_bucket{le="0.5",tool="files__list_files"} 1.0
+devpilot_tool_duration_seconds_bucket{le="1.0",tool="files__list_files"} 1.0
+devpilot_tool_duration_seconds_bucket{le="5.0",tool="files__list_files"} 1.0
+devpilot_tool_duration_seconds_bucket{le="15.0",tool="files__list_files"} 1.0
+devpilot_tool_duration_seconds_bucket{le="60.0",tool="files__list_files"} 1.0
+devpilot_tool_duration_seconds_bucket{le="180.0",tool="files__list_files"} 1.0
+devpilot_tool_duration_seconds_bucket{le="600.0",tool="files__list_files"} 1.0
+devpilot_tool_duration_seconds_bucket{le="+Inf",tool="files__list_files"} 1.0
+devpilot_tool_duration_seconds_count{tool="files__list_files"} 1.0
+devpilot_tool_duration_seconds_sum{tool="files__list_files"} 0.003
+devpilot_tool_duration_seconds_bucket{le="0.01",tool="docs__search"} 1.0
+devpilot_tool_duration_seconds_bucket{le="0.05",tool="docs__search"} 1.0
+devpilot_tool_duration_seconds_bucket{le="0.1",tool="docs__search"} 1.0
+devpilot_tool_duration_seconds_bucket{le="0.5",tool="docs__search"} 1.0
+devpilot_tool_duration_seconds_bucket{le="1.0",tool="docs__search"} 1.0
+devpilot_tool_duration_seconds_bucket{le="5.0",tool="docs__search"} 1.0
+devpilot_tool_duration_seconds_bucket{le="15.0",tool="docs__search"} 1.0
+devpilot_tool_duration_seconds_bucket{le="60.0",tool="docs__search"} 1.0
+devpilot_tool_duration_seconds_bucket{le="180.0",tool="docs__search"} 1.0
+devpilot_tool_duration_seconds_bucket{le="600.0",tool="docs__search"} 1.0
+devpilot_tool_duration_seconds_bucket{le="+Inf",tool="docs__search"} 1.0
+devpilot_tool_duration_seconds_count{tool="docs__search"} 1.0
+devpilot_tool_duration_seconds_sum{tool="docs__search"} 0.005
+devpilot_tool_duration_seconds_bucket{le="0.01",tool="files__read_file"} 1.0
+devpilot_tool_duration_seconds_bucket{le="0.05",tool="files__read_file"} 1.0
+devpilot_tool_duration_seconds_bucket{le="0.1",tool="files__read_file"} 1.0
+devpilot_tool_duration_seconds_bucket{le="0.5",tool="files__read_file"} 1.0
+devpilot_tool_duration_seconds_bucket{le="1.0",tool="files__read_file"} 1.0
+devpilot_tool_duration_seconds_bucket{le="5.0",tool="files__read_file"} 1.0
+devpilot_tool_duration_seconds_bucket{le="15.0",tool="files__read_file"} 1.0
+devpilot_tool_duration_seconds_bucket{le="60.0",tool="files__read_file"} 1.0
+devpilot_tool_duration_seconds_bucket{le="180.0",tool="files__read_file"} 1.0
+devpilot_tool_duration_seconds_bucket{le="600.0",tool="files__read_file"} 1.0
+devpilot_tool_duration_seconds_bucket{le="+Inf",tool="files__read_file"} 1.0
+devpilot_tool_duration_seconds_count{tool="files__read_file"} 1.0
+devpilot_tool_duration_seconds_sum{tool="files__read_file"} 0.002
+devpilot_tool_duration_seconds_bucket{le="0.01",tool="terminal__run_tests"} 0.0
+devpilot_tool_duration_seconds_bucket{le="0.05",tool="terminal__run_tests"} 0.0
+devpilot_tool_duration_seconds_bucket{le="0.1",tool="terminal__run_tests"} 0.0
+devpilot_tool_duration_seconds_bucket{le="0.5",tool="terminal__run_tests"} 0.0
+devpilot_tool_duration_seconds_bucket{le="1.0",tool="terminal__run_tests"} 0.0
+devpilot_tool_duration_seconds_bucket{le="5.0",tool="terminal__run_tests"} 2.0
+devpilot_tool_duration_seconds_bucket{le="15.0",tool="terminal__run_tests"} 2.0
+devpilot_tool_duration_seconds_bucket{le="60.0",tool="terminal__run_tests"} 2.0
+devpilot_tool_duration_seconds_bucket{le="180.0",tool="terminal__run_tests"} 2.0
+devpilot_tool_duration_seconds_bucket{le="600.0",tool="terminal__run_tests"} 2.0
+devpilot_tool_duration_seconds_bucket{le="+Inf",tool="terminal__run_tests"} 2.0
+devpilot_tool_duration_seconds_count{tool="terminal__run_tests"} 2.0
+devpilot_tool_duration_seconds_sum{tool="terminal__run_tests"} 2.456
+devpilot_tool_duration_seconds_bucket{le="0.01",tool="files__replace_text"} 1.0
+devpilot_tool_duration_seconds_bucket{le="0.05",tool="files__replace_text"} 1.0
+devpilot_tool_duration_seconds_bucket{le="0.1",tool="files__replace_text"} 1.0
+devpilot_tool_duration_seconds_bucket{le="0.5",tool="files__replace_text"} 1.0
+devpilot_tool_duration_seconds_bucket{le="1.0",tool="files__replace_text"} 1.0
+devpilot_tool_duration_seconds_bucket{le="5.0",tool="files__replace_text"} 1.0
+devpilot_tool_duration_seconds_bucket{le="15.0",tool="files__replace_text"} 1.0
+devpilot_tool_duration_seconds_bucket{le="60.0",tool="files__replace_text"} 1.0
+devpilot_tool_duration_seconds_bucket{le="180.0",tool="files__replace_text"} 1.0
+devpilot_tool_duration_seconds_bucket{le="600.0",tool="files__replace_text"} 1.0
+devpilot_tool_duration_seconds_bucket{le="+Inf",tool="files__replace_text"} 1.0
+devpilot_tool_duration_seconds_count{tool="files__replace_text"} 1.0
+devpilot_tool_duration_seconds_sum{tool="files__replace_text"} 0.007
+devpilot_tool_duration_seconds_bucket{le="0.01",tool="git__diff"} 1.0
+devpilot_tool_duration_seconds_bucket{le="0.05",tool="git__diff"} 1.0
+devpilot_tool_duration_seconds_bucket{le="0.1",tool="git__diff"} 1.0
+devpilot_tool_duration_seconds_bucket{le="0.5",tool="git__diff"} 1.0
+devpilot_tool_duration_seconds_bucket{le="1.0",tool="git__diff"} 1.0
+devpilot_tool_duration_seconds_bucket{le="5.0",tool="git__diff"} 1.0
+devpilot_tool_duration_seconds_bucket{le="15.0",tool="git__diff"} 1.0
+devpilot_tool_duration_seconds_bucket{le="60.0",tool="git__diff"} 1.0
+devpilot_tool_duration_seconds_bucket{le="180.0",tool="git__diff"} 1.0
+devpilot_tool_duration_seconds_bucket{le="600.0",tool="git__diff"} 1.0
+devpilot_tool_duration_seconds_bucket{le="+Inf",tool="git__diff"} 1.0
+devpilot_tool_duration_seconds_count{tool="git__diff"} 1.0
+devpilot_tool_duration_seconds_sum{tool="git__diff"} 0.006
+# HELP devpilot_tool_duration_seconds_created Executed tool duration
+# TYPE devpilot_tool_duration_seconds_created gauge
+devpilot_tool_duration_seconds_created{tool="files__list_files"} 1.789580122229276e+09
+devpilot_tool_duration_seconds_created{tool="docs__search"} 1.789580122237634e+09
+devpilot_tool_duration_seconds_created{tool="files__read_file"} 1.7895801222443433e+09
+devpilot_tool_duration_seconds_created{tool="terminal__run_tests"} 1.789580123901138e+09
+devpilot_tool_duration_seconds_created{tool="files__replace_text"} 1.7895801241567404e+09
+devpilot_tool_duration_seconds_created{tool="git__diff"} 1.789580125815007e+09
+# HELP devpilot_model_request_duration_seconds Model calls, separate from demo
+# TYPE devpilot_model_request_duration_seconds histogram
+devpilot_model_request_duration_seconds_bucket{le="0.01",provider="demo"} 8.0
+devpilot_model_request_duration_seconds_bucket{le="0.05",provider="demo"} 8.0
+devpilot_model_request_duration_seconds_bucket{le="0.1",provider="demo"} 8.0
+devpilot_model_request_duration_seconds_bucket{le="0.5",provider="demo"} 8.0
+devpilot_model_request_duration_seconds_bucket{le="1.0",provider="demo"} 8.0
+devpilot_model_request_duration_seconds_bucket{le="5.0",provider="demo"} 8.0
+devpilot_model_request_duration_seconds_bucket{le="15.0",provider="demo"} 8.0
+devpilot_model_request_duration_seconds_bucket{le="60.0",provider="demo"} 8.0
+devpilot_model_request_duration_seconds_bucket{le="180.0",provider="demo"} 8.0
+devpilot_model_request_duration_seconds_bucket{le="600.0",provider="demo"} 8.0
+devpilot_model_request_duration_seconds_bucket{le="+Inf",provider="demo"} 8.0
+devpilot_model_request_duration_seconds_count{provider="demo"} 8.0
+devpilot_model_request_duration_seconds_sum{provider="demo"} 0.0
+# HELP devpilot_model_request_duration_seconds_created Model calls, separate from demo
+# TYPE devpilot_model_request_duration_seconds_created gauge
+devpilot_model_request_duration_seconds_created{provider="demo"} 1.7895801222243245e+09
+# HELP devpilot_model_tokens_total Provider-reported tokens only; absent usage is not fabricated
+# TYPE devpilot_model_tokens_total counter
+# HELP devpilot_approvals_total Approval decisions
+# TYPE devpilot_approvals_total counter
+devpilot_approvals_total{decision="approved"} 3.0
+# HELP devpilot_approvals_created Approval decisions
+# TYPE devpilot_approvals_created gauge
+devpilot_approvals_created{decision="approved"} 1.7895801225884795e+09
+# HELP devpilot_active_runs Currently active runs (0 or 1)
+# TYPE devpilot_active_runs gauge
+devpilot_active_runs 0.0
+# HELP devpilot_pending_approvals Currently waiting approvals
+# TYPE devpilot_pending_approvals gauge
+devpilot_pending_approvals 0.0
+# HELP devpilot_accepting_runs 0 while draining
+# TYPE devpilot_accepting_runs gauge
+devpilot_accepting_runs 1.0
+# HELP devpilot_ready Last storage/application readiness check
+# TYPE devpilot_ready gauge
+devpilot_ready 1.0

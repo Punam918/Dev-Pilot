@@ -1,0 +1,10 @@
+diff --git a/normalize.py b/normalize.py
+index 78bb71d..e4b617d 100644
+--- a/normalize.py
++++ b/normalize.py
+@@ -4,4 +4,4 @@
+ def normalize_username(value: str) -> str:
+     if not isinstance(value, str):
+         raise TypeError("username must be a string")
+-    return value.lower()
++    return value.strip().casefold()
