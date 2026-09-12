@@ -1,0 +1,4 @@
+kube_context = "kind-devpilot"
+values_file  = "../deploy/environments/staging/values.yaml"
+# Existing namespaces and devpilot-secrets must already be provisioned.
+# Do NOT use this when Argo CD or another Helm release already owns DevPilot.
