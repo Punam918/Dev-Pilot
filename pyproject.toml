@@ -15,7 +15,7 @@ dependencies = [
   "httpx>=0.28,<0.29",
   "pydantic-settings>=2.14,<3",
   "jsonschema>=4.26,<5",
-  "prometheus-client>=0.25,<0.26",
+  "prometheus-client>=0.25,<0.27",
 ]
 
 [project.optional-dependencies]
