@@ -1,0 +1,18 @@
+usage: devpilot [-h] {init,serve,token,doctor,replay,evaluate} ...
+
+Local MCP debugging with explicit approvals
+
+positional arguments:
+  {init,serve,token,doctor,replay,evaluate}
+    init                Copy trusted fixtures and create a private .env when
+                        absent
+    serve               Start the local web UI and API
+    token               Print the local API access token
+    doctor              Print non-secret local configuration checks
+    replay              Run one scripted fixture with automatic fixture-scoped
+                        approvals; no LLM
+    evaluate            Run all three synthetic tasks; script mode is not
+                        model evaluation
+
+options:
+  -h, --help            show this help message and exit

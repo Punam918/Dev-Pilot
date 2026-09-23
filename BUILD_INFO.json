@@ -1,0 +1,26 @@
+{
+  "project": "Dev-Pilot",
+  "version": "0.3.0",
+  "packaging_date": "2026-09-16",
+  "tested_python": "3.13.5",
+  "tests": {
+    "passed": 105,
+    "skipped": 2,
+    "failed": 0,
+    "main_process_statement_coverage_percent": 79.0160642570281
+  },
+  "scripted_fixtures": {
+    "completed": 3,
+    "total": 3,
+    "is_llm_benchmark": false
+  },
+  "real_http_workflow": true,
+  "real_otlp_capture_receiver": true,
+  "real_docker_or_cluster_execution": false,
+  "official_helm_execution": false,
+  "terraform_execution": false,
+  "remote_ci_execution": false,
+  "live_model_execution": false,
+  "no_model_weights_or_credentials": true,
+  "evidence": "docs/VALIDATION.md"
+}

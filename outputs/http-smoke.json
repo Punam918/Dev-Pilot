@@ -1,0 +1,30 @@
+{
+  "live": {
+    "status": "ok",
+    "version": "0.3.0",
+    "checks": "application process only"
+  },
+  "ready": {
+    "ready": true,
+    "draining": false
+  },
+  "auth_rejection": true,
+  "config": {
+    "provider": "demo",
+    "model": "scripted replay",
+    "runner": "host-trusted",
+    "max_steps": 24,
+    "docker_tools": false,
+    "version": "0.3.0",
+    "draining": false,
+    "active_run": null
+  },
+  "repositories": {
+    "repositories": [
+      "demo-normalize",
+      "demo-pagination",
+      "demo-redis"
+    ]
+  },
+  "separate_metrics_auth": true
+}

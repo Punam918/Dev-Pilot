@@ -1,0 +1,33 @@
+name: security
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '23 5 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        with: {persist-credentials: false}
+      - name: Secret and dependency scanning (includes known fixed vulnerabilities)
+        run: |
+          docker run --rm -v "$PWD:/src:ro" aquasec/trivy:0.66.0 fs /src \
+            --scanners vuln,secret --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1
+      - name: IaC report (requires human triage, not a silent universal pass)
+        if: always()
+        run: |
+          mkdir -p outputs
+          docker run --rm -v "$PWD:/src:ro" aquasec/trivy:0.66.0 config /src \
+            --format json > outputs/ci-iac-scan.json
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4
+        if: always()
+        with:
+          name: security-report
+          path: outputs/ci-iac-scan.json
+          retention-days: 14

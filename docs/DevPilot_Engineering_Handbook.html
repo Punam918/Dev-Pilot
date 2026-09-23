@@ -1,0 +1,1770 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevPilot — Engineering Handbook</title><style>
+@page { size: A4; margin: 19mm 17mm 19mm; }
+* { box-sizing: border-box; }
+html { color: #233044; background: white; }
+body { margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 10pt; line-height: 1.52; }
+h1,h2,h3 { color: #142640; line-height: 1.24; break-after: avoid-page; }
+h1 { font-size: 23pt; margin: 0 0 8mm; padding-top: 3mm; border-top: 3px solid #f37940; break-before: page; }
+h2 { font-size: 14pt; margin-top: 7mm; margin-bottom: 3mm; }
+h3 { font-size: 11.5pt; margin-top: 5mm; }
+p { margin: 0 0 3.2mm; orphans: 3; widows: 3; }
+a { color: #235b8c; text-decoration: none; overflow-wrap: anywhere; }
+strong { color: #162b45; }
+li { margin: 1.5mm 0; }
+ul,ol { padding-left: 6mm; }
+code { font-family: 'DejaVu Sans Mono', monospace; font-size: 8.1pt; overflow-wrap: anywhere; }
+p code,li code,td code { background: #edf2f6; padding: 0.25mm 0.6mm; border-radius: 2px; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; padding: 4mm; background: #edf2f6; border-left: 3px solid #9eb4cc; line-height: 1.45; }
+blockquote { margin: 4mm 0; padding: 3mm 5mm; background: #f0f5f9; border-left: 3px solid #f37940; }
+blockquote p:last-child { margin-bottom: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 8.6pt; margin: 4mm 0 6mm; table-layout: fixed; }
+thead { display: table-header-group; }
+tr { break-inside: avoid; }
+th,td { border: 1px solid #d8e1eb; padding: 2.3mm 2.5mm; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+th { color: #fff; background: #223b59; }
+td:first-child { font-weight: 500; }
+tbody tr:nth-child(even) { background: #f5f8fb; }
+table code { font-size: 7.5pt; }
+img { max-width: 100%; height: auto; max-height: 225mm; object-fit: contain; display: block; margin: 5mm auto; }
+.cover { break-after: page; padding-top: 16mm; }
+.cover .brand { letter-spacing: 4px; font-weight: 700; font-size: 13pt; color: #f37940; }
+.cover .title { margin: 12mm 0 5mm; font-size: 43pt; font-weight: 750; line-height: 1.06; color: #142640; }
+.cover .subtitle { font-size: 20pt; line-height: 1.3; margin-bottom: 12mm; color: #4c6079; }
+.cover .rule { height: 4px; width: 23mm; background: #f37940; margin: 9mm 0; }
+.cover .intro { font-size: 12pt; max-width: 150mm; }
+.cover .topics { background: #edf2f6; padding: 7mm; margin-top: 10mm; font-size: 11pt; line-height: 1.8; }
+.cover .edition { margin-top: 12mm; font-size: 9pt; color: #52677e; }
+.front-title { font-size: 25pt; color: #142640; margin-bottom: 5mm; }
+.toc { font-size: 10pt; }
+.toc ul { list-style: none; margin: 0; padding: 0; }
+.toc li { margin: 0; border-bottom: 1px solid #e1e8ef; padding: 1.8mm 0; break-inside: avoid; }
+.diagram { background: #f1f5fa; border: 1px solid #d4dfea; padding: 4mm; margin: 5mm 0; break-inside: avoid; }
+.diagram-title { font-size: 9pt; font-weight: 700; letter-spacing: 1px; margin-bottom: 3mm; }
+.flow-row { display: flex; align-items: center; gap: 2mm; margin: 2mm 0; }
+.flow-row > div { flex: 1; min-width: 0; text-align: center; background: #fff; border: 1px solid #c8d5e4; padding: 3mm 1.5mm; font-size: 9pt; font-weight: 700; }
+.flow-row small { font-size: 8pt; font-weight: 400; }
+.diagram-note { margin-top: 3mm; font-size: 8.5pt; color: #475f7c; }
+@media screen { body { max-width: 900px; margin: 40px auto; padding: 40px; box-shadow: 0 2px 20px #14264018; } h1 { margin-top: 60px; } }
+</style></head><body>
+<section class="cover"><div class="brand">DEVPILOT / ENGINEERING HANDBOOK</div>
+<div class="title">Understand<br>the entire project.</div>
+<div class="subtitle">From your first request<br>to interview-ready explanations</div>
+<div class="rule"></div><p class="intro">A beginner-friendly guide to what DevPilot does,
+why its components exist, how its code executes, and what the available evidence actually proves.</p>
+<div class="topics">35 chapters · 45 interview questions<br>
+Architecture &amp; source code · Models &amp; MCP tools<br>
+Approvals &amp; testing · Docker &amp; Kubernetes<br>
+CI/CD &amp; observability · Troubleshooting &amp; practice</div>
+<p class="edition">Repository-based learning edition · September 2026<br>
+Includes local validation results and known limitations.<br>
+No project credentials are included.</p></section><section aria-label="Contents"><div class="front-title">Your reading map</div>
+<p>Read Chapters 1–6 first. Follow one real demo with Chapter 27. Use Chapters 29–31 to rehearse interview answers, and Chapter 26 to locate the implementation.</p>
+<p>The contents below are clickable. The PDF also includes chapter bookmarks.</p><div class="toc">
+<ul>
+<li><a href="#01-start-here-understand-the-project-in-one-conversation">01 · Start here: understand the project in one conversation</a></li>
+<li><a href="#02-foundations-the-vocabulary-before-the-architecture">02 · Foundations: the vocabulary before the architecture</a></li>
+<li><a href="#03-the-problem-the-audience-and-the-design-boundaries">03 · The problem, the audience, and the design boundaries</a></li>
+<li><a href="#04-the-architecture-as-a-map">04 · The architecture as a map</a></li>
+<li><a href="#05-startup-what-happens-before-the-first-request">05 · Startup: what happens before the first request</a></li>
+<li><a href="#06-follow-one-investigation-from-beginning-to-end">06 · Follow one investigation from beginning to end</a></li>
+<li><a href="#07-the-browser-what-you-see-and-what-javascript-does">07 · The browser: what you see and what JavaScript does</a></li>
+<li><a href="#08-the-api-contracts-validation-and-status-codes">08 · The API: contracts, validation, and status codes</a></li>
+<li><a href="#09-runmanager-the-coordinator-and-state-machine">09 · RunManager: the coordinator and state machine</a></li>
+<li><a href="#10-the-model-adapter-where-ai-begins-and-ends">10 · The model adapter: where AI begins and ends</a></li>
+<li><a href="#11-mcp-a-protocol-not-a-permission-system">11 · MCP: a protocol, not a permission system</a></li>
+<li><a href="#12-every-tool-what-it-does-why-it-exists-and-how-it-works">12 · Every tool: what it does, why it exists, and how it works</a></li>
+<li><a href="#13-approvals-hashes-and-the-trust-boundary">13 · Approvals, hashes, and the trust boundary</a></li>
+<li><a href="#14-workspace-isolation-and-search-internals">14 · Workspace isolation and search internals</a></li>
+<li><a href="#15-tests-and-runners-executing-code-responsibly">15 · Tests and runners: executing code responsibly</a></li>
+<li><a href="#16-verification-artifacts-and-honest-conclusions">16 · Verification, artifacts, and honest conclusions</a></li>
+<li><a href="#17-sqlite-files-and-durable-versus-temporary-state">17 · SQLite, files, and durable versus temporary state</a></li>
+<li><a href="#18-configuration-and-credentials-without-confusion">18 · Configuration and credentials without confusion</a></li>
+<li><a href="#19-docker-and-compose-packaging-the-application">19 · Docker and Compose: packaging the application</a></li>
+<li><a href="#20-kubernetes-and-helm-from-first-principles">20 · Kubernetes and Helm from first principles</a></li>
+<li><a href="#21-cicd-releases-gitops-and-terraform">21 · CI/CD, releases, GitOps, and Terraform</a></li>
+<li><a href="#22-observability-logs-metrics-traces-and-audit-records">22 · Observability: logs, metrics, traces, and audit records</a></li>
+<li><a href="#23-backups-maintenance-rollback-and-recovery">23 · Backups, maintenance, rollback, and recovery</a></li>
+<li><a href="#24-tests-fixtures-and-the-evidence-hierarchy">24 · Tests, fixtures, and the evidence hierarchy</a></li>
+<li><a href="#25-the-real-model-experiment-explain-what-happened-accurately">25 · The real-model experiment: explain what happened accurately</a></li>
+<li><a href="#26-source-map-where-to-look-when-someone-asks-how-it-works">26 · Source map: where to look when someone asks how it works</a></li>
+<li><a href="#27-hands-on-walkthrough-run-inspect-and-explain">27 · Hands-on walkthrough: run, inspect, and explain</a></li>
+<li><a href="#28-troubleshooting-by-symptom-layer-and-evidence">28 · Troubleshooting by symptom, layer, and evidence</a></li>
+<li><a href="#29-interview-preparation-project-and-architecture-questions">29 · Interview preparation: project and architecture questions</a></li>
+<li><a href="#30-interview-preparation-security-reliability-and-testing">30 · Interview preparation: security, reliability, and testing</a></li>
+<li><a href="#31-interview-preparation-devops-and-system-design-follow-ups">31 · Interview preparation: DevOps and system-design follow-ups</a></li>
+<li><a href="#32-a-practical-study-and-interview-rehearsal-plan">32 · A practical study and interview rehearsal plan</a></li>
+<li><a href="#33-glossary-plain-language-definitions">33 · Glossary: plain-language definitions</a></li>
+<li><a href="#34-complete-application-settings-reference">34 · Complete application settings reference</a></li>
+<li><a href="#35-evidence-reading-map-and-scope-of-this-edition">35 · Evidence, reading map, and scope of this edition</a></li>
+</ul>
+</div>
+</section>
+<main><h1 id="01-start-here-understand-the-project-in-one-conversation">01 · Start here: understand the project in one conversation</h1>
+<h2 id="the-simplest-accurate-description">The simplest accurate description</h2>
+<p>DevPilot is a debugging workbench for small Python repositories. You describe a problem, the application investigates a disposable copy of the code, and you review proposed edits and test runs. At the end, you can download a patch, an explanation, and a record of what actually happened.</p>
+<p>The word <strong>workbench</strong> matters. A workbench brings tools together while a person remains responsible for decisions. DevPilot is not a system that automatically fixes and deploys arbitrary production applications. Its central design is to connect investigation, approval, execution, and evidence.</p>
+<p>Imagine a developer receives the report: “The service cannot find Redis when deployed with Docker Compose.” A chatbot might suggest changing a hostname. DevPilot gives the investigation an operational workflow: inspect the relevant file, reproduce the failure, propose an exact change, obtain approval, rerun tests, and export the change with evidence. The developer can then review and apply that patch through their normal development process.</p>
+<h2 id="why-build-this-instead-of-asking-a-chatbot">Why build this instead of asking a chatbot?</h2>
+<p>A chatbot's explanation is text. Text can be plausible without being correct. It may refer to a file that does not exist, assume a test passed, or suggest a fix that changes unrelated behavior. DevPilot gives the model bounded access to actual repository tools and records their results independently of the model's explanation.</p>
+<p>There are three questions to keep separate throughout this handbook:</p>
+<ol>
+<li><strong>What did the model say?</strong> This is a proposed explanation or requested action.</li>
+<li><strong>What did the application execute?</strong> This is an approved tool operation with recorded inputs and outputs.</li>
+<li><strong>What does the evidence establish?</strong> This is a conclusion supported by exit codes, hashes, and recorded artifacts, with limitations.</li>
+</ol>
+<p>This separation is the project's strongest interview story. It is more meaningful than listing many technologies without explaining how they contribute to a reliable workflow.</p>
+<h2 id="the-two-experiences-you-must-not-confuse">The two experiences you must not confuse</h2>
+<p><strong>Scripted demo:</strong> <code>DemoModel</code> follows a predefined sequence and repair for one of three bundled examples. It still uses real tools, real approval gates, real edits, and real tests. It demonstrates integration, not AI intelligence.</p>
+<p><strong>Live model:</strong> <code>OpenAIModel</code> sends the conversation and tool definitions to a configured model endpoint. The model decides what to inspect and which change to request. That introduces real uncertainty: latency, invalid calls, incomplete explanations, and incorrect repairs are possible.</p>
+<p>The adapter is called <code>OpenAIModel</code> because it uses an OpenAI-compatible HTTP format. The repository's intended local model paths use Qwen through Ollama or vLLM. The demo does not need a paid model API or downloaded weights.</p>
+<h2 id="a-short-interview-introduction">A short interview introduction</h2>
+<blockquote>
+<p>“DevPilot is a single-operator debugging workbench. It combines a local model interface, MCP tools, approval-gated edits and tests, disposable repository snapshots, and independently recorded test verification. The default demo is scripted, while live inference uses an OpenAI-compatible adapter. It also includes container, Kubernetes, delivery, and observability configurations for operating the same application.”</p>
+</blockquote>
+<p>That is an accurate project description, not a claim about who authored every file. When discussing your contribution, identify the parts you actually implemented, reviewed, modified, or tested. Do not claim production users, live-model success rates, or cluster deployments that you cannot demonstrate.</p>
+<h2 id="how-to-study-this-handbook">How to study this handbook</h2>
+<p>Read Chapters 1–6 to understand the problem and the complete workflow. Chapters 7–18 explain the implementation. Chapters 19–25 explain deployment and operations. The later chapters provide source maps, troubleshooting, interview answers, and a practice plan. You do not need to memorize every setting on the first pass. First learn the path a request follows and the boundary each component enforces.</p>
+<p>This handbook describes version 0.3.0 plus the local UI and cache-policy changes reviewed on 21 September 2026. It is based on the source in this checkout. “Implemented,” “locally demonstrated,” and “not yet demonstrated” are deliberately distinguished.</p>
+<h1 id="02-foundations-the-vocabulary-before-the-architecture">02 · Foundations: the vocabulary before the architecture</h1>
+<h2 id="repository-source-code-dependency-and-environment">Repository, source code, dependency, and environment</h2>
+<p>A <strong>repository</strong> is a collection of source files and supporting material. Git can track changes in a repository, but a directory can contain useful source code without including Git metadata. DevPilot accepts a directory under its configured workspace, then creates a fresh Git baseline in a copy.</p>
+<p>A <strong>dependency</strong> is software your code imports or calls. For example, DevPilot uses FastAPI to serve HTTP requests and HTTPX to send them. The dependency versions installed in a Python environment affect runtime behavior. Having a source file on disk does not mean every dependency it imports is installed.</p>
+<p>A <strong>virtual environment</strong>, here <code>.venv</code>, is a project-specific Python installation context. It keeps this application's installed packages separate from unrelated Python projects. <code>.venv/bin/python</code> explicitly selects that environment's interpreter. Activating the environment is a convenience that adjusts command lookup; it is not what makes the source code correct.</p>
+<h2 id="process-thread-asynchronous-task-and-subprocess">Process, thread, asynchronous task, and subprocess</h2>
+<p>A <strong>process</strong> is a running program with its own operating-system identity and memory. The DevPilot API is one process. Its MCP servers are child processes. A Docker container runs processes with additional operating-system restrictions.</p>
+<p>An <strong>asyncio task</strong> is scheduled work inside a Python event loop. DevPilot uses a task for an investigation so the API can continue serving status, events, approval decisions, and cancellation while the investigation waits on a model or operator. It does not create a separate API worker for every investigation.</p>
+<p>A <strong>subprocess</strong> is another operating-system process launched by a parent. This matters for tools: blocking pytest or Git commands should have their own timeout, bounded output, and cleanup. Separating processes also prevents mixing JSON-RPC protocol output with ordinary Python function calls, although it is not by itself a security sandbox.</p>
+<h2 id="http-api-endpoint-and-json">HTTP, API, endpoint, and JSON</h2>
+<p><strong>HTTP</strong> is the request/response protocol used between the browser and server. An <strong>API</strong> is the application interface that other software calls. An <strong>endpoint</strong> is a method/path combination, such as <code>POST /api/runs</code>.</p>
+<p>A request can contain a JSON body. <strong>JSON</strong> represents strings, numbers, Boolean values, lists, and objects in a machine-readable format. For example:</p>
+<pre><code class="language-json">{&quot;repo&quot;: &quot;demo-redis&quot;, &quot;task&quot;: &quot;Investigate the hostname bug&quot;, &quot;mode&quot;: &quot;repair&quot;}
+</code></pre>
+<p>This does not execute a command. The backend first validates the request, checks operational conditions, and chooses what to do. An HTTP status such as 202 means the investigation was accepted, not that the bug was fixed.</p>
+<h2 id="frontend-backend-model-service-and-runner">Frontend, backend, model service, and runner</h2>
+<p>The <strong>frontend</strong> is the browser interface. It displays state and sends user actions. The <strong>backend</strong> is the trusted application logic that validates requests, owns run state, enforces approvals, and exports artifacts.</p>
+<p>The <strong>model service</strong> generates responses and tool-call requests. It is a separate service in live mode. The <strong>runner</strong> executes the fixed test command. The model proposes; the backend decides whether a request is permitted; the runner executes the permitted test. These roles must remain distinct.</p>
+<h2 id="authentication-authorization-and-approval">Authentication, authorization, and approval</h2>
+<p><strong>Authentication</strong> answers “Does this caller possess the required credential?” DevPilot checks a bearer token on its application API. <strong>Authorization</strong> answers “Is this action allowed?” Tool availability, path restrictions, and diagnose mode are examples. <strong>Approval</strong> is a specific operator decision authorizing a particular write or test against a particular snapshot.</p>
+<p>Possessing the API token does not automatically approve all future tool calls. Conversely, a model claiming “the user approved this” is not an application approval. The relevant decision travels through the actual approval endpoint and is bound cryptographically to an action.</p>
+<h2 id="test-assertion-exit-code-and-regression">Test, assertion, exit code, and regression</h2>
+<p>A <strong>test</strong> executes code and checks expected behavior. An <strong>assertion</strong> states a condition that should be true. An <strong>exit code</strong> is the integer result of a process; zero usually means success for the command used here. A <strong>regression</strong> is behavior that used to work but broke after a change.</p>
+<p>Pytest executes Python, including imports and setup code. Therefore “run tests” is an execution privilege. A test file can do much more than read data. That is why DevPilot requests approval and provides isolated runner options.</p>
+<h1 id="03-the-problem-the-audience-and-the-design-boundaries">03 · The problem, the audience, and the design boundaries</h1>
+<h2 id="the-debugging-problem-as-a-sequence">The debugging problem as a sequence</h2>
+<p>Debugging often involves reading source, searching documentation, reproducing a failure, editing a small piece of code, checking the result, and communicating what changed. Each transition can lose context. A person may forget which code version a passing test used, or an AI system may confidently describe a test it never ran.</p>
+<p>DevPilot's answer is not unrestricted autonomy. It puts those transitions into a stateful workflow with recorded evidence. The same investigation record connects the user's task, model interactions, tool results, approval decisions, final snapshot, and exported patch.</p>
+<h2 id="who-the-current-implementation-fits">Who the current implementation fits</h2>
+<p>The implementation fits a single developer or operator investigating a small Python project with a <code>tests/</code> directory and prepared dependencies. It is also useful as a learning project because it makes many engineering boundaries explicit: HTTP versus subprocess communication, durable versus in-memory state, tool requests versus permissions, and application versus model deployment.</p>
+<p>The repository's DevOps material lets you study how to package and operate this application. It is not a second unrelated sample product. The Helm chart, monitoring dashboard, and backup scripts are all intended to support this same API and agent workflow.</p>
+<h2 id="why-the-scope-is-intentionally-narrow">Why the scope is intentionally narrow</h2>
+<p>The application supports one serving process and one active run. This reduces the complexity of run ownership and approvals. SQLite is suitable for a small local audit store. A narrow pytest runner is easier to constrain than an unrestricted shell.</p>
+<p>Narrow scope has costs. Users cannot launch an unlimited queue of investigations. The model cannot install dependencies or create arbitrary terminal commands. The snapshot limits exclude large repositories. These are deliberate constraints to explain, not inconveniences to hide.</p>
+<h2 id="what-the-project-does-not-promise">What the project does not promise</h2>
+<p>It does not automatically clone repositories from GitHub, push commits, open pull requests, publish changes, or repair production infrastructure. It does not support arbitrary language test runners, multi-tenant user management, distributed approval state, automatic incident remediation, or zero-downtime failover.</p>
+<p>It also does not prove correctness merely because a model sounds confident or because one test suite passes. Verification is evidence about a particular test execution and snapshot. A trustworthy explanation states both the evidence and what it cannot establish.</p>
+<h2 id="decision-framework-for-an-interview">Decision framework for an interview</h2>
+<p>When asked “Why did you choose this architecture?”, answer using a constraint, a choice, and a consequence. For example: “The current service has one operator and bounded local history, so SQLite avoids a separate database service. That simplicity means multiple independent API replicas are unsupported until run ownership and approvals move into shared infrastructure.”</p>
+<p>This pattern shows engineering judgment. Saying “SQLite is lightweight” without explaining the ownership constraint is a weaker answer.</p>
+<h1 id="04-the-architecture-as-a-map">04 · The architecture as a map</h1>
+<div class="diagram"><div class="diagram-title">REQUEST AND EVIDENCE FLOW</div><div class="flow-row"><div>Browser<br><small>Task · review · downloads</small></div><b>→</b><div>FastAPI<br><small>Auth · input validation</small></div><b>→</b><div>RunManager<br><small>State · policy · approvals</small></div></div><div class="flow-row"><div>Model service<br><small>Requests tools</small></div><b>↔</b><div>RunManager<br><small>Checks requests</small></div><b>↔</b><div>MCP gateway<br><small>Validated dispatch</small></div></div><div class="flow-row"><div>Tool subprocesses<br><small>Files · Git · search · DB</small></div><b>↔</b><div>Copied repository<br><small>Bounded snapshot</small></div><b>↔</b><div>Test runner<br><small>Fixed pytest command</small></div></div><div class="diagram-note">RunManager also writes SQLite audit records and final patch/report/trace artifacts. The model never directly owns the filesystem or approval store.</div></div>
+
+<h2 id="application-layer">Application layer</h2>
+<p><code>api.py</code> exposes HTTP operations. <code>runtime.py</code> owns the investigation. <code>store.py</code> persists records. The browser never needs direct access to the model service or SQLite file. It talks to the application API, which returns only the information required by the interface.</p>
+<p>This concentrates policy at a controlled boundary. If browser JavaScript were allowed to decide that an operation was approved without backend checks, a modified client could bypass the UI. Here, the server enforces decisions independently.</p>
+<h2 id="model-layer">Model layer</h2>
+<p><code>models.py</code> defines the response types and the two implementations: a scripted demo and the live HTTP adapter. Both return the same general form: optional assistant content and a list of requested tool calls. This allows the runtime to use one tool/approval pipeline for both.</p>
+<p>That common interface is valuable for repeatable integration tests. It does not make demo performance equivalent to live performance. The caller still records which provider and model were used.</p>
+<h2 id="tool-layer">Tool layer</h2>
+<p><code>mcp/client.py</code> manages subprocess connections and tool discovery. <code>mcp/server.py</code> exposes a pinned MCP subset. <code>tools/registry.py</code> declares names, input schemas, risk labels, and handlers. Individual modules implement restricted operations.</p>
+<p>MCP servers run inside the same host or API pod as local stdio subprocesses. They are not independently reachable network microservices. Drawing them as separate Kubernetes Deployments would misrepresent the actual implementation.</p>
+<h2 id="execution-and-operations-layers">Execution and operations layers</h2>
+<p>A runner executes tests on the snapshot. Host, Docker, and Kubernetes implementations have different trust and resource boundaries. Monitoring, backups, deployment manifests, and CI/CD support operating the application around those boundaries.</p>
+<p>Remember three independent service health questions: Is the API alive? Can the model answer? Can the test runner execute? A healthy API does not imply the other two are working.</p>
+<h1 id="05-startup-what-happens-before-the-first-request">05 · Startup: what happens before the first request</h1>
+<h2 id="from-a-shell-command-into-python">From a shell command into Python</h2>
+<p><code>python -m devpilot</code> asks Python to execute the package's <code>__main__.py</code>. That file calls the command-line entry point in <code>cli.py</code>. The package also defines a <code>devpilot</code> console command in <code>pyproject.toml</code>; it reaches the same CLI function.</p>
+<p>The CLI parser selects a subcommand. <code>serve</code> starts the application. <code>doctor</code> reports non-secret configuration checks. <code>token</code> prints the configured access token locally. <code>init</code>, <code>replay</code>, and <code>evaluate</code> serve different setup and test purposes described later.</p>
+<h2 id="what-setupsh-does">What setup.sh does</h2>
+<p><code>setup.sh</code> moves to the project directory, runs <code>scripts/bootstrap.py</code>, creates <code>.venv</code> if necessary, installs development dependencies, and installs this project in editable mode. An editable installation lets the interpreter import the working source directory while you develop.</p>
+<p>Bootstrap generates missing <code>.env</code> and credential files. It preserves existing values. This prevents rerunning setup from unexpectedly rotating credentials or replacing a carefully chosen configuration. Missing configuration and intentionally existing configuration are different cases.</p>
+<h2 id="why-runsh-uses-port-8091">Why run.sh uses port 8091</h2>
+<p><code>run.sh</code> uses exported environment variables when provided and otherwise chooses port 8091, host <code>127.0.0.1</code>, and state directory <code>.devpilot-local</code>. It checks for a virtual-environment interpreter, tracks a process ID, prints the local address and token, and starts the server.</p>
+<p>Direct CLI startup uses <code>Settings</code>, which reads <code>.env</code>; bootstrap normally puts port 8088 and <code>.devpilot</code> there. Bare code defaults use port 8080. These are different startup layers, not three simultaneously required servers. Environment values explicitly supplied by <code>run.sh</code> override the values in <code>.env</code> for that process.</p>
+<h2 id="what-application-construction-does">What application construction does</h2>
+<p><code>Settings</code> loads and validates configuration. <code>ensure_token()</code> resolves the API credential. <code>RunManager</code> ensures the state and workspace directories exist, creates the audit store, prepares telemetry, and initializes active-run and approval tracking.</p>
+<p><code>create_app()</code> creates FastAPI, mounts static files, registers middleware and routes, and defines startup/shutdown behavior. During application startup, <code>InstanceLease</code> takes an exclusive file lock for this state directory. Unfinished runs from a previous process are marked <code>interrupted</code>.</p>
+<h2 id="why-startup-and-construction-are-separated">Why startup and construction are separated</h2>
+<p>Constructing an app object may happen in tests or before a server actually begins serving. The serving lease belongs to application lifespan, not merely to importing a Python module. The current <code>create_app()</code> creates the manager with recovery disabled, then performs unfinished-run recovery while the lifespan lease is held.</p>
+<p>At shutdown, the manager drains admission and cancels active work if necessary, and telemetry closes its exporter. This is cleanup, not continuation of the investigation in another process.</p>
+<h1 id="06-follow-one-investigation-from-beginning-to-end">06 · Follow one investigation from beginning to end</h1>
+<h2 id="step-1-the-browser-sends-a-task">Step 1: the browser sends a task</h2>
+<p>The user connects, selects <code>demo-redis</code>, chooses repair mode, and clicks Investigate. JavaScript sends a JSON request to <code>POST /api/runs</code> with the bearer token in the Authorization header. FastAPI validates the shape and size of the request.</p>
+<p><code>RunManager.create()</code> then checks whether the service is draining, whether another run is active, whether retention capacity remains, whether the repository is valid, and whether the task and mode are acceptable. Demo mode additionally checks that the selected input matches an unchanged bundled fixture.</p>
+<h2 id="step-2-create-an-identity-and-durable-record">Step 2: create an identity and durable record</h2>
+<p>The manager generates a run ID and stores a queued record in SQLite. It includes the repository name, redacted task, mode, provider, model, runner, initial verification state, and metrics. The API returns the ID with HTTP 202, while an asyncio task performs the investigation.</p>
+<p>The ID lets every later operation refer to the same investigation. A browser refresh can read its record again. It does not mean the in-memory execution task could survive a process crash.</p>
+<h2 id="step-3-construct-the-copied-workspace">Step 3: construct the copied workspace</h2>
+<p>The runtime fingerprints the eligible source files, copies them under the run's state directory, and initializes a fresh Git repository there. Git's initial commit establishes the exact input baseline for later diff generation.</p>
+<p>The original is an input, not the working directory for edits. The runtime also records whether the original source fingerprint still matches at finalization. This check is separate from the successful-test verification flag.</p>
+<h2 id="step-4-connect-the-model-and-tools">Step 4: connect the model and tools</h2>
+<p>The manager chooses the scripted or live model, constructs the initial messages, starts MCP servers through the gateway, and discovers the available tools. Diagnose mode removes write tools from the model-visible catalog and also checks write requests at execution time.</p>
+<p>A live model receives descriptions and schemas rather than a general operating-system handle. It might request <code>files__read_file</code> with <code>{"path":"service.py"}</code>. The application decides whether that name and those arguments are valid.</p>
+<h2 id="step-5-inspect-and-reproduce">Step 5: inspect and reproduce</h2>
+<p>Read-only requests are executed without an individual approval prompt. File reads return content, line numbers, and a SHA256 hash. Search returns ranked passages. When the model requests <code>terminal__run_tests</code>, the runtime pauses and records a pending approval.</p>
+<p>On approval, a signed capability is sent to the MCP server. The server verifies it against the exact tool, arguments, and current snapshot. The runner executes pytest and records the exit code and output. A failing baseline is useful evidence, not an application failure by itself.</p>
+<h2 id="step-6-review-and-apply-a-proposed-edit">Step 6: review and apply a proposed edit</h2>
+<p>The model requests an exact replacement with an expected file hash. DevPilot builds a preview diff and requests approval. The operator can see precisely which text changes. After approval, the server checks the capability and the file hash again, then writes the replacement in the copied workspace.</p>
+<p>If the old text appears twice, the hash is stale, the path is a test file, or the snapshot changed after approval, the edit is rejected. The model receives an error result rather than silently bypassing the rule.</p>
+<h2 id="step-7-test-the-result-and-finalize">Step 7: test the result and finalize</h2>
+<p>A post-edit test run requires another approval. When the model ends its response sequence, the runtime derives verification from the last recorded test and the final snapshot. It writes <code>changes.patch</code>, <code>report.md</code>, and <code>trace.json</code>, and updates the terminal state.</p>
+<p>The UI displays the result and enables downloads. There is still no automatic application of the patch to the original repository. That final integration belongs to the developer's normal review and version-control workflow.</p>
+<div class="callout"><strong>Practice:</strong> Explain this chapter aloud without naming every library. Your explanation should still include the original/copy boundary, approval boundary, independent test evidence, and exported patch.</div>
+
+<h1 id="07-the-browser-what-you-see-and-what-javascript-does">07 · The browser: what you see and what JavaScript does</h1>
+<h2 id="why-the-frontend-is-intentionally-small">Why the frontend is intentionally small</h2>
+<p>The interface uses plain HTML, CSS, and JavaScript. There is no React application, Node compilation step, or separate frontend API gateway. FastAPI serves the page and its assets. This is appropriate for a small workbench with a limited number of interactions and reduces the number of build systems a beginner must understand.</p>
+<p><code>static/index.html</code> defines semantic controls and panels. <code>style.css</code> controls layout, colors, spacing, responsive behavior, and focus styles. <code>app.js</code> connects those controls to API calls and renders returned state. The browser does not compute whether a repair is verified.</p>
+<h2 id="connection-and-session-storage">Connection and session storage</h2>
+<p>The user enters a token. <code>connect()</code> calls <code>/api/config</code>, stores the accepted token in <code>sessionStorage</code>, loads repository choices, populates recent history, and reconnects to an active run if the API reports one. The token input is cleared after successful connection.</p>
+<p>Session storage keeps the credential associated with that browser tab's session instead of permanently storing it as application data. It is not protection against arbitrary same-origin JavaScript. Avoiding unsafe HTML rendering and preserving the browser security policy remain important.</p>
+<h2 id="submitting-a-task-and-selecting-a-run">Submitting a task and selecting a run</h2>
+<p><code>startRun()</code> sends the repository, task, and mode. <code>selectRun()</code> stops the previous event stream and polling interval, records the new run ID, resets the displayed activity, and starts reading the selected run.</p>
+<p>The editor provides a character count, examples, and a keyboard shortcut. Those are usability features. The backend still validates the request, because frontend controls can be changed or bypassed by a client.</p>
+<h2 id="why-there-are-both-events-and-polling">Why there are both events and polling</h2>
+<p>The activity timeline follows a server-sent event stream. SSE lets the backend send new event records over a long-lived HTTP response. The UI also polls the run detail every 800 milliseconds so status, metrics, and pending approval state remain current.</p>
+<p>The JavaScript uses streaming <code>fetch()</code> rather than the simplest <code>EventSource</code> pattern because it needs to attach an Authorization header. It decodes the stream, splits event blocks, parses JSON, and adds entries to the timeline. The backend emits keep-alive comments and a final done event.</p>
+<p>Polling and streaming are complementary here, but they also produce extra requests. A larger product could consolidate state updates or add more robust reconnect/cursor behavior. The current API supports an <code>after</code> sequence cursor; the current frontend does not implement a sophisticated automatic reconnection manager.</p>
+<h2 id="approvals-downloads-and-safe-rendering">Approvals, downloads, and safe rendering</h2>
+<p>Approval buttons post a strict Boolean decision against the selected run and approval ID. Download buttons fetch an artifact with authentication, create a temporary browser object URL, and initiate a download. Temporary URLs are revoked afterward.</p>
+<p>Model explanations and tool output are placed into elements with <code>textContent</code>, rather than interpreted as HTML. A source file containing HTML-like text should display as evidence, not become executable browser markup. Content Security Policy provides a further browser-side restriction.</p>
+<h2 id="the-client-facing-redesign-and-cache-policy">The client-facing redesign and cache policy</h2>
+<p>The updated design separates navigation, task entry, approval, activity, and results. Runtime details are collapsible. Activity filters do not hide or delete audit records; they change which already-loaded entries are visible. The demo label remains visible because presentation must not imply that scripted behavior is live AI.</p>
+<p>The page, static assets, and API responses now send <code>Cache-Control: no-store</code>, plus compatibility headers. A normal navigation or reload fetches the current files after deployment. This does not automatically reload an already-open investigation, and it does not restart the backend or rebuild a container. The tradeoff is less browser caching and more repeated asset transfer, acceptable for this small local UI.</p>
+<h1 id="08-the-api-contracts-validation-and-status-codes">08 · The API: contracts, validation, and status codes</h1>
+<h2 id="what-makes-an-api-a-contract">What makes an API a contract</h2>
+<p>An endpoint defines the method, path, required authentication, input shape, possible output, and failure behavior. The UI relies on that contract rather than importing backend Python functions. FastAPI's request models provide an explicit boundary between raw JSON and application values.</p>
+<p><code>RunInput</code> requires a repository name and a task, constrains task length, limits mode to repair or diagnose, and rejects extra fields. <code>Decision</code> requires a strict Boolean. This prevents a client from adding a field such as <code>shell</code> and expecting the application to execute it.</p>
+<h2 id="routes-grouped-by-purpose">Routes grouped by purpose</h2>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Meaning and important boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /</code> and <code>/static/*</code></td>
+<td>Serve the workbench page and assets</td>
+</tr>
+<tr>
+<td><code>GET /livez</code>, <code>/healthz</code></td>
+<td>Confirm process health, not model quality</td>
+</tr>
+<tr>
+<td><code>GET /readyz</code></td>
+<td>Check storage access and whether drain is active</td>
+</tr>
+<tr>
+<td><code>GET /metrics</code></td>
+<td>Expose metrics with a separate credential</td>
+</tr>
+<tr>
+<td><code>GET /api/config</code></td>
+<td>Return non-secret configuration and active-run identity</td>
+</tr>
+<tr>
+<td><code>GET /api/model/health</code></td>
+<td>Check demo availability or list models at the endpoint</td>
+</tr>
+<tr>
+<td><code>GET /api/repos</code></td>
+<td>List eligible named repository directories</td>
+</tr>
+<tr>
+<td><code>POST /api/runs</code></td>
+<td>Accept a new investigation</td>
+</tr>
+<tr>
+<td><code>GET /api/runs</code></td>
+<td>Return recent stored investigations</td>
+</tr>
+<tr>
+<td><code>GET /api/runs/{id}</code></td>
+<td>Return selected run state and result</td>
+</tr>
+<tr>
+<td><code>POST /api/runs/{id}/cancel</code></td>
+<td>Cancel the currently active run</td>
+</tr>
+<tr>
+<td><code>POST /api/runs/{id}/approvals/{approval_id}</code></td>
+<td>Decide one pending action</td>
+</tr>
+<tr>
+<td><code>GET /api/runs/{id}/events</code></td>
+<td>Stream persisted events after a cursor</td>
+</tr>
+<tr>
+<td><code>GET /api/runs/{id}/artifacts/{kind}</code></td>
+<td>Download finalized patch/report/trace</td>
+</tr>
+<tr>
+<td><code>POST /api/admin/drain</code>, <code>/resume</code></td>
+<td>Control admission of new investigations</td>
+</tr>
+</tbody>
+</table>
+<h2 id="interpret-status-codes-correctly">Interpret status codes correctly</h2>
+<p>HTTP 401 means the required credential was absent or incorrect. HTTP 400 represents an invalid request or unsupported repository input. HTTP 409 means the request conflicts with current state, such as starting a second run or answering an expired approval. HTTP 503 is used when drain prevents new runs or readiness is false. HTTP 202 means accepted for asynchronous work.</p>
+<p>A test failure inside an investigation is not necessarily an HTTP error. The test tool can execute correctly and return a nonzero pytest exit code as data. Keep transport success, tool success, test success, and investigation success separate.</p>
+<h2 id="middleware-and-request-boundaries">Middleware and request boundaries</h2>
+<p>Trusted-host middleware restricts accepted Host values. Mutation requests are checked against the expected Origin when an Origin header is supplied. The code checks declared request length before processing such requests. This is a declared-length guard, not a claim of an independent streaming body-size firewall for every HTTP transfer mode.</p>
+<p>Response headers disable sniffing and framing and constrain the page's allowed content sources. API and UI no-store headers prevent browsers and compliant intermediaries from storing responses. Operational middleware records a request ID, normalized route, method, status, and time to response headers.</p>
+<h2 id="authentication-is-intentionally-simple">Authentication is intentionally simple</h2>
+<p>The API compares the supplied bearer-token header with the expected value using constant-time comparison. There is one operator credential, not a database of users and roles. The application does not provide user registration, password reset, organization permissions, or built-in SSO.</p>
+<p>For a broader deployment, identity integration and per-user authorization would be architectural work. Putting this app behind a gateway does not automatically transform its internal single-operator model into multi-tenancy.</p>
+<h1 id="09-runmanager-the-coordinator-and-state-machine">09 · RunManager: the coordinator and state machine</h1>
+<h2 id="why-a-coordinator-is-necessary">Why a coordinator is necessary</h2>
+<p>An investigation crosses asynchronous boundaries: model requests, operator decisions, MCP subprocesses, and artifact creation. <code>RunManager</code> gives those steps one owner. Without that ownership, a browser refresh or two overlapping requests could produce conflicting edits or confuse which test belongs to which workspace.</p>
+<p>The manager keeps a reference to the active asyncio task and its ID. It also keeps a mapping from approval IDs to a run ID and an asyncio Future. SQLite stores the audit record; the Future is the live synchronization object waiting for the operator.</p>
+<h2 id="read-the-state-machine-as-a-story">Read the state machine as a story</h2>
+<div class="diagram"><div class="diagram-title">RUN LIFECYCLE</div><div class="flow-row"><div>Queued<br><small>Record created</small></div><b>→</b><div>Running<br><small>Investigate / execute</small></div><b>↔</b><div>Awaiting approval<br><small>One pending decision</small></div></div><div class="flow-row"><div>Completed<br><small>Final model response</small></div><div>Failed<br><small>Execution error</small></div><div>Cancelled<br><small>Stopped by request</small></div><div>Limit reached<br><small>Budget exhausted</small></div></div><div class="diagram-note">After a process restart, unfinished stored runs become interrupted. Completed is not synonymous with verified.</div></div>
+
+<p>A queued record exists before the background task has started. Running covers investigation and tool orchestration. Awaiting approval pauses at a human checkpoint. The runtime restores running state after an approval decision or expiry so the model can receive the result and continue or end.</p>
+<p>A model returning a final explanation causes completed status even if no fix was verified. An exception causes failed status. Cancellation is handled separately so final artifacts can still describe already-approved changes. Time, context, turn, and tool limits bound work, although different limits have different code paths; for example, a tool-call-budget exception is handled as an execution error in the current implementation.</p>
+<h2 id="why-only-one-active-run">Why only one active run</h2>
+<p>The check in <code>create()</code> rejects a second run while the first asyncio task is unfinished. This is not a queue: the second caller must wait and try again later. A simpler ownership model makes it easier to bind one approval, one snapshot, and one active workflow.</p>
+<p>This guard is inside one process. A file lease prevents a second serving process on the same state directory. Neither mechanism is a distributed scheduling system. Multiple replicas with separate state directories would create separate workbenches, not a coordinated fleet.</p>
+<h2 id="budgets-and-failure-handling">Budgets and failure handling</h2>
+<p>The model loop checks the size of serialized messages before requesting another completion. It counts model turns and tool calls. An outer timeout limits the investigation duration. Tool and model timeouts apply to their respective operations.</p>
+<p>Tool argument and policy errors can be returned to the model as tool errors. Broader failures end the run. The runtime's finalization block attempts to compute verification, produce a patch, update stored metadata, emit a terminal event, and export artifacts regardless of the normal success path.</p>
+<p>These controls make failures visible. They do not guarantee every external process or network service instantly stops when the user cancels; subprocess cleanup and Kubernetes deadlines provide additional layers.</p>
+<h2 id="drain-versus-cancellation">Drain versus cancellation</h2>
+<p>Drain rejects new investigations and marks the app not ready for normal admission. It allows existing work to finish. Cancellation stops the active task. A deployment procedure should prefer drain and wait when preserving an investigation matters.</p>
+<p>An approval waiting for a person can delay drain. That is intentional. A deployment script is not allowed to turn “waiting” into automatic permission to execute code.</p>
+<h1 id="10-the-model-adapter-where-ai-begins-and-ends">10 · The model adapter: where AI begins and ends</h1>
+<h2 id="the-model-sees-a-conversation-not-the-whole-machine">The model sees a conversation, not the whole machine</h2>
+<p>A request contains a model name, messages, tool definitions, generation settings, and output budget. The messages initially contain the system instructions and user task. Later they include previous assistant tool calls and the resulting tool messages.</p>
+<p>The model does not automatically read the repository. It discovers code through available tools. This distinction is central to agent design: access is provided through a catalog rather than implied by the model's ability to generate text.</p>
+<h2 id="structured-tool-calls">Structured tool calls</h2>
+<p>A tool call contains an ID, a function name, and JSON arguments. The application parses those arguments, validates their schema, determines risk, and executes only an allowed request. The call ID links an assistant's request to its tool result in the next conversation turn.</p>
+<p>For example, the model may request a file hash through a read, then submit that hash in a replacement request. It cannot choose the Docker security flags or change the Kubernetes namespace through that edit schema because those fields are not accepted tool arguments.</p>
+<h2 id="http-behavior-and-bounded-retries">HTTP behavior and bounded retries</h2>
+<p><code>OpenAIModel.complete()</code> posts to the configured base URL plus <code>/chat/completions</code>. It uses HTTPX with a timeout and ignores proxy environment variables through <code>trust_env=False</code>. It sends <code>stream=False</code>; browser activity streaming is a separate feature.</p>
+<p>The adapter makes up to three attempts for selected transient HTTP statuses and connection/timeout failures. It does not endlessly retry authentication errors. It limits response size and the number of tool calls per response, rejects duplicate IDs, checks response shape, and treats output truncation as an error.</p>
+<p>Retries can multiply elapsed time. A configured 120-second request timeout is not a promise that the overall model operation ends after exactly 120 seconds, because retries and backoff add time. The outer run timeout provides a separate overall bound.</p>
+<h2 id="context-tokens-and-temperature">Context, tokens, and temperature</h2>
+<p>A <strong>token</strong> is a model-specific unit of text, not necessarily a word or character. DevPilot's context guard uses characters in serialized messages as a practical bound; it is not a tokenizer-aware guarantee that the request fits every model's context window.</p>
+<p><code>max_output_tokens</code> limits generated output. <code>temperature</code> influences sampling randomness. A low temperature does not guarantee correctness. When the model reports token usage, the runtime records it; absent usage stays absent rather than becoming an invented measurement.</p>
+<p>There is no context summarizer, embedding memory, fine-tuning pipeline, or planner/executor model team in this implementation. It is a bounded conversational tool loop.</p>
+<h2 id="reasoning-output-and-confidentiality">Reasoning output and confidentiality</h2>
+<p>The adapter ignores provider-specific reasoning fields and strips complete <code>&lt;think&gt;…&lt;/think&gt;</code> blocks from normal content. That is output handling, not a guarantee that the model will avoid spending computation on reasoning. A provider/template can also place reasoning-like text in ordinary content or produce malformed tags; filtering is not a complete semantic classifier.</p>
+<p>The real local test exposed this distinction: instructions asking for concise non-thinking behavior did not deliver practical response times on the available CPU configuration. An experimental setting/template was tried and removed because it did not establish a reliable solution.</p>
+<h1 id="11-mcp-a-protocol-not-a-permission-system">11 · MCP: a protocol, not a permission system</h1>
+<h2 id="what-mcp-provides-here">What MCP provides here</h2>
+<p>Model Context Protocol defines a way for a client and tool server to describe capabilities and exchange calls. DevPilot implements a pinned 2025-06-18 stdio subset. It supports initialization, tools, resources, prompts, and ping. It does not claim every feature of every MCP version.</p>
+<p>Think of MCP as a standard-shaped conversation between the application and tools. It helps answer “Which tools exist?” and “How do I call this tool?” It does not answer “Should this user be allowed to execute this action?” DevPilot's policy and signed approval checks answer that separately.</p>
+<h2 id="why-stdio-and-json-rpc">Why stdio and JSON-RPC</h2>
+<p><strong>Stdio</strong> means the parent writes to a subprocess's standard input and reads standard output. <strong>JSON-RPC</strong> structures requests and responses using method names, parameters, IDs, and error objects. DevPilot sends one JSON message per line.</p>
+<p>Protocol messages belong on stdout; diagnostics go to stderr. If ordinary debug logging contaminated stdout, the client could fail to parse the next response. The client drains stderr separately and keeps a bounded, redacted tail for diagnostics.</p>
+<h2 id="connection-lifecycle">Connection lifecycle</h2>
+<p>The gateway starts a server process with the workspace root, per-run secret, and operator-controlled options. The client sends <code>initialize</code>, checks the negotiated protocol version, sends <code>notifications/initialized</code>, and requests <code>tools/list</code>.</p>
+<p>Server-local tool names become model-visible names such as <code>files__read_file</code>. The prefix tells the gateway which subprocess owns the operation. A request lock serializes requests to an individual subprocess, and response IDs are checked to prevent mismatched replies.</p>
+<h2 id="validation-exists-on-both-sides">Validation exists on both sides</h2>
+<p>The gateway validates tool arguments before dispatch. The server validates them again before invoking the handler. This is useful because a subprocess tool boundary should not rely entirely on a caller behaving correctly.</p>
+<p>For non-read tools, the server additionally verifies the signed capability. Model text cannot create a valid approval merely by adding an <code>_meta</code> value. The signature key belongs to the trusted application and tool subprocesses, not the model prompt.</p>
+<h2 id="resources-and-prompts">Resources and prompts</h2>
+<p>A resource is a read-oriented representation, such as <code>workspace://overview</code> or a file at <code>repo:///{path}</code>. The prompt interface exposes a reusable debugging checklist. These are supported protocol features, but the main agent runtime primarily discovers and calls tools.</p>
+<p>No remote OAuth negotiation, sampling, subscriptions, HTTP MCP transport, or arbitrary external MCP installation is implemented here. The server list is built into the application. An interviewer may ask whether this is a general-purpose MCP marketplace client; the accurate answer is no.</p>
+<h1 id="12-every-tool-what-it-does-why-it-exists-and-how-it-works">12 · Every tool: what it does, why it exists, and how it works</h1>
+<h2 id="file-tools-inspect-before-changing">File tools: inspect before changing</h2>
+<p><code>files__list_files</code> returns eligible regular files in the copied workspace. This gives the model a map before it assumes a filename exists. It uses the workspace exclusion and size policies, so the result is not necessarily every file in the original directory.</p>
+<p><code>files__read_file</code> reads a bounded line range, returns plain and numbered text, and includes the current SHA256 of the full text. Paths and line numbers support evidence-based explanations; the hash supports later stale-edit prevention. A read request cannot arbitrarily escape the workspace or read excluded credential paths.</p>
+<p><code>files__replace_text</code> requires a path, old text, new text, and expected hash. The old text must match exactly once. The file must not be protected test code. A preview is shown before approval, and the replacement is written through a temporary file and atomic replacement. It is not a generic file-creation or shell-write tool.</p>
+<h2 id="git-tools-review-the-copied-changes">Git tools: review the copied changes</h2>
+<p><code>git__status</code> reads status in the snapshot repository. <code>git__diff</code> obtains the patch relative to the initial snapshot commit. <code>git__history</code> reads the history of that newly initialized copy, not the user's original development history.</p>
+<p>Git commands use fixed argument lists and disable hooks, signing, filesystem monitor, and external diff behavior where relevant. Original <code>.git</code> configuration is not copied. The model cannot use these tools to push or change branches in the original repository.</p>
+<h2 id="search-tool-retrieve-relevant-evidence">Search tool: retrieve relevant evidence</h2>
+<p><code>docs__search</code> searches code and documentation using BM25. It returns matching paths, line ranges, symbols, scores, and excerpts. It rebuilds its index from the current snapshot so it sees approved edits. It needs no embedding model and no external search service.</p>
+<p>The name <code>docs</code> should not mislead you into thinking it searches only Markdown. Eligible source files are searched as well. Search result content remains untrusted repository data.</p>
+<h2 id="test-tool-one-command-selected-runner">Test tool: one command, selected runner</h2>
+<p><code>terminal__run_tests</code> takes no command arguments. It invokes the application's fixed pytest command. That is why the tool name is not equivalent to a terminal shell. The operator configures the runner and image outside the model-visible schema.</p>
+<p>The runtime asks for approval, and the runner returns exit code, bounded output, duration, timeout/output-limit flags, runner identity, and snapshot checks. A nonzero pytest result is meaningful failure evidence even when the tool executed normally.</p>
+<h2 id="database-tools-inspect-a-copied-sqlite-file">Database tools: inspect a copied SQLite file</h2>
+<p><code>database__schema</code> inspects tables and their schema. <code>database__query</code> executes bounded read queries on a small SQLite file inside the workspace. There is no PostgreSQL or remote-database connection in this implementation.</p>
+<p>The code opens SQLite in read-only mode, disables extension loading, restricts authorizer operations/functions, bounds query complexity and result sizes, and interrupts expensive work using a progress handler deadline. An arbitrary SQL string does not imply arbitrary database privileges.</p>
+<p>This database is distinct from DevPilot's audit database. The tool works on repository data in the snapshot; <code>store.py</code> manages the application's own state elsewhere.</p>
+<h2 id="optional-docker-observation-tools">Optional Docker observation tools</h2>
+<p><code>docker__list_containers</code>, <code>docker__inspect</code>, and <code>docker__logs</code> exist only when the operator enables them. They restrict observations to an operator-configured label scope. Inspection returns selected state rather than the complete container configuration and environment. Logs are bounded and redacted on a best-effort basis.</p>
+<p>These are observation tools, not container-management tools. They do not start, stop, remove, or deploy containers. Enabling a Docker pytest runner does not automatically enable Docker observation, and enabling observation does not select the test runner.</p>
+<h2 id="catalog-summary">Catalog summary</h2>
+<table>
+<thead>
+<tr>
+<th>Server</th>
+<th>Tools</th>
+<th>Risk category</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Files</td>
+<td>list_files, read_file, replace_text</td>
+<td>Two reads; one approved write</td>
+</tr>
+<tr>
+<td>Git</td>
+<td>status, diff, history</td>
+<td>Reads</td>
+</tr>
+<tr>
+<td>Docs</td>
+<td>search</td>
+<td>Read</td>
+</tr>
+<tr>
+<td>Terminal</td>
+<td>run_tests</td>
+<td>Approved execution</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>schema, query</td>
+<td>Restricted reads</td>
+</tr>
+<tr>
+<td>Docker, optional</td>
+<td>list_containers, inspect, logs</td>
+<td>Label-scoped observations</td>
+</tr>
+</tbody>
+</table>
+<p>There are 10 default tools and 13 with optional Docker observation. The catalog in <code>tools/registry.py</code> is the authoritative place to inspect accepted arguments and handlers.</p>
+<h1 id="13-approvals-hashes-and-the-trust-boundary">13 · Approvals, hashes, and the trust boundary</h1>
+<h2 id="why-are-you-sure-is-not-enough">Why “Are you sure?” is not enough</h2>
+<p>A useful approval must identify what is being authorized. Suppose the interface shows a harmless edit, but the code changes before the action executes. If approval were only a Boolean attached to a run, a different action could accidentally inherit that permission.</p>
+<p>DevPilot binds approval to the exact tool, arguments, and workspace content. It shows the operator the proposed edit, argument hash, and snapshot hash. After the operator allows it, the application issues a capability that is checked at the tool boundary.</p>
+<h2 id="hashes-explained-without-cryptography-jargon">Hashes explained without cryptography jargon</h2>
+<p>A cryptographic hash maps content to a fixed-size fingerprint. SHA256 produces a 256-bit result, commonly represented as 64 hexadecimal characters. A tiny input change almost certainly changes the fingerprint. Hashing is not encryption: you do not use the hash to recover the original text.</p>
+<p>The file hash answers “Is this still the same file I read?” The workspace fingerprint answers “Is this still the same eligible set of files and contents?” These are related but different checks. DevPilot builds the workspace fingerprint from sorted file names and their content hashes using canonical serialization.</p>
+<p>Canonical JSON fixes details such as key ordering and separators, so logically equivalent application inputs are serialized consistently before hashing. Consistent bytes are necessary when independent components must agree about what was signed.</p>
+<h2 id="hmac-and-the-capability">HMAC and the capability</h2>
+<p>HMAC combines a secret key and message to produce a message-authentication code. A caller without the key should not be able to forge a valid signature for a changed message. DevPilot uses HMAC-SHA256 over an encoded capability payload.</p>
+<p>The payload identifies the tool, argument hash, snapshot hash, expiry, and random nonce. A nonce is a value intended for one use. The server remembers used nonces so the same capability cannot simply be replayed within that server process.</p>
+<p>Human approval can wait up to the configured approval timeout, 300 seconds by default. Once approval is granted, the issued capability has a separate short expiry, 60 seconds by default in the capability helper. Do not confuse the human waiting window with the capability's validity window.</p>
+<h2 id="what-happens-on-denial-or-expiry">What happens on denial or expiry</h2>
+<p>The runtime returns a failed tool result instead of executing the action. DemoModel stops after a denied or failed operation. A live model may explain the situation or continue permitted investigation, but the system prompt and policy do not authorize it to bypass the denied action.</p>
+<p>An already-answered or wrong-run approval is rejected. Approvals are not durable resumable jobs: the waiting Future is in memory. A process restart cannot safely recreate the operator's live decision state just by reading the old display metadata.</p>
+<h2 id="the-trust-boundary-and-its-limits">The trust boundary and its limits</h2>
+<p>The operator, application installation, and tool-server code are trusted. Repository content and model output are not trusted instructions. The key is available to the trusted application and MCP processes, so this design does not protect against a malicious administrator or compromised application code.</p>
+<p>Filesystem checks and hashes reduce accidental or model-driven damage. They are not a formal proof against every concurrent filesystem race or hostile host actor. Similarly, containers share a kernel. In an interview, name the intended threat model rather than claiming an absolute sandbox.</p>
+<div class="callout"><strong>Interview answer:</strong> “Approval is enforced in code. We sign a short-lived capability for one tool call and snapshot, then verify it again at the tool server. Prompt text is not authority.”</div>
+
+<h1 id="14-workspace-isolation-and-search-internals">14 · Workspace isolation and search internals</h1>
+<h2 id="what-is-copied-and-what-is-excluded">What is copied and what is excluded</h2>
+<p><code>Workspace.files()</code> walks the repository while excluding Git internals, common virtual environments and caches, sensitive names, symlinks, and oversized files. <code>copy_workspace()</code> copies eligible regular files into a newly created destination and applies ordinary permissions.</p>
+<p>Code constants limit eligible files to 120,000 bytes each, 1,500 files, and 12,000,000 total copied bytes. Some oversized files are omitted rather than represented in the snapshot. Therefore, the snapshot is a bounded view of a repository, not a forensic clone of every original file.</p>
+<p>Known secret names include selected key files, credential filenames, and most <code>.env</code> files. Public <code>.env.example</code> and <code>.env.sample</code> names are exceptions. This list cannot recognize every secret in arbitrary source or logs. Best-effort redaction also masks common token patterns, but it is not a universal data-loss prevention system.</p>
+<h2 id="preventing-path-escape">Preventing path escape</h2>
+<p>A relative path such as <code>service.py</code> should resolve inside the snapshot. Absolute paths, parent traversal, backslash tricks, Git metadata access, sensitive components, and symlink traversal are rejected. The code checks resolved paths remain under the workspace root and restricts ordinary files to single-link regular files.</p>
+<p>File reads use <code>O_NOFOLLOW</code> where available to protect the final path component at open time. That improves one race boundary; it does not justify claiming that no filesystem race can ever exist in a mutable directory controlled by a malicious host user.</p>
+<h2 id="why-tests-are-protected">Why tests are protected</h2>
+<p>A model could make a failing suite pass by weakening assertions instead of repairing the application. DevPilot rejects edits under <code>tests</code>, filenames starting with <code>test_</code>, and <code>conftest.py</code>. This keeps the demonstration focused on fixing application code.</p>
+<p>This is a path-based protection rule. It does not recognize every possible test in every ecosystem, and it does not prove that application code cannot cheat against a test. Additional grading and human review remain useful.</p>
+<h2 id="bm25-from-first-principles">BM25 from first principles</h2>
+<p>Suppose your question contains “redis hostname default.” Search must identify useful passages among many files. BM25 gives a score based on query-term occurrence, rarity across passages, and passage length. A rare meaningful term contributes more than a common term repeated everywhere, while term frequency gains eventually saturate.</p>
+<p>DevPilot tokenizes words, splits snake_case and camelCase boundaries, and includes path and Python symbol information. It makes chunks up to 60 lines long, advancing by 40 lines. The overlap helps avoid cutting all context at an arbitrary chunk boundary. Python's AST parser supplies function and class names when parsing succeeds.</p>
+<p>The scoring uses the familiar BM25 form with frequency saturation and length normalization. In the implementation, the frequency factor is <code>2.2</code>, the <code>k1</code> term is <code>1.2</code>, and length normalization uses <code>0.25 + 0.75 × length / average_length</code>. You need not memorize these constants to understand the design; know that the score is lexical ranking, not a probability that the passage proves the answer.</p>
+<h2 id="why-no-vector-database">Why no vector database</h2>
+<p>A vector search system would require embeddings, model/version management, index storage, and update behavior. BM25 is transparent and sufficient for small bounded examples. It can miss semantic matches when the query uses different words from the code, but it is simple to reproduce and keeps the search local.</p>
+<p>A good interview answer compares these tradeoffs rather than declaring one retrieval method universally superior. A future hybrid retriever could combine lexical and semantic ranking, but that is not shipped in this codebase.</p>
+<h1 id="15-tests-and-runners-executing-code-responsibly">15 · Tests and runners: executing code responsibly</h1>
+<h2 id="the-fixed-test-command">The fixed test command</h2>
+<pre><code class="language-bash">python -m pytest -q -p no:cacheprovider -o addopts= -o pythonpath=. tests
+</code></pre>
+<p><code>-m pytest</code> runs pytest using the chosen Python interpreter. <code>-q</code> reduces output verbosity. Disabling pytest's cache provider avoids its usual cache writes. Clearing <code>addopts</code> limits inherited extra command arguments. <code>pythonpath=.</code> makes the copied project root importable, and <code>tests</code> selects the expected test directory.</p>
+<p>This is not complete isolation from project configuration or Python behavior. Importing tests and application modules still executes code. Runner boundaries, prepared dependencies, and operator trust still matter.</p>
+<h2 id="host-trusted-runner">Host-trusted runner</h2>
+<p>The host runner uses a local Python subprocess in the copied workspace. It requires <code>trust_local_code=true</code>. It is convenient for bundled reviewed examples, but the child process still has the host user's operating-system privileges apart from the application's process/environment choices.</p>
+<p>The subprocess helper builds a sanitized environment, uses an argument list without a shell, closes stdin, captures combined output, limits output size and time, and terminates the process group when required. <code>shell=False</code> prevents shell parsing of argument strings; it does not make an intentionally executed Python test harmless.</p>
+<h2 id="docker-runner">Docker runner</h2>
+<p>The Docker runner selects an operator-built image already present locally. The model cannot choose its image. The command disables network access, uses a read-only root filesystem and read-only workspace mount, drops capabilities, sets no-new-privileges, runs as a non-root UID, and limits memory, CPU, and process count. A temporary in-memory <code>/tmp</code> supports necessary temporary writes.</p>
+<p>The image must already contain required test dependencies. Network-disabled tests cannot solve missing dependencies by installing packages. The runner cleans up only the uniquely named ephemeral container created for that call.</p>
+<p>A Docker daemon and a successful <code>docker build</code> are prerequisites, not proof the hardened run works. In this machine's actual check, a simple Python container ran, but the real restricted runner failed with an execution-permission error. That distinction belongs in the project status.</p>
+<h2 id="kubernetes-runner">Kubernetes runner</h2>
+<p>The Kubernetes runner sends a compressed snapshot through an immutable ConfigMap to a short-lived Job in a separate namespace. The compressed archive is limited to 700,000 bytes to stay below the ConfigMap size budget after encoding and metadata.</p>
+<p>The test container has no application volume, no model credential, and no automatically mounted service-account token. Its fixed entrypoint checks archive members, creates files, and runs pytest. Network denial requires the namespace NetworkPolicy to be enforced by the cluster's CNI plugin.</p>
+<p>The runner observes Pod termination status and bounded logs, checks ownership relationships, and deletes its Job when possible. Active deadlines, TTL cleanup, and owner references provide cleanup even if the controlling subprocess is killed before its normal finalization.</p>
+<h2 id="snapshot-checks-before-and-after-execution">Snapshot checks before and after execution</h2>
+<p>The runner fingerprints the copied workspace before tests and compares it afterward. It returns the tested snapshot hash and whether eligible content stayed unchanged. This prevents a passing test run from automatically verifying a different final snapshot.</p>
+<p>These checks are especially meaningful with a read-only Docker mount. With Kubernetes, tests execute an extracted copy and return a container exit status. The current evidence model does not constitute a formal proof that arbitrary hostile test code never influenced execution; the test runner is still a constrained engineering tool, not a universal adversarial-code platform.</p>
+<h1 id="16-verification-artifacts-and-honest-conclusions">16 · Verification, artifacts, and honest conclusions</h1>
+<h2 id="separate-four-meanings-of-success">Separate four meanings of success</h2>
+<p>A request can succeed at one layer and fail at another. HTTP 202 means the run was accepted. A tool result marked okay can mean pytest was successfully invoked while its exit code is 1. Completed means the model returned a final response. Verified means the runtime found the required final-test evidence.</p>
+<p>For example, the scripted model can finish after a denied action and explain that no repair was verified. Calling that “completed” is not dishonest if the verification panel remains false. Calling it a successful fix would be dishonest.</p>
+<h2 id="the-actual-verification-rule">The actual verification rule</h2>
+<p>The runtime starts with verification false. It can become true only if the last recorded successful test-tool result has exit code zero, no timeout, no output-limit termination, and snapshot identity consistent with the final copied workspace. The runner must report that the snapshot did not change during its test operation.</p>
+<p>The source-unchanged result is recorded separately and is not part of the Boolean expression assigning <code>verified</code>. That subtlety is worth understanding before describing the code to an interviewer. The displayed flag is not a comprehensive statement about every safety or semantic property.</p>
+<h2 id="why-the-last-tested-snapshot-matters">Why the last tested snapshot matters</h2>
+<p>Suppose tests pass, then the model edits another line and immediately says “done.” The final workspace no longer matches the last tested hash, so it must not inherit the earlier passing result. Hash binding protects the relationship between evidence and the state it describes.</p>
+<p>Now suppose the model changes application behavior so the current tests pass but a missing edge case still fails. The hash check cannot detect that semantic gap. Tests cover only their assertions. Additional independent cases and human review help address a different kind of uncertainty.</p>
+<h2 id="the-three-exported-artifacts">The three exported artifacts</h2>
+<p><code>changes.patch</code> is the Git diff from the copied baseline. A developer can inspect it without accepting an entire model-generated repository. <code>report.md</code> combines run identity, configuration labels, verification, the assistant's explanation, metrics, and tool evidence. <code>trace.json</code> preserves structured run metadata and event records.</p>
+<p>The artifacts have different audiences: the patch is for code review, the report is for reading, and the trace is for detailed inspection or tooling. All can contain repository information and should be reviewed before external sharing. Redaction is not a guarantee that every sensitive detail has been removed.</p>
+<h2 id="independent-evaluation">Independent evaluation</h2>
+<p>The evaluation harness copies the final workspace into a separate grading workspace and adds extra fixture tests from <code>devpilot/graders</code>. Those tests were not in the agent's working repository during investigation, although they are public in the source distribution.</p>
+<p>A resolved evaluation case requires completed status, runtime verification, and passing extra grading without timeout or output-limit failure. This is stronger than relying on the model's final sentence, but it remains a small synthetic test. Three predefined cases cannot establish broad live-model debugging quality.</p>
+<h1 id="17-sqlite-files-and-durable-versus-temporary-state">17 · SQLite, files, and durable versus temporary state</h1>
+<h2 id="why-sqlite-fits-the-current-shape">Why SQLite fits the current shape</h2>
+<p>SQLite stores relational data in a local file without a separate database service. For a single-operator workbench, it simplifies installation, backup, and local debugging. <code>store.py</code> manages the connection and schema; the application does not require PostgreSQL or Redis to store its own runs.</p>
+<p>The database has a <code>runs</code> table with ID, timestamps, status, and JSON metadata, plus an <code>events</code> table with sequence number, run ID, timestamp, kind, and JSON event data. An index supports ordered event retrieval for a selected run.</p>
+<h2 id="wal-and-connection-behavior">WAL and connection behavior</h2>
+<p>Write-ahead logging records changes in a journal before checkpointing them into the main database file. It helps SQLite handle readers alongside writes, but it does not make all application state distributed or all updates independent of process ownership.</p>
+<p>The store opens connections through a context manager, enables foreign keys, commits successful operations, and closes the connection. Run metadata updates merge existing JSON fields and write a new row value. This design assumes the application's deliberately constrained ownership model rather than a large fleet of concurrent writers.</p>
+<h2 id="durable-data-versus-live-synchronization">Durable data versus live synchronization</h2>
+<p>The task description, status history, tool evidence, and artifacts are durable. The active asyncio task, approval Futures, current drain flag, and process-local metric counters are not durable execution state.</p>
+<p>After a restart, stored unfinished runs are marked interrupted. The UI may inspect old evidence, but the old coroutine does not reappear and continue from its previous instruction. Resumable execution would require explicit durable checkpoints, ownership, and approval semantics beyond the current database rows.</p>
+<h2 id="storage-layout-and-retention">Storage layout and retention</h2>
+<pre><code class="language-text">workspace/&lt;repository&gt;/                 original input
+.devpilot-local/audit.sqlite3            audit database for run.sh
+.devpilot-local/service.lock             process ownership lock
+.devpilot-local/server.pid               script process tracking
+.devpilot-local/runs/&lt;id&gt;/workspace/     disposable copy
+.devpilot-local/runs/&lt;id&gt;/changes.patch  exported changes
+.devpilot-local/runs/&lt;id&gt;/report.md      readable evidence
+.devpilot-local/runs/&lt;id&gt;/trace.json     structured evidence
+</code></pre>
+<p>Other startup paths can use different state directories. The default retention cap is 100 stored runs. Reaching the cap prevents starting another investigation; the app does not silently delete the oldest run. Operators must archive or rotate state deliberately while stopped.</p>
+<h2 id="why-a-pid-file-and-a-file-lease-are-different">Why a PID file and a file lease are different</h2>
+<p>A PID file is a convenience used by start/stop scripts to identify a process. Process IDs can become stale or be reused. A file lease is an operating-system lock held while the application owns a state directory. The lease is the stronger serving/maintenance ownership mechanism in this design.</p>
+<p>Neither provides leader election across a distributed system. If someone asks how to scale horizontally, explain that a shared database is only one part of the answer; active execution and approvals also require coordinated ownership.</p>
+<h1 id="18-configuration-and-credentials-without-confusion">18 · Configuration and credentials without confusion</h1>
+<h2 id="where-settings-come-from">Where settings come from</h2>
+<p><code>Settings</code> is a Pydantic Settings class using the <code>DP_</code> environment prefix. It reads code defaults, <code>.env</code>, process environment, and explicit constructor values according to the settings priority. Explicit constructor values and exported environment overrides are useful in tests and controlled startup scripts.</p>
+<p>The validation method checks combinations, not just individual field types. For example, host execution requires an explicit trust flag, metrics and API credentials must differ, wildcard allowed hosts are rejected, and the data directory must not be the same as or inside the workspace directory.</p>
+<h2 id="core-settings-to-understand">Core settings to understand</h2>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Defaults or representative names</th>
+<th>Why they matter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Provider</td>
+<td><code>demo</code> or <code>openai</code></td>
+<td>Selects scripted actions versus live inference</td>
+</tr>
+<tr>
+<td>Model</td>
+<td><code>DP_MODEL</code>, <code>DP_BASE_URL</code></td>
+<td>Identifies the endpoint and model served there</td>
+</tr>
+<tr>
+<td>Runner</td>
+<td>disabled, host-trusted, docker, kubernetes</td>
+<td>Controls where pytest executes</td>
+</tr>
+<tr>
+<td>Paths</td>
+<td>workspace and data directories</td>
+<td>Separates input repositories from audit state</td>
+</tr>
+<tr>
+<td>Turn/tool budgets</td>
+<td>24 turns, 40 calls</td>
+<td>Prevents unbounded investigation loops</td>
+</tr>
+<tr>
+<td>Context budget</td>
+<td>90,000 characters by code default</td>
+<td>Bounds conversation growth, not exact model tokens</td>
+</tr>
+<tr>
+<td>Timeouts</td>
+<td>tool 90 s, model 120 s, approval 300 s, run 1,200 s</td>
+<td>Bounds distinct waiting/execution stages</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>2,048 model output tokens by default</td>
+<td>Controls response generation budget</td>
+</tr>
+<tr>
+<td>Listener</td>
+<td>host and port</td>
+<td>Determines which local/network interface serves the API</td>
+</tr>
+<tr>
+<td>Retention</td>
+<td>100 runs</td>
+<td>Bounds retained investigations by count</td>
+</tr>
+<tr>
+<td>Observability</td>
+<td>metrics token, JSON logs, OTLP settings</td>
+<td>Enables controlled operational visibility</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-credential-files-in-your-editor">The credential files in your editor</h2>
+<p><code>.secrets/api-token</code> authenticates access to DevPilot's API. <code>.secrets/metrics-token</code> authenticates metrics scraping. <code>.secrets/grafana-password</code> is used for the optional Grafana login. These are different purposes and should not be substituted for one another.</p>
+<p>When a credential-file setting is configured, the file's value overrides the corresponding literal credential setting. Bootstrap protects the containing secret directory and preserves existing files. No actual credential values are reproduced in this handbook.</p>
+<p>If no API token is supplied through settings, <code>ensure_token()</code> creates or reads a private fallback token in the selected state directory. That is why retrieving a token using the wrong data directory can produce a credential for a different instance.</p>
+<h2 id="why-gitignore-matters">Why .gitignore matters</h2>
+<p>The existing <code>.gitignore</code> excludes <code>.env</code>, secret directories, virtual environments, local state, local workspace contents, local validation outputs, Terraform state, and backups. It explicitly allows public configuration examples.</p>
+<p>Ignoring a file prevents ordinary future tracking; it does not erase a secret already committed to Git history. A secret exposed elsewhere may require rotation even after the local file is ignored. Do not include the editor tabs' credential contents in screenshots or interview slides.</p>
+<h2 id="configuration-is-not-deployment-magic">Configuration is not deployment magic</h2>
+<p>Changing <code>.env</code> does not reconfigure a process that has already loaded its settings. Restart the relevant service after reviewing active work. Changing a source file does not rebuild an existing image. Compose's explicit <code>environment:</code> settings may override values you expected to come from <code>.env</code>.</p>
+<p>Likewise, setting a model name does not download the model, and setting a runner image name does not build that image. Configuration names point to resources; they do not create all those resources automatically.</p>
+<h1 id="19-docker-and-compose-packaging-the-application">19 · Docker and Compose: packaging the application</h1>
+<h2 id="image-versus-container-versus-volume">Image versus container versus volume</h2>
+<p>A Docker <strong>image</strong> is a packaged filesystem and startup configuration. A <strong>container</strong> is a running or stopped instance created from an image. A <strong>volume</strong> stores data separately from a container's disposable filesystem. Replacing a container should not accidentally replace the audit history if the application data lives in its configured persistent volume.</p>
+<p>DevPilot has two images because the application and tests have different responsibilities. The application image contains the API, agent code, tools, and runtime dependencies. The runner image contains the Python test environment and fixed Kubernetes entrypoint. An arbitrary repository cannot install packages into either image through a model tool.</p>
+<h2 id="the-application-dockerfile">The application Dockerfile</h2>
+<p>The build stage creates wheels for dependencies and for the project. A wheel is Python's installable package format. The runtime stage installs these wheels, adds Git and certificate support, creates data directories, and runs as a non-root application user.</p>
+<p>A multi-stage build keeps build work separate from the runtime layout. It does not by itself guarantee a vulnerability-free or perfectly reproducible image. Dependency constraints, base-image selection, scans, and evidence all matter.</p>
+<p>The Dockerfile's command starts the same <code>python -m devpilot serve --seed</code> application used locally. Containerization changes packaging and process environment, not the business logic into a different program.</p>
+<h2 id="what-compose-adds">What Compose adds</h2>
+<p><code>compose.yaml</code> defines the local scripted application service, explicit provider/runner settings, a loopback port mapping, credential-file mounts, a persistent data volume, resource limits, a read-only root filesystem, and temporary storage. The default host port is 8088 mapped to the container's port 8080.</p>
+<p>Inside that container, host-trusted means tests execute in subprocesses within the application container. It does not mean a separate test container is automatically created. This default is restricted to the bundled demo workflow. The configuration does not mount the host Docker socket into the app.</p>
+<h2 id="why-localhost-changes-meaning">Why localhost changes meaning</h2>
+<p>Inside a container, <code>localhost</code> refers to that container's network namespace. It is not automatically the host machine and not a sibling Redis container. Compose services can reach one another through service names on their shared network. This is the concept illustrated by the Redis fixture's hostname default.</p>
+<p>Host port mapping serves another purpose: it lets a host browser reach a container service. <code>127.0.0.1:8088:8080</code> publishes container port 8080 on the host's loopback address at 8088. It is not the same as telling a sibling container to use port 8088.</p>
+<h2 id="optional-compose-definitions">Optional Compose definitions</h2>
+<p>The repository includes model-service definitions for Ollama and vLLM and a monitoring overlay. Inspect each definition and its documented prerequisites before combining them. A Compose override changes selected configuration fields; it does not prove the resulting model, GPU, registry, and network setup is usable.</p>
+<p><code>compose.local.yaml</code> changes <code>init</code> behavior. It is not a general fix for operating-system security restrictions. The real local runner error must be investigated on its merits rather than bypassed by arbitrarily removing security controls.</p>
+<h1 id="20-kubernetes-and-helm-from-first-principles">20 · Kubernetes and Helm from first principles</h1>
+<h2 id="objects-you-need-to-know">Objects you need to know</h2>
+<p>A <strong>Pod</strong> is the basic unit in which Kubernetes runs containers. A <strong>Deployment</strong> manages desired application Pods. A <strong>Service</strong> provides a stable network destination. A <strong>Job</strong> runs work to completion. A <strong>namespace</strong> groups resources and policy scopes. A <strong>PersistentVolumeClaim</strong> requests persistent storage.</p>
+<p>A <strong>ConfigMap</strong> stores non-secret configuration or bounded input data. A <strong>Secret</strong> carries sensitive values, but base64 encoding is not encryption. A <strong>ServiceAccount</strong> identifies a workload to the Kubernetes API. <strong>RBAC</strong> controls which API operations that identity can perform.</p>
+<p>Helm packages templates and values into a chart. It renders concrete Kubernetes resources from configuration. Helm is not the cluster itself and does not make invalid architecture safe simply because a template renders.</p>
+<h2 id="devpilots-cluster-topology">DevPilot's cluster topology</h2>
+<div class="diagram"><div class="diagram-title">INTENDED CLUSTER TOPOLOGY</div><div class="flow-row"><div>Private ingress / Service<br><small>Operator access</small></div><b>→</b><div>One API Pod<br><small>FastAPI + MCP processes</small></div><b>↔</b><div>Persistent volume<br><small>SQLite + artifacts</small></div></div><div class="flow-row"><div>Model endpoint<br><small>Ollama / vLLM</small></div><b>↔</b><div>API Pod<br><small>Scoped Job permissions</small></div><b>→</b><div>Runner namespace<br><small>Ephemeral pytest Jobs</small></div></div><div class="diagram-note">The test Job does not receive the API's secrets or persistent state volume. Network restrictions depend on an enforcing CNI.</div></div>
+
+<p>The API Pod contains MCP subprocesses, while test execution happens in separate Jobs. The model endpoint can be another service, subject to operator configuration. The chart expects prerequisites such as runner namespace policy and application credentials to be prepared.</p>
+<h2 id="why-exactly-one-replica-and-recreate">Why exactly one replica and Recreate</h2>
+<p>The chart enforces one replica because the application uses SQLite and in-memory approvals without a shared queue. Recreate updates stop the old application before bringing up its replacement, avoiding overlapping owners of the same state volume.</p>
+<p>This produces downtime. A rolling update or horizontal autoscaler would not fix the missing ownership model. Scaling requires durable work ownership, shared approvals, suitable persistence, and carefully defined retry/resume semantics first.</p>
+<h2 id="probes-and-their-different-jobs">Probes and their different jobs</h2>
+<p>Liveness asks whether the process is alive enough to continue. Readiness asks whether it should accept normal traffic now. Startup probes allow a process time to initialize before normal health expectations apply.</p>
+<p>DevPilot's liveness does not depend on model availability. If an external model is down, repeatedly restarting a healthy API would not repair it and could destroy active review state. Readiness becomes false during drain and checks local storage/database accessibility.</p>
+<h2 id="network-policy-and-execution-isolation">Network policy and execution isolation</h2>
+<p>The runner namespace defaults to denying network traffic. Such a policy only works if the cluster's networking implementation enforces it. The included isolation check uses a reachable control destination so a failed runner connection cannot be mistaken for proof when the destination is actually down for everyone.</p>
+<p>The runner Job uses no automatically mounted service-account token, non-root execution, dropped capabilities, fixed resources, deadlines, and temporary volumes. A namespace is not equivalent to a separate physical machine. Container isolation and administrator trust still have limits.</p>
+<h2 id="helm-guards">Helm guards</h2>
+<p>The chart rejects incompatible settings such as multiple API replicas, a runner namespace equal to the application namespace, or too little tool timeout relative to the Job deadline. Production settings require appropriate image digests and a real provider. Ingress requires a public origin, and production ingress requires a TLS secret.</p>
+<p>These guards prevent known configuration mistakes. They cannot verify all cluster prerequisites or substitute for running the actual acceptance checks.</p>
+<h1 id="21-cicd-releases-gitops-and-terraform">21 · CI/CD, releases, GitOps, and Terraform</h1>
+<h2 id="continuous-integration-versus-continuous-delivery">Continuous integration versus continuous delivery</h2>
+<p><strong>Continuous integration</strong> checks whether a proposed change works with the rest of the project. Tests, linting, packaging checks, and configuration validation are typical CI activities. <strong>Delivery</strong> prepares a reviewed artifact for release. <strong>Deployment</strong> changes the running environment.</p>
+<p>The repository contains workflows for CI, security checks, image publication, and optional kind integration. Their presence is implementation evidence, not proof that they ran successfully in your GitHub account.</p>
+<h2 id="the-ci-workflow">The CI workflow</h2>
+<p>The Python job checks Python 3.11, 3.12, and 3.13, installs dependencies, runs Ruff, compiles Python files, validates configuration, and runs tests with coverage and JUnit output. Separate container/chart work checks Compose, builds the runner image, exercises Docker tests, runs the demo through HTTP, and validates Helm and Prometheus material.</p>
+<p>Some tests are optional because they need a real Docker daemon or the optional official MCP SDK. A skipped integration check must be reported as skipped, not folded into a claim that every deployment path passed.</p>
+<h2 id="build-scan-and-publish">Build, scan, and publish</h2>
+<p>The publisher builds application and runner images, attaches BuildKit SBOM/provenance, pushes candidates to GHCR, scans the exact resulting digests, and writes a promotion manifest only after the required gates pass.</p>
+<p>An <strong>SBOM</strong> is a software bill of materials: an inventory of components. <strong>Provenance</strong> records information about how an artifact was built. Neither automatically means the artifact is cryptographically signed under a deployment verification policy. This repository does not claim a keyless signature system it does not implement.</p>
+<p>The scan policy targets fixed high/critical vulnerabilities. Lower-severity and unfixed issues still require review. A candidate image may exist in the registry before its scan passes; “uploaded” and “approved for promotion” are different states.</p>
+<h2 id="why-image-digests-matter">Why image digests matter</h2>
+<p>A tag is a human-readable name that can be moved to different image content. A digest identifies specific image content. Promotion records the reviewed application/runner digest pair so a deployment refers to the artifacts that were actually reviewed and scanned.</p>
+<p><code>scripts/promote.py</code> validates a release manifest and updates environment values for review. It does not cryptographically prove the manifest came from a trusted workflow. Artifact origin, repository access, and reviewer controls remain part of the trust boundary.</p>
+<h2 id="gitops-and-manual-synchronization">GitOps and manual synchronization</h2>
+<p>Argo CD compares Git's desired deployment configuration with cluster state. In this project, automatic synchronization is deliberately disabled. A naive automatic replacement could interrupt a run awaiting human approval.</p>
+<p>The operator reviews the promotion, drains the application, waits for active work, handles backup needs, and synchronizes the change. Rollback normally means reverting the desired-state change in Git and synchronizing that reviewed state. A one-off cluster rollback can be overwritten if Git still declares the broken version.</p>
+<h2 id="terraforms-exact-role">Terraform's exact role</h2>
+<p>The Terraform configuration is an alternative Helm release owner for an existing cluster. It does not create cloud networks, virtual machines, GPUs, or databases. It requires an explicit context and values file and includes a prevent-destroy safeguard.</p>
+<p>Do not let Terraform and Argo CD independently manage the same release. Competing controllers can repeatedly undo each other's changes. Choosing one owner is an operational design decision, not merely a tooling preference.</p>
+<h1 id="22-observability-logs-metrics-traces-and-audit-records">22 · Observability: logs, metrics, traces, and audit records</h1>
+<h2 id="four-kinds-of-evidence">Four kinds of evidence</h2>
+<p>A <strong>log</strong> records an event or message. A <strong>metric</strong> summarizes quantities over time. A <strong>trace</strong> connects timed operations. An <strong>audit record</strong> preserves who or what requested and performed an application action, with detailed evidence.</p>
+<p>DevPilot's SQLite trace events are detailed investigation evidence. Prometheus and OTLP telemetry are operational summaries. You should not copy source code, prompts, or tokens into metric labels just because they would be convenient for debugging.</p>
+<h2 id="metrics-implemented-in-telemetrypy">Metrics implemented in telemetry.py</h2>
+<p>The code records HTTP counts and time to response headers, finished-run counts and durations, tool results and duration, model request duration, reported model tokens, approval decisions, active runs, pending approvals, readiness, and whether admission is enabled.</p>
+<p>Providers are separated in relevant labels so scripted replay is not silently counted as live-model behavior. Token metrics only increase when the provider supplies valid usage values. In-memory counters reset on process restart; Prometheus observes successive process lifetimes rather than receiving a durable transactional audit database.</p>
+<h2 id="why-label-cardinality-matters">Why label cardinality matters</h2>
+<p>A metric label creates a dimension. If every unique run ID or arbitrary path becomes a label, a monitoring system may create an enormous number of time series. That increases memory and storage cost and may expose sensitive data.</p>
+<p>DevPilot restricts tool names, status names, methods, and provider vocabulary. Unknown values map to bounded categories. Route templates represent endpoints without turning every run identifier into a separate label value.</p>
+<h2 id="traces-and-logs">Traces and logs</h2>
+<p>Optional OpenTelemetry spans cover HTTP requests, model completion, and MCP tools. The tracing wrapper accepts only reviewed operational attributes, and exception messages are not automatically exported. It intentionally avoids sending repository contents through tracing metadata.</p>
+<p>JSON operational logs include timestamp, severity, service, event, request ID, route, method, status, and duration when supplied. These support questions such as “Which endpoint started failing after the update?” without exporting the full private investigation.</p>
+<h2 id="monitoring-stack-responsibilities">Monitoring stack responsibilities</h2>
+<p>Prometheus scrapes metrics. Grafana visualizes them with provisioned data sources and dashboards. Alertmanager groups and routes alerts; the bundled configuration does not have an external notification destination enabled. The OpenTelemetry Collector receives/forwards traces, and Tempo stores them.</p>
+<p>The local monitoring overlay uses host ports 13000 for Grafana, 19090 for Prometheus, and 19093 for Alertmanager. A configured dashboard is not proof the stack was deployed or a scrape succeeded. Runtime acceptance requires checking the actual services and data.</p>
+<h2 id="a-useful-incident-example">A useful incident example</h2>
+<p>Suppose <code>/readyz</code> is false while <code>/livez</code> remains healthy. First determine whether maintenance drain is active. If not, inspect database access and writable storage. Do not assume a model outage caused readiness failure; model listing is checked through a separate endpoint.</p>
+<p>Suppose model request duration rises while HTTP liveness remains normal. Inspect the model service and hardware. Restarting the API may interrupt evidence without making model inference faster. The local CPU fallback during the Qwen test is an example of why these signals should be separated.</p>
+<h1 id="23-backups-maintenance-rollback-and-recovery">23 · Backups, maintenance, rollback, and recovery</h1>
+<h2 id="what-is-actually-backed-up">What is actually backed up</h2>
+<p>The backup module creates an offline tar.gz archive containing application state and workspace files plus a manifest of file sizes and SHA256 hashes. It uses SQLite's backup API to create a consistent database copy. It excludes credentials, selected ephemeral database files, and caches.</p>
+<p>The archive is not encrypted and is not automatically uploaded offsite. Backups may contain source code and tool evidence. Monitoring data in separate service volumes is not part of this application archive.</p>
+<h2 id="why-the-server-must-be-stopped">Why the server must be stopped</h2>
+<p>Backup acquires the same file lease used by serving. This prevents maintenance against a state directory actively owned by the application. Merely telling users not to click buttons is weaker than enforcing exclusive ownership.</p>
+<p>Drain stops new work, but it does not release the serving lease. After the active run finishes, stop the server before performing offline maintenance. Deployment-specific helper scripts coordinate the corresponding downtime workflow.</p>
+<h2 id="restore-to-a-new-directory">Restore to a new directory</h2>
+<p>Restore checks archive membership, duplicate names, path traversal, file types, total size, manifest membership, individual lengths, and hashes before creating the destination. It refuses to restore over an existing directory.</p>
+<p>A checksum catches accidental corruption relative to the supplied manifest. It is not a digital signature proving the archive's trusted origin, because someone who can replace both the data and manifest can recompute hashes. Protect archive access and establish provenance separately.</p>
+<h2 id="safe-rollback-thinking">Safe rollback thinking</h2>
+<p>Rolling back an image changes executable code. Restoring a backup changes data. These are separate operations. If a release changes data shape, an older image may not understand the current state. Blindly reverting an image does not answer the compatibility question.</p>
+<p>A reviewed rollback records the outgoing and incoming digests, drains work, checks state compatibility, applies the desired version through the release owner, and validates health and a representative workflow afterward.</p>
+<h2 id="rpo-and-rto-explained">RPO and RTO explained</h2>
+<p><strong>Recovery Point Objective</strong> describes how much recent data loss is acceptable. <strong>Recovery Time Objective</strong> describes how quickly service should be restored. They depend on backup frequency, storage location, recovery procedure, and measured restore speed.</p>
+<p>The repository contains tools and procedures, not a demonstrated production recovery SLA. You cannot claim a five-minute recovery target merely because a backup command exists. Measure a restore drill and record its conditions first.</p>
+<h1 id="24-tests-fixtures-and-the-evidence-hierarchy">24 · Tests, fixtures, and the evidence hierarchy</h1>
+<h2 id="three-synthetic-repair-fixtures">Three synthetic repair fixtures</h2>
+<p>The Redis fixture uses the wrong default hostname for sibling containers. The pagination fixture stops a slice one element too early. The normalization fixture lowercases a value without stripping surrounding whitespace or performing Unicode case folding.</p>
+<p>DemoModel knows the predefined edit for each case. The tests execute for real, but the discovery of the repair is scripted. <code>validate_demo()</code> checks names and fingerprints so an altered or unrelated repository cannot accidentally be treated as a trusted bundled demo.</p>
+<h2 id="what-the-evaluation-harness-does">What the evaluation harness does</h2>
+<p><code>run_case()</code> creates temporary input and state directories, seeds fixtures, constructs a manager, and handles narrowly scoped approvals for the evaluation. It copies exported artifacts and runs extra grading tests in a separate workspace. <code>evaluate()</code> aggregates all three results into JSON and Markdown summaries.</p>
+<p>Automatic approval here is an explicit fixture harness behavior. It is not the normal interactive product granting the model blanket permission. The live evaluation command also requires a live provider and a Docker or Kubernetes runner.</p>
+<h2 id="test-families-in-the-repository">Test families in the repository</h2>
+<table>
+<thead>
+<tr>
+<th>Test family</th>
+<th>What it checks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Safety</td>
+<td>Paths, exclusions, stale edits, capability signatures and replay behavior</td>
+</tr>
+<tr>
+<td>Tools</td>
+<td>File handling, search, SQLite restrictions and tool results</td>
+</tr>
+<tr>
+<td>Protocol</td>
+<td>MCP lifecycle, JSON-RPC requests, schemas and subprocess behavior</td>
+</tr>
+<tr>
+<td>Models</td>
+<td>Response parsing, errors, retry policy and structured calls</td>
+</tr>
+<tr>
+<td>Runtime/API</td>
+<td>States, approval decisions, cancellation, auth, downloads and verification</td>
+</tr>
+<tr>
+<td>DevOps/configuration</td>
+<td>Readiness, drain, chart/deployment assumptions and manifest checks</td>
+</tr>
+<tr>
+<td>Backup</td>
+<td>Offline ownership, archive integrity and unsafe restore rejection</td>
+</tr>
+<tr>
+<td>Kubernetes runner</td>
+<td>Job and API interactions under controlled test responses</td>
+</tr>
+<tr>
+<td>OTLP</td>
+<td>Controlled trace-export behavior</td>
+</tr>
+<tr>
+<td>Optional integrations</td>
+<td>Real Docker runner and official MCP SDK interoperability</td>
+</tr>
+</tbody>
+</table>
+<h2 id="why-mocks-are-useful-but-limited">Why mocks are useful but limited</h2>
+<p>A controlled fake HTTP response lets a test force rare failures, such as an invalid model payload or Kubernetes API error, without operating a real cluster. This is useful coverage of code behavior.</p>
+<p>It cannot prove that a real cluster's CNI enforces network policy, that a registry image pulls successfully, or that a particular GPU driver supports a serving container. Those require actual environment-specific integration checks. A static YAML parse is another distinct evidence level.</p>
+<h2 id="what-was-demonstrated-in-this-workspace">What was demonstrated in this workspace</h2>
+<p>The restored application suite recorded 105 passes and two optional skips before the cache-policy change. The cache-policy change then passed the 14-test runtime/API subset, including four new response-cache cases. Do not add these numbers and call the sum a unique full-suite result: they overlap and refer to different invocations.</p>
+<p>The redesigned UI completed the actual scripted Redis workflow in Chrome, including three approvals, verification, and patch download, with no JavaScript page errors. Layouts at 1500, 1024, 768, 390, and 360 pixels had no horizontal overflow. The no-store headers were checked against the running server.</p>
+<p>The real Docker integration check failed on this machine, and the live Qwen cart investigation did not complete with a verified patch. Kubernetes and full production delivery remain unproven here. A truthful interview explanation names these limits alongside the passing checks.</p>
+<h1 id="25-the-real-model-experiment-explain-what-happened-accurately">25 · The real-model experiment: explain what happened accurately</h1>
+<h2 id="the-new-example-and-its-purpose">The new example and its purpose</h2>
+<p>A separate shopping-cart example was created to avoid confusing the hard-coded fixtures with live AI ability. It calculates totals using Python Decimal and accepts a percentage discount. For a unit price of 19.99, quantity 3, and discount 10%, the correct total is 53.97. The intentionally buggy implementation returns 59.87 because it subtracts the fraction itself instead of that fraction of the subtotal.</p>
+<p>Baseline testing produced two failures and four passes. That proves the example contains a reproducible defect. This diagnosis was made by direct code inspection and testing during the project review, not by a successful DevPilot model repair.</p>
+<h2 id="environment-findings">Environment findings</h2>
+<p>No model service was initially listening. An installed Snap-based Llama model store hit a permission restriction through its launcher. After authorization, a dedicated Ollama 0.34.2 container and Qwen3 4B weights were installed. The container uses a persistent model volume and a loopback endpoint.</p>
+<p>The local NVIDIA GPU exists, but that Ollama version reported an installed driver older than its requirement and selected CPU inference. A structured tool-call smoke test passed. The subsequent investigation's first response took about 104 seconds, and observed generation was roughly 5–9 tokens per second.</p>
+<h2 id="investigation-results-and-the-attempted-adjustment">Investigation results and the attempted adjustment</h2>
+<p>The original Qwen attempt completed one model turn and a file-listing tool call, then was stopped after about 341 seconds during slow subsequent generation. No proposed patch or test execution was approved. Verification remained false and the source was unchanged.</p>
+<p>A temporary reasoning setting and a modified local model-template alias were investigated. That attempt was also stopped without a repair. The temporary application modifications and alias were removed rather than presented as a fix. The original Qwen weights remain available.</p>
+<p>The completed file-listing call demonstrates that the model adapter and MCP dispatch can work together. It does not demonstrate the full repair loop. A cancelled run also does not prove the model could never solve the task under a different serving configuration.</p>
+<h2 id="the-separate-docker-limitation">The separate Docker limitation</h2>
+<p>The runner image built, and a basic container could execute Python. The actual hardened runner returned an execution-permission error. The optional Docker integration test failed separately. That means “Docker is installed” is not enough to claim isolated tests are working.</p>
+<p>A supervised host-runner fallback was prepared for the tiny reviewed example, with manual review required for every edit and execution. It did not reach those approvals. A 179-case independent checker was prepared outside the model-visible repository but was not executed because there was no repaired result.</p>
+<h2 id="the-interview-lesson">The interview lesson</h2>
+<p>Explain this as an integration investigation with honest boundaries: “The scripted and browser flows are demonstrated. The real endpoint can return valid tool calls, but our local CPU/serving setup did not complete the new repair example, and the hardened Docker path has an environment failure. We kept both failures visible and did not turn them into a successful benchmark.”</p>
+<p>The next acceptance target is concrete: establish practical live inference, restore the intended runner boundary, and repeat the same input through baseline, approved edit, post-edit tests, and independent grading. Infrastructure source files alone do not satisfy that target.</p>
+<h1 id="26-source-map-where-to-look-when-someone-asks-how-it-works">26 · Source map: where to look when someone asks how it works</h1>
+<p>Use this chapter as a navigation map while reading the actual repository. The prose chapters explain behavior; this index tells you where that behavior lives. Paths are relative to the project root.</p>
+<h2 id="application-source">Application source</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Responsibility and connection to the rest of the application</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>devpilot/__init__.py</code></td>
+<td>Defines package version</td>
+</tr>
+<tr>
+<td><code>devpilot/__main__.py</code></td>
+<td>Enables <code>python -m devpilot</code></td>
+</tr>
+<tr>
+<td><code>devpilot/cli.py</code></td>
+<td>Implements init, token, doctor, serve, replay, evaluate</td>
+</tr>
+<tr>
+<td><code>devpilot/config.py</code></td>
+<td>Settings, allowed providers/runners, credential-file loading, path and URL validation</td>
+</tr>
+<tr>
+<td><code>devpilot/api.py</code></td>
+<td>HTTP routes, bearer authentication, origin/host checks, UI files, SSE, health and admin operations</td>
+</tr>
+<tr>
+<td><code>devpilot/runtime.py</code></td>
+<td>Central state machine: snapshots, model loop, approval futures, cancellation, evidence and exports</td>
+</tr>
+<tr>
+<td><code>devpilot/models.py</code></td>
+<td>Model response types, HTTP adapter with bounded retries, and scripted DemoModel</td>
+</tr>
+<tr>
+<td><code>devpilot/prompts.py</code></td>
+<td>Evidence-first instructions passed to the model; enforcement remains in code</td>
+</tr>
+<tr>
+<td><code>devpilot/demo.py</code></td>
+<td>Fixture definitions, one-line predefined repairs, seeding and fingerprint validation</td>
+</tr>
+<tr>
+<td><code>devpilot/evaluation.py</code></td>
+<td>Three-task replay/live harness, fixture-scoped automatic approvals, separate grading and summaries</td>
+</tr>
+<tr>
+<td><code>devpilot/safety.py</code></td>
+<td>Workspace boundaries, excluded paths, bounded copying, hashing, exact replacements, redaction and signed capabilities</td>
+</tr>
+<tr>
+<td><code>devpilot/process.py</code></td>
+<td>Fixed argument-vector subprocess execution, sanitized environment, output/time limits and descendant cleanup</td>
+</tr>
+<tr>
+<td><code>devpilot/gitops.py</code></td>
+<td>Initializes snapshot Git baseline and reads diff/status/history using controlled commands</td>
+</tr>
+<tr>
+<td><code>devpilot/retrieval.py</code></td>
+<td>Splits text into overlapping chunks, annotates Python symbols, ranks results using BM25</td>
+</tr>
+<tr>
+<td><code>devpilot/store.py</code></td>
+<td>SQLite runs/events tables, CRUD, chronological event retrieval and restart interruption</td>
+</tr>
+<tr>
+<td><code>devpilot/lease.py</code></td>
+<td>Linux <code>flock</code> lease to prevent simultaneous serving/maintenance against the same state</td>
+</tr>
+<tr>
+<td><code>devpilot/telemetry.py</code></td>
+<td>Per-manager Prometheus metrics, structured operational logging, optional OTLP tracing</td>
+</tr>
+<tr>
+<td><code>devpilot/backup.py</code></td>
+<td>Offline archive creation, manifest hashes, bounded validation and restore to a new directory</td>
+</tr>
+<tr>
+<td><code>devpilot/mcp/__init__.py</code></td>
+<td>Pins the supported MCP protocol version</td>
+</tr>
+<tr>
+<td><code>devpilot/mcp/client.py</code></td>
+<td>Stdio subprocess lifecycle, JSON-RPC request IDs, tool discovery/validation and signed dispatch</td>
+</tr>
+<tr>
+<td><code>devpilot/mcp/server.py</code></td>
+<td>Initialization, tools/resources/prompts/ping, schema checks and capability enforcement</td>
+</tr>
+<tr>
+<td><code>devpilot/tools/__init__.py</code></td>
+<td>Marks the tools package</td>
+</tr>
+<tr>
+<td><code>devpilot/tools/registry.py</code></td>
+<td>Authoritative catalog of tool schemas, handlers and risk classifications</td>
+</tr>
+<tr>
+<td><code>devpilot/tools/runner.py</code></td>
+<td>Selects the runner and executes the fixed pytest command with snapshot checks</td>
+</tr>
+<tr>
+<td><code>devpilot/tools/kubernetes.py</code></td>
+<td>Archives a snapshot, creates Job/ConfigMap, observes completion/logs and cleans up</td>
+</tr>
+<tr>
+<td><code>devpilot/tools/database.py</code></td>
+<td>Bounded read-only SQLite connection with an authorizer and execution deadline</td>
+</tr>
+<tr>
+<td><code>devpilot/tools/docker.py</code></td>
+<td>Optional label-scoped container listing, state inspection and recent logs</td>
+</tr>
+<tr>
+<td><code>devpilot/static/index.html</code></td>
+<td>Workbench layout, connection, task entry, trace, approvals and result panels</td>
+</tr>
+<tr>
+<td><code>devpilot/static/app.js</code></td>
+<td>Authenticated fetch, session token storage, run creation, polling, SSE, decisions and downloads</td>
+</tr>
+<tr>
+<td><code>devpilot/static/style.css</code></td>
+<td>Visual layout, status styles and responsive presentation</td>
+</tr>
+<tr>
+<td><code>runner/job_entrypoint.py</code></td>
+<td>Validates/extracts the transferred snapshot and invokes pytest inside a Kubernetes test container</td>
+</tr>
+</tbody>
+</table>
+<h2 id="supporting-scripts-and-build-files">Supporting scripts and build files</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>setup.sh</code>, <code>run.sh</code>, <code>stop.sh</code></td>
+<td>Local environment installation and foreground server lifecycle</td>
+</tr>
+<tr>
+<td><code>scripts/bootstrap.py</code>, <code>bootstrap.sh</code></td>
+<td>Generate missing local config and credentials without replacing existing values</td>
+</tr>
+<tr>
+<td><code>scripts/check_model.py</code></td>
+<td>Check configured model structured tool-call support</td>
+</tr>
+<tr>
+<td><code>scripts/http_smoke.py</code></td>
+<td>Read-only health, readiness, authentication and repository checks</td>
+</tr>
+<tr>
+<td><code>scripts/cluster-smoke.py</code></td>
+<td>Demo-only Redis workflow over HTTP; explicitly enables fixture automatic approvals</td>
+</tr>
+<tr>
+<td><code>scripts/drain.py</code></td>
+<td>Ask the API to drain, wait for completion, or resume</td>
+</tr>
+<tr>
+<td><code>scripts/compose-backup.sh</code>, <code>k8s-backup.py</code></td>
+<td>Deployment-specific offline backup workflows</td>
+</tr>
+<tr>
+<td><code>scripts/create-k8s-secret.py</code></td>
+<td>Create cluster credentials in an explicit context</td>
+</tr>
+<tr>
+<td><code>scripts/kind-up.sh</code></td>
+<td>Create a dedicated local lab, images, policy, deployment and isolation checks</td>
+</tr>
+<tr>
+<td><code>scripts/check-runner-isolation.py</code></td>
+<td>Exercise actual cluster network denial with a control target</td>
+</tr>
+<tr>
+<td><code>scripts/install-helm.sh</code></td>
+<td>Install the repository's selected Helm tool version</td>
+</tr>
+<tr>
+<td><code>scripts/validate-configs.py</code></td>
+<td>Check deployment/configuration consistency without claiming a live deployment</td>
+</tr>
+<tr>
+<td><code>scripts/chart-input.py</code>, <code>render-chart-static.go</code></td>
+<td>Support static chart inspection/rendering; distinct from real Helm/cluster checks</td>
+</tr>
+<tr>
+<td><code>scripts/promote.py</code></td>
+<td>Update environment values from release manifest digests for review</td>
+</tr>
+<tr>
+<td><code>scripts/update-locks.sh</code></td>
+<td>Regenerate dependency constraints</td>
+</tr>
+<tr>
+<td><code>scripts/package_zip.py</code></td>
+<td>Package the distribution with filtered contents and build metadata</td>
+</tr>
+<tr>
+<td><code>scripts/capture_ui.py</code></td>
+<td>Capture UI evidence using optional browser tooling</td>
+</tr>
+<tr>
+<td><code>requirements/runtime.in</code>, <code>runtime.txt</code></td>
+<td>Runtime dependency intent and exact constraints</td>
+</tr>
+<tr>
+<td><code>requirements/dev.txt</code>, <code>runner.txt</code></td>
+<td>Development/test and isolated-runner dependencies</td>
+</tr>
+<tr>
+<td><code>pyproject.toml</code></td>
+<td>Package metadata, console entrypoint, extras, pytest and Ruff settings</td>
+</tr>
+<tr>
+<td><code>Makefile</code></td>
+<td>Convenience development commands</td>
+</tr>
+<tr>
+<td><code>BUILD_INFO.json</code>, <code>MANIFEST.sha256</code></td>
+<td>Distributed build metadata and packaged-file hashes; local edits change the packaged state</td>
+</tr>
+<tr>
+<td><code>LICENSE</code>, <code>SECURITY.md</code>, <code>CONTRIBUTING.md</code>, <code>CHANGELOG.md</code></td>
+<td>Licensing, trust assumptions, contribution process and release history</td>
+</tr>
+<tr>
+<td><code>.env.example</code></td>
+<td>Public configuration reference; local <code>.env</code> and <code>.secrets</code> are private</td>
+</tr>
+<tr>
+<td><code>outputs/</code></td>
+<td>Packaged validation artifacts plus clearly separated new local results</td>
+</tr>
+<tr>
+<td><code>outputs-previous-0.2.0/</code></td>
+<td>Historical evidence for the earlier version</td>
+</tr>
+<tr>
+<td><code>docs/</code></td>
+<td>Architecture, API, MCP, model, UI, deployment, operations, evaluation and portfolio guides</td>
+</tr>
+</tbody>
+</table>
+<h2 id="deployment-source">Deployment source</h2>
+<table>
+<thead>
+<tr>
+<th>File/directory</th>
+<th>What it contributes and why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Dockerfile</code></td>
+<td>Builds the non-root application image with packaged code and runtime dependencies</td>
+</tr>
+<tr>
+<td><code>Dockerfile.runner</code></td>
+<td>Separate Python/pytest test image including the Kubernetes entrypoint</td>
+</tr>
+<tr>
+<td><code>compose.yaml</code></td>
+<td>Local scripted demo with loopback binding, persistent volume, secrets and resource restrictions</td>
+</tr>
+<tr>
+<td><code>compose.local.yaml</code></td>
+<td>Overrides <code>init</code> to false; does not remove general runtime restrictions</td>
+</tr>
+<tr>
+<td><code>compose.ollama.yaml</code>, <code>compose.vllm.yaml</code></td>
+<td>Optional model-service definitions; inspect their settings before use</td>
+</tr>
+<tr>
+<td><code>compose.monitoring.yaml</code></td>
+<td>Adds the monitoring stack and connects the application's trace export</td>
+</tr>
+<tr>
+<td><code>helm/devpilot/Chart.yaml</code></td>
+<td>Chart metadata</td>
+</tr>
+<tr>
+<td><code>helm/devpilot/values.yaml</code>, <code>values.schema.json</code></td>
+<td>Deployment defaults and configuration shape/constraints</td>
+</tr>
+<tr>
+<td><code>helm/devpilot/templates/checks.yaml</code></td>
+<td>Additional deployment correctness guards</td>
+</tr>
+<tr>
+<td><code>deployment.yaml</code>, <code>service.yaml</code>, <code>pvc.yaml</code></td>
+<td>One application replica, networking, persistent state and probes</td>
+</tr>
+<tr>
+<td><code>configmap.yaml</code>, <code>rbac.yaml</code></td>
+<td>Application settings and scoped runner permissions</td>
+</tr>
+<tr>
+<td><code>networkpolicy.yaml</code>, <code>ingress.yaml</code></td>
+<td>Traffic boundaries and optional ingress</td>
+</tr>
+<tr>
+<td><code>servicemonitor.yaml</code></td>
+<td>Optional Prometheus Operator scrape resource</td>
+</tr>
+<tr>
+<td><code>_helpers.tpl</code>, <code>NOTES.txt</code></td>
+<td>Shared chart naming/image helpers and installation guidance</td>
+</tr>
+<tr>
+<td><code>infra/kind.yaml</code></td>
+<td>Local Kubernetes lab configuration</td>
+</tr>
+<tr>
+<td><code>infra/kubernetes/runner-namespace.yaml</code></td>
+<td>Separate runner namespace, admission/resource/network constraints</td>
+</tr>
+<tr>
+<td><code>infra/kubernetes/vllm.yaml</code></td>
+<td>Optional cluster model-serving resources</td>
+</tr>
+<tr>
+<td><code>deploy/environments/staging/values.yaml</code></td>
+<td>Staging desired configuration</td>
+</tr>
+<tr>
+<td><code>deploy/environments/production/values.yaml</code></td>
+<td>Production configuration with digest-oriented release requirements</td>
+</tr>
+<tr>
+<td><code>argocd/project.yaml</code>, <code>application.yaml</code></td>
+<td>Scoped GitOps application using manual synchronization</td>
+</tr>
+<tr>
+<td><code>terraform/main.tf</code>, <code>variables.tf</code>, <code>terraform.tfvars.example</code></td>
+<td>Alternative installer for an existing cluster, not a cloud-cluster provisioner</td>
+</tr>
+</tbody>
+</table>
+<h2 id="how-to-trace-a-feature-in-an-interview">How to trace a feature in an interview</h2>
+<p>If asked about edits, start with the registry schema, follow the request through <code>RunManager._approval()</code>, then inspect the capability check in the MCP server and the actual replacement in <code>Workspace.replace()</code>. If asked about correctness, follow <code>run_tests()</code> into finalization in <code>RunManager._execute()</code>. If asked about UI state, start with <code>selectRun()</code> and <code>refreshRun()</code> in JavaScript, then follow the run-detail and events routes in the API.</p>
+<p>This tracing technique is more useful than memorizing filenames independently. For any feature, identify the input, validation, state transition, side effect, recorded output, and failure path.</p>
+<h1 id="27-hands-on-walkthrough-run-inspect-and-explain">27 · Hands-on walkthrough: run, inspect, and explain</h1>
+<h2 id="exercise-a-start-the-demonstrated-local-mode">Exercise A: start the demonstrated local mode</h2>
+<p>From a terminal, move into the project folder. Quotes are required because the path contains spaces and parentheses.</p>
+<pre><code class="language-bash">cd '/home/punam/Music/IMPFolder/Project/devpilot-devops-complete (2)/devpilot'
+./run.sh
+</code></pre>
+<p>On a fresh environment, run <code>./setup.sh</code> first. Do not start a second server on the same port or state directory if the existing one is already running. The script's default URL is <code>http://127.0.0.1:8091</code>.</p>
+<p>To retrieve the token for that state directory locally:</p>
+<pre><code class="language-bash">DP_DATA_DIR=.devpilot-local .venv/bin/python -m devpilot token
+</code></pre>
+<p>Paste the value into the UI, not into documentation or a public issue. The configured token-file setting can make the same API credential apply across state directories, but matching the server settings is still the right habit.</p>
+<h2 id="exercise-b-explain-the-redis-demo-while-using-it">Exercise B: explain the Redis demo while using it</h2>
+<p>Select the Redis example and start an investigation. Watch the file/search evidence. At the first test approval, explain that the code has not been repaired yet and that the test intentionally reproduces the defect. Review the failing output rather than treating the red assertion as a failed application installation.</p>
+<p>At the edit approval, read the exact replacement and hashes. Explain that the change applies to the disposable workspace. At the final test approval, explain why a second execution is necessary. After completion, inspect the test exit, verification state, and exported patch.</p>
+<p>A good demonstration narrates evidence as it appears. It should not say “the AI discovered the fix” when the visible provider is the scripted demo.</p>
+<h2 id="exercise-c-deny-an-action">Exercise C: deny an action</h2>
+<p>Start another bundled demo and decline the first execution request. Confirm no execution was silently substituted and no verified repair is reported. Then explain why denial is a successful policy outcome even if the investigation did not fix a bug.</p>
+<p>This makes a strong interview demonstration: you are showing the boundary works, not only the happy path. Avoid using automatic fixture-approval scripts as a substitute for demonstrating the interactive review experience.</p>
+<h2 id="exercise-d-inspect-the-source-to-artifact-relationship">Exercise D: inspect the source-to-artifact relationship</h2>
+<p>Open <code>workspace/demo-redis/service.py</code> and compare it with the downloaded patch. The source should remain unchanged after a run. Locate the copied workspace under the run directory and see that the patch describes that copy's difference from its fresh Git baseline.</p>
+<p>Explain that a patch is portable review material, not a deployment. Applying it to another repository still requires ensuring the context matches, reviewing the change, and running that repository's relevant checks.</p>
+<h2 id="exercise-e-replay-the-acceptance-fixtures">Exercise E: replay the acceptance fixtures</h2>
+<pre><code class="language-bash">.venv/bin/python -m devpilot evaluate \
+  --out outputs/local-study-replay --label study-session
+</code></pre>
+<p>This command explicitly runs the trusted scripted evaluation harness with fixture-scoped automatic approvals. Read <code>summary.md</code>, a case's report, and its extra grading output. Identify which evidence came from the run and which came from the separate grader.</p>
+<h2 id="exercise-f-study-a-deployment-without-claiming-it-ran">Exercise F: study a deployment without claiming it ran</h2>
+<p>Read <code>Dockerfile</code>, <code>compose.yaml</code>, the Helm values and guards, and the runner Job manifest builder. For each, state the process it starts, data it mounts, network it uses, privileges it receives, and what happens when it stops.</p>
+<p>You can explain configuration intent without claiming an actual deployment. To upgrade that explanation into operational evidence, perform the documented integration checks in a suitable reviewed environment and save their results.</p>
+<h1 id="28-troubleshooting-by-symptom-layer-and-evidence">28 · Troubleshooting by symptom, layer, and evidence</h1>
+<h2 id="the-page-does-not-open">The page does not open</h2>
+<p>First determine which startup path was used and which URL it printed. Port 8091 belongs to <code>run.sh</code> defaults; 8088 is the usual bootstrap direct/Compose path. Check whether the process is still alive and whether another process owns the port. A browser connection failure is different from a 401 after the page loads.</p>
+<p>If the server fails before listening, read its startup output for invalid settings, missing credential files, directory permissions, or a held instance lease. Do not regenerate secrets or delete state simply because a port is unavailable.</p>
+<h2 id="the-page-opens-but-connection-is-rejected">The page opens but connection is rejected</h2>
+<p>A 401 means the API credential did not match. Retrieve the token using the same configuration and state context as the server. Remember that an explicit token-file setting overrides a literal token setting. The Grafana password and metrics token are not API login tokens.</p>
+<p>A 403 on a mutation can indicate an Origin mismatch. A host rejection points to allowed-host configuration. These are different boundaries, so changing the API token will not repair every rejected request.</p>
+<h2 id="a-run-will-not-start">A run will not start</h2>
+<p>Read the HTTP status and detail. The manager can reject new work because another run is active, drain is enabled, the run cap has been reached, a repository name is invalid, or a demo fixture has changed. A custom project is intentionally rejected by the scripted demo provider.</p>
+<p>Starting another API process to bypass a busy run is not the correct solution. The ownership model is deliberately single-run and single-process.</p>
+<h2 id="a-run-appears-stuck">A run appears stuck</h2>
+<p>Check whether it is awaiting approval, generating a model response, or executing a tool. An approval pause is intentional. The model may be slow or retrying. A runner may be waiting for a container or Kubernetes Job to start.</p>
+<p>Use recorded timestamps, tool events, model-service logs, and resource observations to distinguish these cases. The browser's lack of a new event is not proof the process is dead. Conversely, a lively API does not prove useful model progress.</p>
+<h2 id="tests-fail-after-a-patch">Tests fail after a patch</h2>
+<p>Inspect the actual assertion output and the diff. The model may have fixed one case but broken another. A missing import can indicate runner dependencies rather than logic. A timeout or output-limit flag means execution did not provide a clean successful result, even if some tests printed success before termination.</p>
+<p>Do not edit the tests merely to produce green output. The project deliberately protects ordinary test paths for that reason. Revisit the expected behavior and require a fresh test of the final snapshot.</p>
+<h2 id="docker-builds-but-tests-do-not-run">Docker builds but tests do not run</h2>
+<p>Compare a basic container with the exact hardened runner command. Building installs files into an image; starting a process under read-only mounts, dropped privileges, and host security policy is a different operation. Record the real exit code and runtime error.</p>
+<p>The local <code>operation not permitted</code> result remains unresolved. Removing authentication, enabling arbitrary shell access, or dropping isolation settings is not evidence that the intended Docker path works. Diagnose the host/runtime compatibility or choose another supported isolated environment.</p>
+<h2 id="kubernetes-job-stays-pending">Kubernetes Job stays pending</h2>
+<p>Inspect the exact Job and Pod events in the runner namespace with an explicit cluster context. Missing images, pull credentials, resource quotas, admission policy, unavailable runtime classes, and scheduling capacity can all prevent execution.</p>
+<p>A pending Pod is not a failing application test, and failure to reach a network target is not proof of isolation until the control target is known to be reachable. Preserve that distinction in incident notes.</p>
+<h2 id="the-ui-still-shows-an-old-page">The UI still shows an old page</h2>
+<p>The current server sets no-store for HTML and assets. Confirm you are reaching the updated server or image and the expected port. A source change in your working directory does not change files inside an older running image. An already-open browser document also does not replace its loaded JavaScript without navigation or reload.</p>
+<p>Investigate server identity and deployment state before blaming browser caching. The UI cache policy solves future response storage; it does not perform builds, rollouts, or automatic reloads during active work.</p>
+<h1 id="29-interview-preparation-project-and-architecture-questions">29 · Interview preparation: project and architecture questions</h1>
+<h2 id="1-explain-devpilot-in-30-seconds">1. Explain DevPilot in 30 seconds.</h2>
+<p>DevPilot is a single-operator debugging workbench that investigates a copied Python repository, proposes exact changes, requests approval for edits and tests, and exports a patch with evidence. It supports a scripted integration demo and a live model adapter. Test verification is computed by the application from execution results and snapshot identity, not from the model's claim.</p>
+<h2 id="2-what-problem-does-it-solve">2. What problem does it solve?</h2>
+<p>It connects AI-assisted investigation to reviewable evidence. A suggestion alone does not establish that the right file was changed or that the final code was tested. DevPilot records the path from task to tool evidence, approval, change, test result, and patch so the operator can assess what really happened.</p>
+<h2 id="3-what-is-the-most-important-design-decision">3. What is the most important design decision?</h2>
+<p>One strong answer is the separation between model intent and application authority. The model can request tools, but the backend validates arguments and controls approvals. Another is tying test evidence to the final snapshot. Explain one in depth instead of naming every technology as equally important.</p>
+<h2 id="4-is-it-an-autonomous-agent">4. Is it an autonomous agent?</h2>
+<p>It has an agent-like conversational tool loop in live mode, but mutation and execution are supervised. It cannot issue arbitrary shell commands or push changes. The demo is a fixed action policy. Be explicit about which mode you are describing and what autonomy is actually available.</p>
+<h2 id="5-why-use-fastapi">5. Why use FastAPI?</h2>
+<p>It fits typed request validation, async HTTP handling, static serving, and streaming responses in a Python application. The choice also keeps the API close to the agent and test-runner code. This is a project-specific fit, not a claim that another framework could not implement the design.</p>
+<h2 id="6-why-not-build-the-frontend-with-react">6. Why not build the frontend with React?</h2>
+<p>The current workbench has a small, bounded interaction surface. Plain JavaScript avoids an additional frontend build toolchain and serves directly from the Python package. A larger interface with complex shared state could justify a framework; the existing choice favors simplicity at this scope.</p>
+<h2 id="7-where-does-the-actual-ai-run">7. Where does the actual AI run?</h2>
+<p>In live mode, a separately configured model service receives HTTP chat-completion requests. The backend adapter formats those requests and interprets structured responses. The model is not embedded in the UI or trained by this repository. Demo mode does not contact a model service.</p>
+<h2 id="8-why-does-the-provider-say-openai-when-using-qwen">8. Why does the provider say openai when using Qwen?</h2>
+<p>It identifies the compatible API protocol used by the adapter, not necessarily the model vendor. The model name and base URL select the actual model service. In the documented local path, that can be Qwen served by Ollama or vLLM.</p>
+<h2 id="9-how-does-the-model-access-files">9. How does the model access files?</h2>
+<p>Through schema-defined tools such as file listing, reading, and exact replacement. The model first requests an operation in JSON. The application validates it and dispatches it to a workspace-bound MCP subprocess. The model never receives a general filesystem handle or unrestricted shell.</p>
+<h2 id="10-why-use-mcp-instead-of-direct-python-calls">10. Why use MCP instead of direct Python calls?</h2>
+<p>MCP provides structured discovery and a consistent subprocess tool interface with explicit schemas and lifecycle. That makes tool boundaries visible and testable. It also adds process/protocol complexity. In this implementation the value is bounded integration, not support for arbitrary remote servers.</p>
+<h2 id="11-what-does-asynchronous-execution-buy-you">11. What does asynchronous execution buy you?</h2>
+<p>The API remains available while the run waits on a model, tool, or operator. Status, events, approval, and cancellation requests can still be handled. It does not mean the application supports multiple active investigations or that CPU work becomes automatically parallel.</p>
+<h2 id="12-why-can-you-not-simply-add-an-hpa">12. Why can you not simply add an HPA?</h2>
+<p>Horizontal replicas would each have their own active task and approval Futures, while the current persistence and lease model assume one owner. Scaling requires a shared queue, durable approvals, coordinated run ownership, and suitable data storage. Adding an autoscaler without those changes would create correctness problems.</p>
+<h2 id="13-why-sqlite-rather-than-postgresql">13. Why SQLite rather than PostgreSQL?</h2>
+<p>SQLite removes a database service from the single-operator setup and provides durable local history. The tradeoff is that the overall architecture remains local and constrained. Migrating to PostgreSQL could help persistence concurrency, but it would not alone make in-memory approvals and task ownership distributed.</p>
+<h2 id="14-why-is-the-original-git-history-unavailable">14. Why is the original Git history unavailable?</h2>
+<p>The snapshot excludes original <code>.git</code> metadata and creates a fresh baseline. This avoids importing hooks and local configuration and makes the exported diff relative to the copied input. The cost is losing original development history as investigation context.</p>
+<h2 id="15-does-the-application-deploy-its-own-patch">15. Does the application deploy its own patch?</h2>
+<p>No. It exports a patch for review. Deployment configuration in the repository operates DevPilot itself, not arbitrary applications that DevPilot inspects. This distinction prevents confusing the project's DevOps layer with a model tool that can push production changes.</p>
+<h1 id="30-interview-preparation-security-reliability-and-testing">30 · Interview preparation: security, reliability, and testing</h1>
+<h2 id="16-what-prevents-a-prompt-injection-instruction-in-a-readme-from-executing-a-shell-command">16. What prevents a prompt-injection instruction in a README from executing a shell command?</h2>
+<p>The repository is treated as untrusted data, the tool catalog has no unrestricted shell command, and tool arguments are schema-validated. Writes and tests require an application-issued capability. Prompt instructions reinforce the rule, but backend boundaries are the actual enforcement. These controls do not make arbitrary host execution harmless.</p>
+<h2 id="17-what-exactly-is-signed-in-an-approval">17. What exactly is signed in an approval?</h2>
+<p>The capability binds the tool name, canonical argument hash, snapshot hash, expiry, and nonce. An HMAC proves it came from a holder of the per-run secret. The server checks those fields and single use before calling a non-read handler. It is authorization for one action, not a reusable login token.</p>
+<h2 id="18-why-do-you-need-both-a-file-hash-and-workspace-hash">18. Why do you need both a file hash and workspace hash?</h2>
+<p>The file hash prevents replacing stale content in the target file. The workspace hash binds approval to the broader state the operator reviewed and ties tests to a particular eligible snapshot. They answer different integrity questions and are checked at different points.</p>
+<h2 id="19-can-the-model-change-tests-to-make-itself-look-correct">19. Can the model change tests to make itself look correct?</h2>
+<p>The replacement tool rejects ordinary test directories and recognized test filenames, and the evaluation harness adds separate grading checks. These reduce a common shortcut. They are not a proof against every possible application-level test cheat or every unconventional test layout.</p>
+<h2 id="20-what-does-verifiedtrue-prove">20. What does verified=true prove?</h2>
+<p>It records a clean zero exit code from the fixed test command associated with the final snapshot, without timeout or output-limit termination and with the runner's snapshot-unchanged check. It does not prove all business requirements, production compatibility, or security. Source integrity is recorded separately.</p>
+<h2 id="21-why-is-completed-different-from-verified">21. Why is completed different from verified?</h2>
+<p>Completed means the model loop ended with a final response. A model can explain a denied action or incomplete investigation and then stop. Verification requires actual execution evidence. Keeping the two fields distinct avoids turning a conversational ending into a claim of correctness.</p>
+<h2 id="22-what-happens-if-the-server-restarts-during-approval">22. What happens if the server restarts during approval?</h2>
+<p>The in-memory approval Future disappears. On the next startup, unfinished stored runs are marked interrupted. They are not automatically resumed. The operator can inspect existing evidence and start a new investigation, rather than inheriting a stale or ambiguous approval.</p>
+<h2 id="23-is-the-host-runner-safe-for-any-repository">23. Is the host runner safe for any repository?</h2>
+<p>No. It executes Python as the host user and is intended for trusted code. A sanitized environment and fixed argument list reduce some exposure but are not a hostile-code sandbox. Non-demo repositories need a prepared isolated runner and an appropriate trust model.</p>
+<h2 id="24-do-docker-and-kubernetes-make-arbitrary-code-completely-safe">24. Do Docker and Kubernetes make arbitrary code completely safe?</h2>
+<p>No. They provide useful isolation and resource controls but share a kernel and depend on correct host/cluster policy. Kubernetes NetworkPolicy requires an enforcing CNI. Stronger hostile-code requirements might need a microVM or separate worker infrastructure, which is not implemented here.</p>
+<h2 id="25-why-no-docker-socket-inside-the-application-container">25. Why no Docker socket inside the application container?</h2>
+<p>Access to a host Docker daemon can confer broad host control. The default Compose and chart do not mount that socket. Host-Python Docker execution and Kubernetes Job execution are separately configured paths with explicit operational assumptions.</p>
+<h2 id="26-can-a-backup-checksum-prove-who-created-the-backup">26. Can a backup checksum prove who created the backup?</h2>
+<p>No. It detects inconsistency relative to the manifest, not trusted authorship. An attacker able to alter both can regenerate hashes. Trusted storage, signatures, and access controls address provenance and tampering at a different boundary.</p>
+<h2 id="27-what-test-evidence-can-you-honestly-present">27. What test evidence can you honestly present?</h2>
+<p>Show the actual unit/API results, scripted replay reports, and browser integration evidence. Identify skipped optional checks and the separately failed Docker integration. State that the live cart repair was cancelled without verification and that a Kubernetes deployment was not demonstrated. Evidence should be tied to a date, configuration, and invocation.</p>
+<h2 id="28-what-is-your-strongest-negative-test">28. What is your strongest negative test?</h2>
+<p>Examples include rejecting a replayed or stale capability, denying a protected test edit, rejecting cross-origin mutations, refusing a second active run, or withholding verification after the workspace changes following a passing test. Explain the property being protected, not only the test function name.</p>
+<h2 id="29-how-would-you-improve-recovery-after-a-crash">29. How would you improve recovery after a crash?</h2>
+<p>Define durable run checkpoints, idempotent or compensatable actions, persistent approval state, lease ownership, and explicit retry rules. A queue and database alone are not enough if a tool might have executed before a crash but its result was not committed. Recovery must handle ambiguous external side effects.</p>
+<h2 id="30-what-did-the-real-model-test-teach-you">30. What did the real-model test teach you?</h2>
+<p>The endpoint could return a structured tool call, but that did not establish a usable end-to-end repair. CPU fallback and long generation affected progress, and the intended Docker runner had a separate host execution failure. We preserved the failures and did not present the prepared independent checks as passed.</p>
+<h1 id="31-interview-preparation-devops-and-system-design-follow-ups">31 · Interview preparation: DevOps and system-design follow-ups</h1>
+<h2 id="31-explain-liveness-versus-readiness-here">31. Explain liveness versus readiness here.</h2>
+<p>Liveness reports process health and avoids coupling API restarts to a model outage. Readiness also checks storage and drain state. A drained process can remain alive while refusing new runs. This is exactly what a controlled maintenance window needs.</p>
+<h2 id="32-why-are-updates-manually-synchronized">32. Why are updates manually synchronized?</h2>
+<p>An automatic rollout could interrupt an operator's pending approval or active test. The workflow drains admission, waits for existing work, handles backup needs, and then applies the reviewed update. One replica and Recreate imply downtime; the project does not claim zero-downtime upgrades.</p>
+<h2 id="33-why-use-image-digests-rather-than-only-tags">33. Why use image digests rather than only tags?</h2>
+<p>A digest binds deployment to specific image content. Tags can move. The release process records the reviewed app and runner digests together, so the deployed pair can be traced back to exact scan and build evidence.</p>
+<h2 id="34-what-is-the-difference-between-a-security-scan-and-a-security-guarantee">34. What is the difference between a security scan and a security guarantee?</h2>
+<p>A scan checks known findings under a defined policy and tool database at a point in time. It may exclude unfixed or lower-severity issues and cannot prove absence of all vulnerabilities. Policy, patching, threat modeling, runtime controls, and review remain necessary.</p>
+<h2 id="35-what-do-sbom-and-provenance-add">35. What do SBOM and provenance add?</h2>
+<p>An SBOM describes included components, and provenance describes aspects of how an artifact was produced. They help trace and assess releases. They do not automatically provide trusted signature verification or prove the software is correct. State exactly which attachments and verification rules exist.</p>
+<h2 id="36-why-should-argo-cd-and-terraform-not-both-own-the-release">36. Why should Argo CD and Terraform not both own the release?</h2>
+<p>Each controller has its own desired state and reconciliation behavior. If both manage the same resources independently, one can undo the other's change. The repository presents them as alternative release ownership choices, not two required managers for one deployment.</p>
+<h2 id="37-how-do-you-prevent-sensitive-telemetry">37. How do you prevent sensitive telemetry?</h2>
+<p>The telemetry code exports a bounded operational vocabulary rather than repository paths, prompts, arguments, or run IDs as labels. Tracing avoids automatic exception text export. Detailed private evidence belongs in the protected audit store and artifacts, which still require careful handling.</p>
+<h2 id="38-why-is-no-store-different-from-versioned-assets">38. Why is no-store different from versioned assets?</h2>
+<p>No-store asks clients not to retain responses, so future page loads fetch the current files. Versioned or content-hashed asset URLs permit efficient caching because a changed build has a different address. The current user preference led to no-store. A high-traffic product might choose hashed assets plus revalidated HTML instead.</p>
+<h2 id="39-how-would-you-add-support-for-another-programming-language">39. How would you add support for another programming language?</h2>
+<p>Define a reviewed runner image and fixed test command for that language, extend supported project detection and result handling, and preserve the same approval/snapshot boundaries. Do not solve the problem by exposing a generic command string to the model. Add meaningful fixtures and actual runner integration checks.</p>
+<h2 id="40-how-would-you-add-automatic-pull-request-creation">40. How would you add automatic pull-request creation?</h2>
+<p>Introduce an explicit, separately approved integration that binds the reviewed patch to a repository, branch, and destination, with scoped credentials and audit records. A PR request is an external side effect requiring its own permissions. The current project does not implement it, and exporting a patch is not equivalent.</p>
+<h2 id="41-how-would-you-improve-model-quality-measurement">41. How would you improve model quality measurement?</h2>
+<p>Use more diverse independently specified tasks, hold out evaluation data from the agent, record model/version/settings, compare baselines, repeat runs when randomness matters, and distinguish timeout/tool failures from semantic repair failures. Report costs and latency as well as correctness. Three public synthetic examples are insufficient for broad claims.</p>
+<h2 id="42-what-is-the-biggest-production-gap">42. What is the biggest production gap?</h2>
+<p>There is no single universal answer. For this local checkout, reliable live inference and an operational isolated runner are immediate acceptance gaps. For a multi-user product, identity/authorization, durable execution ownership, tenant isolation, retention, and recovery need architectural work. Explain the target environment before prioritizing.</p>
+<h2 id="43-what-would-you-show-during-a-ten-minute-demonstration">43. What would you show during a ten-minute demonstration?</h2>
+<p>Start with the problem and trust boundaries, run a clearly labelled scripted example, show the baseline failure, exact approval diff, final passing tests, and exported patch, then inspect one relevant source path. Finish with the measured limitations. Avoid spending the entire demonstration reading a technology list.</p>
+<h2 id="44-what-if-an-interviewer-asks-something-you-have-not-implemented">44. What if an interviewer asks something you have not implemented?</h2>
+<p>Say what the current code does, what the missing capability would require, and how you would validate it. For example: “This version does not resume interrupted runs. I would add durable checkpoints and ownership semantics, then test crashes before and after external tool completion.” A precise limitation is better than inventing a feature.</p>
+<h2 id="45-how-should-you-describe-your-personal-contribution">45. How should you describe your personal contribution?</h2>
+<p>Be specific: UI redesign, cache policy, source review, tests you ran, documentation you wrote, or components you implemented. If the project was provided or generated in part, acknowledge that. Your understanding can still be demonstrated by tracing behavior, explaining tradeoffs, and reproducing evidence without claiming work you did not do.</p>
+<h1 id="32-a-practical-study-and-interview-rehearsal-plan">32 · A practical study and interview rehearsal plan</h1>
+<h2 id="first-pass-explain-a-single-successful-demo">First pass: explain a single successful demo</h2>
+<p>Read Chapters 1–6, then run the bundled Redis example using Chapter 27. Pause before every approval. Explain what is about to run, which copied files it can affect, and what evidence you expect afterward. Write down the failing assertion, approved change, passing result, and downloaded patch. This turns a technology list into a story you can reproduce.</p>
+<h2 id="second-pass-follow-the-source">Second pass: follow the source</h2>
+<p>Open <code>devpilot/api.py</code> and find the run-creation route. Follow it into <code>RunManager</code>, the model adapter, the MCP gateway, and the tool implementation. Then follow the return path into the event store and browser. Do the same for an approval and a cancellation. Reading in execution order is usually easier than reading every file alphabetically.</p>
+<p>For each component, identify its inputs, validation, work, failure modes, and outputs. Check the function and tests when an answer is unclear.</p>
+<h2 id="third-pass-challenge-the-happy-path">Third pass: challenge the happy path</h2>
+<p>Explain what happens when an approval is denied, a file changes after review, the model exceeds its budget, the test process times out, or the server restarts. Use existing tests to find evidence. Do not run untrusted code on the host simply to create an impressive demonstration.</p>
+<h2 id="fourth-pass-connect-the-deployment-layers">Fourth pass: connect the deployment layers</h2>
+<p>Sketch the API, model endpoint, persistent state, MCP processes, and runner. Add the network and credential boundaries. Explain how the Docker, Compose, Helm, and CI files support this picture. Mark configurations that have been inspected but have not been executed successfully in this environment.</p>
+<h2 id="a-three-minute-interview-structure">A three-minute interview structure</h2>
+<p>Spend the first thirty seconds on the problem and intended user. Spend the next minute tracing one investigation from HTTP request to approved tool execution and test evidence. Use the next minute to explain two deliberate tradeoffs: the single-owner SQLite architecture and approval-bound exact actions. Finish with what was actually validated and one concrete next improvement, such as resolving runner isolation compatibility or benchmarking a working live model.</p>
+<h2 id="a-self-check-before-presenting">A self-check before presenting</h2>
+<p>Explain the limits of passing tests and scripted demos, the purpose of image digests, and the prerequisites for NetworkPolicy enforcement. Point to source code and recorded evidence. Reproducing one complete run will prepare you better than memorizing terminology alone.</p>
+<h1 id="33-glossary-plain-language-definitions">33 · Glossary: plain-language definitions</h1>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning in this project</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API</td>
+<td>HTTP interface through which the browser starts runs, submits decisions, and retrieves results.</td>
+</tr>
+<tr>
+<td>Artifact</td>
+<td>A saved output such as a patch, report, or trace.</td>
+</tr>
+<tr>
+<td>Assertion</td>
+<td>A test statement that compares actual behavior with expected behavior.</td>
+</tr>
+<tr>
+<td>Asynchronous task</td>
+<td>Work that can pause while waiting for input/output so other requests can progress. It does not by itself make CPU work faster.</td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td>Checking that a caller presents the expected credential.</td>
+</tr>
+<tr>
+<td>Authorization</td>
+<td>Deciding which action a caller or tool is allowed to perform.</td>
+</tr>
+<tr>
+<td>Bearer token</td>
+<td>A credential that grants access to whoever possesses and submits it.</td>
+</tr>
+<tr>
+<td>BM25</td>
+<td>A word-based relevance scoring method used by repository search.</td>
+</tr>
+<tr>
+<td>Capability</td>
+<td>A narrowly scoped authorization record permitting a specific operation under specific conditions.</td>
+</tr>
+<tr>
+<td>CI</td>
+<td>Automated checks that run when code changes.</td>
+</tr>
+<tr>
+<td>Container</td>
+<td>A process environment using operating-system isolation and resource controls.</td>
+</tr>
+<tr>
+<td>Context window</td>
+<td>The amount of conversation and tool information a model can consider for one inference.</td>
+</tr>
+<tr>
+<td>CNI</td>
+<td>Kubernetes networking implementation; policy enforcement depends on its capabilities and configuration.</td>
+</tr>
+<tr>
+<td>Digest</td>
+<td>A content-derived identifier used to pin the exact container image bytes.</td>
+</tr>
+<tr>
+<td>Disposable workspace</td>
+<td>A working copy where investigation and edits happen without modifying the original source.</td>
+</tr>
+<tr>
+<td>Environment variable</td>
+<td>A named process input used to configure application behavior.</td>
+</tr>
+<tr>
+<td>Exit code</td>
+<td>A number returned by a process; zero normally represents success for the fixed pytest command.</td>
+</tr>
+<tr>
+<td>Fixture</td>
+<td>A prepared example or test setup with known starting conditions.</td>
+</tr>
+<tr>
+<td>GitOps</td>
+<td>Managing desired deployment configuration through Git and a reconciler.</td>
+</tr>
+<tr>
+<td>Hash</td>
+<td>A deterministic fingerprint of data; it detects differences but does not alone prove trusted authorship.</td>
+</tr>
+<tr>
+<td>Helm</td>
+<td>A templating and release tool for Kubernetes resources.</td>
+</tr>
+<tr>
+<td>HMAC</td>
+<td>A message-authentication value computed with a secret key, used here to authenticate approval capabilities.</td>
+</tr>
+<tr>
+<td>HTTP</td>
+<td>The request/response protocol used between the browser and server.</td>
+</tr>
+<tr>
+<td>Idempotence</td>
+<td>Repeating an operation without producing an additional unintended effect; not every operation here promises it.</td>
+</tr>
+<tr>
+<td>Image</td>
+<td>A packaged filesystem and metadata from which a container starts.</td>
+</tr>
+<tr>
+<td>Inference</td>
+<td>Running a trained model to generate a response or requested tool call.</td>
+</tr>
+<tr>
+<td>JSON</td>
+<td>A structured text format for messages and stored data.</td>
+</tr>
+<tr>
+<td>JSON-RPC</td>
+<td>A request/response message format underlying this project's MCP stdio communication.</td>
+</tr>
+<tr>
+<td>Kubernetes Job</td>
+<td>A cluster resource that runs a finite task such as the test runner.</td>
+</tr>
+<tr>
+<td>Liveness</td>
+<td>Whether a process is alive; different from whether it is ready for useful work.</td>
+</tr>
+<tr>
+<td>MCP</td>
+<td>Model Context Protocol; here, a constrained stdio interface between the coordinator and tool servers.</td>
+</tr>
+<tr>
+<td>Middleware</td>
+<td>Code that wraps HTTP request handling to apply shared behavior such as headers or request checks.</td>
+</tr>
+<tr>
+<td>Namespace</td>
+<td>A Kubernetes grouping and policy scope; separate namespaces need supporting policies and permissions.</td>
+</tr>
+<tr>
+<td>Nonce</td>
+<td>A unique value used here to identify and prevent reuse of a capability within a tool server process.</td>
+</tr>
+<tr>
+<td>Observability</td>
+<td>Evidence about system behavior collected through logs, metrics, and traces.</td>
+</tr>
+<tr>
+<td>Patch</td>
+<td>A textual representation of differences that a developer can review and apply separately.</td>
+</tr>
+<tr>
+<td>Pod</td>
+<td>Kubernetes' unit for running one or more closely associated containers.</td>
+</tr>
+<tr>
+<td>Probe</td>
+<td>A deployment check used to decide whether a container is live or ready.</td>
+</tr>
+<tr>
+<td>Prompt injection</td>
+<td>Untrusted content that attempts to influence the model's instructions or requested actions.</td>
+</tr>
+<tr>
+<td>RBAC</td>
+<td>Role-based access control, used to limit Kubernetes API operations.</td>
+</tr>
+<tr>
+<td>Readiness</td>
+<td>Whether an instance should receive work according to its configured readiness checks.</td>
+</tr>
+<tr>
+<td>Reconciliation</td>
+<td>Comparing actual deployment state with desired configuration and trying to bring them into agreement.</td>
+</tr>
+<tr>
+<td>Regression</td>
+<td>Previously correct behavior becoming incorrect after a change.</td>
+</tr>
+<tr>
+<td>SBOM</td>
+<td>Software bill of materials: an inventory of software components in a built artifact.</td>
+</tr>
+<tr>
+<td>Schema</td>
+<td>A specification of permitted data shapes, fields, and types.</td>
+</tr>
+<tr>
+<td>Snapshot</td>
+<td>A captured view of repository contents used for isolation and evidence matching.</td>
+</tr>
+<tr>
+<td>SSE</td>
+<td>Server-sent events: a streaming HTTP response carrying updates from server to browser.</td>
+</tr>
+<tr>
+<td>SQLite WAL</td>
+<td>Write-ahead logging, which changes how SQLite records transactions and permits useful read/write concurrency.</td>
+</tr>
+<tr>
+<td>Stdio</td>
+<td>Standard input and output streams used to exchange messages with child processes.</td>
+</tr>
+<tr>
+<td>Telemetry cardinality</td>
+<td>The number of distinct metric-label combinations; unbounded identifiers can make it grow excessively.</td>
+</tr>
+<tr>
+<td>Timeout</td>
+<td>A maximum waiting period after which an operation is interrupted or rejected.</td>
+</tr>
+<tr>
+<td>Tool call</td>
+<td>A structured request for an application-provided operation; it is not automatic permission to execute it.</td>
+</tr>
+<tr>
+<td>Trace</td>
+<td>A record of execution; an exported investigation trace and an OpenTelemetry trace have different purposes.</td>
+</tr>
+<tr>
+<td>Verification</td>
+<td>A conclusion based on defined checks; this project's verified flag has specific, limited conditions.</td>
+</tr>
+<tr>
+<td>Volume</td>
+<td>Persistent or mounted storage available to a container.</td>
+</tr>
+</tbody>
+</table>
+<h1 id="34-complete-application-settings-reference">34 · Complete application settings reference</h1>
+<p>The following inventory is generated from the <code>Settings</code> class defaults, not from the running environment or secret files. These are application-code defaults. Bootstrap scripts, <code>.env</code>, Compose, Helm, and explicit environment variables can override them. A default shown here is not a promise that a deployment is usable without additional configuration.</p>
+<p>Environment variable names begin with <code>DP_</code>. Empty strings mean no value is configured by default. Boolean and numeric values need appropriate parsing; list settings use JSON-style values. Credential names and credential-file paths are documented so you can understand configuration, but no actual project credentials are included.</p>
+<table>
+<thead>
+<tr>
+<th>Environment variable</th>
+<th>Default in application code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DP_PROVIDER</code></td>
+<td><code>'demo'</code></td>
+</tr>
+<tr>
+<td><code>DP_BASE_URL</code></td>
+<td><code>'http://127.0.0.1:11434/v1'</code></td>
+</tr>
+<tr>
+<td><code>DP_MODEL</code></td>
+<td><code>'qwen3:4b'</code></td>
+</tr>
+<tr>
+<td><code>DP_LLM_API_KEY</code></td>
+<td><code>'local'</code></td>
+</tr>
+<tr>
+<td><code>DP_ALLOW_REMOTE_MODEL</code></td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>DP_API_TOKEN</code></td>
+<td><code>''</code></td>
+</tr>
+<tr>
+<td><code>DP_WORKSPACE_DIR</code></td>
+<td><code>workspace</code></td>
+</tr>
+<tr>
+<td><code>DP_DATA_DIR</code></td>
+<td><code>.devpilot</code></td>
+</tr>
+<tr>
+<td><code>DP_RUNNER</code></td>
+<td><code>'disabled'</code></td>
+</tr>
+<tr>
+<td><code>DP_TRUST_LOCAL_CODE</code></td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>DP_RUNNER_IMAGE</code></td>
+<td><code>'devpilot-runner:local'</code></td>
+</tr>
+<tr>
+<td><code>DP_DOCKER_TOOLS</code></td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>DP_DOCKER_LABEL</code></td>
+<td><code>'devpilot.scope=demo'</code></td>
+</tr>
+<tr>
+<td><code>DP_MAX_STEPS</code></td>
+<td><code>24</code></td>
+</tr>
+<tr>
+<td><code>DP_MAX_TOOL_CALLS</code></td>
+<td><code>40</code></td>
+</tr>
+<tr>
+<td><code>DP_MAX_CONTEXT_CHARS</code></td>
+<td><code>90000</code></td>
+</tr>
+<tr>
+<td><code>DP_TOOL_TIMEOUT</code></td>
+<td><code>90</code></td>
+</tr>
+<tr>
+<td><code>DP_LLM_TIMEOUT</code></td>
+<td><code>120</code></td>
+</tr>
+<tr>
+<td><code>DP_APPROVAL_TIMEOUT</code></td>
+<td><code>300</code></td>
+</tr>
+<tr>
+<td><code>DP_RUN_TIMEOUT</code></td>
+<td><code>1200</code></td>
+</tr>
+<tr>
+<td><code>DP_HOST</code></td>
+<td><code>'127.0.0.1'</code></td>
+</tr>
+<tr>
+<td><code>DP_PORT</code></td>
+<td><code>8080</code></td>
+</tr>
+<tr>
+<td><code>DP_TEMPERATURE</code></td>
+<td><code>0.1</code></td>
+</tr>
+<tr>
+<td><code>DP_MAX_OUTPUT_TOKENS</code></td>
+<td><code>2048</code></td>
+</tr>
+<tr>
+<td><code>DP_MAX_RUNS</code></td>
+<td><code>100</code></td>
+</tr>
+<tr>
+<td><code>DP_ALLOWED_HOSTS</code></td>
+<td><code>['localhost', '127.0.0.1', '[::1]', 'testserver']</code></td>
+</tr>
+<tr>
+<td><code>DP_POD_IP</code></td>
+<td><code>''</code></td>
+</tr>
+<tr>
+<td><code>DP_PUBLIC_ORIGIN</code></td>
+<td><code>''</code></td>
+</tr>
+<tr>
+<td><code>DP_METRICS_TOKEN</code></td>
+<td><code>''</code></td>
+</tr>
+<tr>
+<td><code>DP_METRICS_TOKEN_FILE</code></td>
+<td><code>None</code></td>
+</tr>
+<tr>
+<td><code>DP_API_TOKEN_FILE</code></td>
+<td><code>None</code></td>
+</tr>
+<tr>
+<td><code>DP_OTEL_ENABLED</code></td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>DP_OTEL_ENDPOINT</code></td>
+<td><code>'http://127.0.0.1:4318/v1/traces'</code></td>
+</tr>
+<tr>
+<td><code>DP_LOG_JSON</code></td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>DP_KUBE_API_URL</code></td>
+<td><code>'https://kubernetes.default.svc'</code></td>
+</tr>
+<tr>
+<td><code>DP_KUBE_NAMESPACE</code></td>
+<td><code>'devpilot-runners'</code></td>
+</tr>
+<tr>
+<td><code>DP_KUBE_TOKEN_FILE</code></td>
+<td><code>/var/run/secrets/kubernetes.io/serviceaccount/token</code></td>
+</tr>
+<tr>
+<td><code>DP_KUBE_CA_FILE</code></td>
+<td><code>/var/run/secrets/kubernetes.io/serviceaccount/ca.crt</code></td>
+</tr>
+<tr>
+<td><code>DP_KUBE_RUNTIME_CLASS</code></td>
+<td><code>''</code></td>
+</tr>
+<tr>
+<td><code>DP_KUBE_IMAGE_PULL_SECRET</code></td>
+<td><code>''</code></td>
+</tr>
+<tr>
+<td><code>DP_KUBE_JOB_TIMEOUT</code></td>
+<td><code>180</code></td>
+</tr>
+</tbody>
+</table>
+<p>The validators make these settings interdependent. For example, selecting the host runner requires explicit trust, and selecting Kubernetes requires enough outer tool time for the Job deadline plus cleanup margin. Credential files are read during settings validation, so missing files or invalid values can prevent startup. Study Chapter 18 and <code>devpilot/config.py</code> together before changing deployment settings.</p>
+<h1 id="35-evidence-reading-map-and-scope-of-this-edition">35 · Evidence, reading map, and scope of this edition</h1>
+<p>This handbook describes the checked-out DevPilot codebase and the local validation recorded during this work. It is a learning and interview reference, not a certificate of production readiness. Configuration files demonstrate intended deployment behavior; actual execution evidence is identified separately.</p>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Best supporting material in this repository</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Where is each feature implemented?</td>
+<td><code>docs/CODEBASE_WALKTHROUGH.md</code>, Chapter 26, and the referenced source files.</td>
+</tr>
+<tr>
+<td>How was the local application started?</td>
+<td><code>docs/LOCAL_RUN_STATUS.md</code>, <code>run.sh</code>, and Chapter 27.</td>
+</tr>
+<tr>
+<td>What happened in the live-model trial?</td>
+<td><code>docs/REAL_EXAMPLE_CHECK.md</code>, <code>outputs/live-cart-check/</code>, and Chapter 25.</td>
+</tr>
+<tr>
+<td>What UI behavior was exercised?</td>
+<td><code>docs/UI.md</code>, <code>outputs/local-ui-redesign/browser-results.json</code>, and browser screenshots.</td>
+</tr>
+<tr>
+<td>Which automated checks exist?</td>
+<td><code>tests/</code>, evaluation fixtures, and <code>.github/workflows/</code>.</td>
+</tr>
+<tr>
+<td>How are deployment resources defined?</td>
+<td><code>deploy/</code>, Docker/Compose files, Helm templates, and their validation scripts; see Chapter 26 for exact paths.</td>
+</tr>
+<tr>
+<td>What is the current cache policy?</td>
+<td>HTTP middleware in <code>devpilot/api.py</code> and its API tests.</td>
+</tr>
+</tbody>
+</table>
+<p>The recorded full test run passed 105 tests with 2 skipped. After the cache-policy change, the focused runtime/API checks passed 14 tests. These are different checks at different points in the work and must not be added together as a claimed full-suite count. The scripted replay examples and browser workflow have separate evidence. The attempted live model repair did not produce a verified repair. The hardened Docker runner encountered an execution problem in the local environment. Kubernetes and production operation have not been established by these local checks.</p>
+<p>As the code changes, update this handbook's behavior descriptions and evidence together. Record the revision, command, environment, and result for new validation. A screenshot shows what a page looked like; a test report shows what specific checks ran; neither alone proves every architectural claim.</p>
+<h2 id="the-workbench-in-practice">The workbench in practice</h2>
+<p>The screenshot below shows the redesigned desktop workbench. It helps connect the browser concepts in Chapter 7 to the actual interface. Example labels and visible state belong to the demo workflow; they are not evidence of a successful live-model repair.</p>
+<p><img alt="DevPilot desktop workbench: navigation, task entry, workflow status, and investigation controls." src="ui-workbench-redesign.png" /></p>
+<h2 id="your-next-useful-step">Your next useful step</h2>
+<p>Reproduce one scripted investigation, locate its approval and verification code, and explain its patch to another person. Then investigate one documented limitation with a small measurable experiment. That combination—understanding, reproducible evidence, and honest boundaries—is the strongest way to prepare for a project interview.</p></main></body></html>

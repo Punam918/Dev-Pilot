@@ -1,0 +1,23 @@
+# Review and customize; this file intentionally cannot deploy without release digests.
+# scripts/promote.py writes verified image digests, never credentials.
+production: true
+image:
+  repository: ghcr.io/REPLACE_OWNER/devpilot
+  tag: ""
+  digest: ""
+config:
+  provider: openai
+  seed: true
+  model: Qwen/Qwen3-4B-Instruct-2507
+  baseUrl: http://vllm.models.svc.cluster.local:8000/v1
+  allowRemoteModel: true
+  publicOrigin: ""
+  allowedHosts: [localhost, "127.0.0.1", "[::1]", devpilot]
+runner:
+  mode: kubernetes
+  image:
+    repository: ghcr.io/REPLACE_OWNER/devpilot-runner
+    tag: ""
+    digest: ""
+ingress:
+  enabled: false

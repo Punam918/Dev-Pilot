@@ -1,0 +1,28 @@
+{
+  "case": "normalize",
+  "status": "completed",
+  "provider": "demo",
+  "model": "scripted-fixture-policy (NOT an LLM)",
+  "runner": "host-trusted",
+  "resolved": true,
+  "verification": {
+    "verified": true,
+    "tests_executed": true,
+    "last_exit_code": 0,
+    "snapshot_matches_tested": true,
+    "source_unchanged": true,
+    "snapshot_sha256": "2c53e83184080b987d1f35e8af0884c4ddfcb9d025cf486bc8b25f41a99b2cf9"
+  },
+  "heldout_exit_code": 0,
+  "metrics": {
+    "model_turns": 8,
+    "tool_calls": 7,
+    "tool_errors": 0,
+    "llm_ms": 0,
+    "tool_ms": 2756,
+    "prompt_tokens": null,
+    "completion_tokens": null,
+    "wall_ms": 10573
+  },
+  "run_id": "be36bf5ab5b34180903e9db763c18dd1"
+}

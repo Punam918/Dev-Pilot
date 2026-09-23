@@ -1,0 +1,3 @@
+Parsed 29 YAML/JSON files; Helm values schemas and runner policy intent passed. Production placeholders are intentional.
+Rendered chart policy checks: 8 resources; one replica; no host mounts, exec, cluster-wide RBAC or embedded secrets.
+Not a live deployment. Actual helm lint, promtool, Terraform, Docker and cluster tests remain separate checks.

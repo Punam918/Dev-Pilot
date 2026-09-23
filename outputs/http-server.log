@@ -1,0 +1,51 @@
+DevPilot UI: http://127.0.0.1:37003
+Get the access token in another terminal: python -m devpilot token
+INFO:     Started server process [3442]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:37003 (Press CTRL+C to quit)
+{"time": "2026-09-16T17:35:12.333869+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "8c1cfb9d669dd893c7729f98", "route": "/api/repos", "method": "GET", "status": 401, "duration_ms": 0.43}
+{"time": "2026-09-16T17:35:12.335398+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "519b8bc7dabcc2bf1d8106e3", "route": "/api/config", "method": "GET", "status": 200, "duration_ms": 0.69}
+{"time": "2026-09-16T17:35:12.337368+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "eaa108329073cb2b627a6323", "route": "/api/repos", "method": "GET", "status": 200, "duration_ms": 0.58}
+{"time": "2026-09-16T17:35:13.463968+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "abcd5f02f42f1e2800d5cacc", "route": "/api/config", "method": "GET", "status": 200, "duration_ms": 0.44}
+{"time": "2026-09-16T17:35:13.475513+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "34217f93ff79bbba86eef219", "route": "/api/runs", "method": "POST", "status": 202, "duration_ms": 9.67}
+{"time": "2026-09-16T17:35:13.479077+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "db2e8db49dd20aeb416a79d0", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 1.6}
+{"time": "2026-09-16T17:35:13.983605+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "df381c7c14611ba4873304f3", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 2.46}
+{"time": "2026-09-16T17:35:14.487694+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "3ce28ec9d0ffff3d986efd64", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 1.83}
+{"time": "2026-09-16T17:35:14.991458+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "c93a635819c7f5be6014678e", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 1.55}
+{"time": "2026-09-16T17:35:15.495573+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "ca6caa697957359934ccf48e", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 2.17}
+{"time": "2026-09-16T17:35:15.998719+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "b3d98600ff2a552f553cf1a1", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 1.29}
+{"time": "2026-09-16T17:35:16.502063+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "59cc048f5d2b41b5a9503717", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 1.5}
+{"time": "2026-09-16T17:35:17.006699+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "fe34cc80fdc2d1034d37ea57", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 2.91}
+{"time": "2026-09-16T17:35:17.509768+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "3281cab2c2c286da5a4663ee", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 1.39}
+{"time": "2026-09-16T17:35:18.013691+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "10c66d2f1ca7320395fc2a7e", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 1.74}
+{"time": "2026-09-16T17:35:18.518948+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "94c9b997313861745ff0fd64", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 2.08}
+{"time": "2026-09-16T17:35:19.022381+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "89ccd53ed0775eb20da74ee9", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 1.51}
+{"time": "2026-09-16T17:35:19.525389+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "e0bf30f04f4fed2b1d6844c7", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 1.16}
+{"time": "2026-09-16T17:35:20.028804+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "1f55b0ad0b8ef3c34d399414", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 1.19}
+{"time": "2026-09-16T17:35:20.535286+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "a48b507e63bb428a752304b3", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 3.11}
+{"time": "2026-09-16T17:35:21.070900+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "62f64d81c53b30fff3ab21aa", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 6.44}
+{"time": "2026-09-16T17:35:21.575747+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "80d487ace8ca93bda063d095", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 1.71}
+{"time": "2026-09-16T17:35:22.079525+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "a9752c1f9f4e43cd040d6aa5", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 1.64}
+{"time": "2026-09-16T17:35:22.584538+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "21a4d14c4511420684a1646a", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 2.69}
+{"time": "2026-09-16T17:35:22.589857+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "7d0682909c4bca15fa78398a", "route": "/api/runs/{run_id}/approvals/{approval_id}", "method": "POST", "status": 200, "duration_ms": 3.2}
+{"time": "2026-09-16T17:35:23.118853+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "66ab3421de0a94ac48b98568", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 5.79}
+{"time": "2026-09-16T17:35:23.639665+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "6cd48147fd5b40143535997d", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 4.6}
+{"time": "2026-09-16T17:35:24.144430+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "938d0ac67abb8c65a7aed5af", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 1.59}
+{"time": "2026-09-16T17:35:24.150200+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "83e649180fdaddd2c71c9635", "route": "/api/runs/{run_id}/approvals/{approval_id}", "method": "POST", "status": 200, "duration_ms": 3.71}
+{"time": "2026-09-16T17:35:24.654788+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "c829c4a85b3223c97670c13b", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 2.45}
+{"time": "2026-09-16T17:35:24.659301+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "0df581cd22cb5340514ee4a4", "route": "/api/runs/{run_id}/approvals/{approval_id}", "method": "POST", "status": 200, "duration_ms": 2.93}
+{"time": "2026-09-16T17:35:25.182335+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "c327fddc0ba0a477d998cf10", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 5.24}
+{"time": "2026-09-16T17:35:25.704450+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "674662d07340b03122c6cff3", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 4.91}
+{"time": "2026-09-16T17:35:26.222869+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "42d02c0cdaad14d5e77c5e66", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 8.57}
+{"time": "2026-09-16T17:35:26.771323+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "c96e0fd8a48336ba5def8a6b", "route": "/api/runs/{run_id}", "method": "GET", "status": 200, "duration_ms": 24.45}
+{"time": "2026-09-16T17:35:26.777830+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "767bd9a8eae44e13bff84776", "route": "/api/runs/{run_id}/artifacts/{kind}", "method": "GET", "status": 200, "duration_ms": 3.85}
+{"time": "2026-09-16T17:35:26.781835+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "2c3d483f5d400fa7577f62ba", "route": "/api/runs/{run_id}/artifacts/{kind}", "method": "GET", "status": 200, "duration_ms": 1.55}
+{"time": "2026-09-16T17:35:26.784217+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "a4c313659fc866762dd73143", "route": "/api/runs/{run_id}/artifacts/{kind}", "method": "GET", "status": 200, "duration_ms": 1.02}
+{"time": "2026-09-16T17:35:27.027728+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "6ed78a8f905604131d111d8a", "route": "/api/admin/drain", "method": "POST", "status": 200, "duration_ms": 0.66}
+{"time": "2026-09-16T17:35:27.030923+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "91c28fa99be0485c91a76074", "route": "/api/runs", "method": "POST", "status": 503, "duration_ms": 0.72}
+{"time": "2026-09-16T17:35:27.033205+00:00", "level": "INFO", "service": "devpilot", "event": "http_response", "request_id": "d2cba730edf4151a88139d3b", "route": "/api/admin/resume", "method": "POST", "status": 200, "duration_ms": 1.02}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3442]

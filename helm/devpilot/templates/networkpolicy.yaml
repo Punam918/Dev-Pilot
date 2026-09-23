@@ -1,0 +1,26 @@
+{{- if .Values.networkPolicy.enabled }}
+# Control-plane egress is intentionally operator-managed: it needs Kubernetes API,
+# inference, DNS and optionally OTLP. Runner egress is DENIED in a separate namespace.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "devpilot.name" . }}-ingress
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: devpilot
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ .Release.Namespace }}
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ .Values.networkPolicy.ingressNamespace }}
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ .Values.networkPolicy.monitoringNamespace }}
+      ports: [{protocol: TCP, port: 8080}]
+{{- end }}

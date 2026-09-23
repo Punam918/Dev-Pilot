@@ -1,0 +1,84 @@
+name: publish
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  checks:
+    uses: ./.github/workflows/ci.yml
+  publish:
+    needs: checks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    environment: release
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        with: {persist-credentials: false}
+      - name: Login to GHCR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_ACTOR: ${{ github.actor }}
+        run: printf '%s' "$GH_TOKEN" | docker login ghcr.io -u "$GH_ACTOR" --password-stdin
+      - name: Build candidate images and attach BuildKit SBOM/provenance
+        env:
+          REPOSITORY: ${{ github.repository }}
+          COMMIT: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          mkdir -p release
+          IMAGE="ghcr.io/${REPOSITORY,,}"
+          docker buildx create --use --name devpilot-release
+          docker buildx build --platform linux/amd64 --push --provenance=mode=max --sbom=true \
+            --label "org.opencontainers.image.revision=$COMMIT" \
+            --label "org.opencontainers.image.source=https://github.com/$REPOSITORY" \
+            --tag "$IMAGE:sha-$COMMIT" --metadata-file release/app.json .
+          docker buildx build --platform linux/amd64 --push --provenance=mode=max --sbom=true \
+            --label "org.opencontainers.image.revision=$COMMIT" \
+            --label "org.opencontainers.image.source=https://github.com/$REPOSITORY" \
+            --file Dockerfile.runner --tag "$IMAGE-runner:sha-$COMMIT" --metadata-file release/runner.json .
+          echo "IMAGE=$IMAGE" >> "$GITHUB_ENV"
+      - name: Scan the exact pushed digests (fail-closed promotion gate)
+        env:
+          TRIVY_USERNAME: ${{ github.actor }}
+          TRIVY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          for PART in app runner; do
+            REPO="$IMAGE"; [ "$PART" != runner ] || REPO="$IMAGE-runner"
+            DIGEST="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["containerimage.digest"])' "release/$PART.json")"
+            docker run --rm -e TRIVY_USERNAME -e TRIVY_PASSWORD -v "$PWD/release:/reports" \
+              aquasec/trivy:0.66.0 image --severity HIGH,CRITICAL --ignore-unfixed \
+              --exit-code 1 --format json --output "/reports/$PART-scan.json" "$REPO@$DIGEST"
+          done
+      - name: Produce promotion manifest only after both security scans pass
+        env:
+          COMMIT: ${{ github.sha }}
+        run: |
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          root=Path('release')
+          result={'source_commit':os.environ['COMMIT'],'security_gate':'passed',
+                  'scan_policy':'HIGH,CRITICAL with a published fix; remaining/unfixed issues need review',
+                  'attestation':'BuildKit SBOM/provenance; not keyless-signed GitHub artifact attestation'}
+          for part,suffix in [('app',''),('runner','-runner')]:
+              result[part]={'repository':os.environ['IMAGE']+suffix,
+                  'digest':json.loads((root/(part+'.json')).read_text())['containerimage.digest']}
+          (root/'release-manifest.json').write_text(json.dumps(result,indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4
+        if: always()
+        with:
+          name: release-evidence
+          path: release/
+          retention-days: 30
+      - if: always()
+        run: docker logout ghcr.io

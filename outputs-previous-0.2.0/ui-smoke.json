@@ -1,0 +1,9 @@
+{
+  "live_browser_test": "blocked by packaging environment Chromium navigation policy",
+  "error": "net::ERR_BLOCKED_BY_ADMINISTRATOR navigating to local API",
+  "live_browser_verified": false,
+  "static_preview": "Rendered shipped HTML/CSS in-memory; no mocked results or API interaction",
+  "static_preview_file": "docs/ui-static-preview.png",
+  "browser": "144.0.7559.96",
+  "reproduce_live_test": "python scripts/capture_ui.py on your development machine"
+}

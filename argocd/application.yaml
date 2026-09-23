@@ -1,0 +1,25 @@
+# Replace repoURL with your GitHub repository before applying.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: devpilot
+  namespace: argocd
+spec:
+  project: devpilot
+  source:
+    repoURL: https://github.com/REPLACE_OWNER/devpilot.git
+    targetRevision: main
+    path: helm/devpilot
+    helm:
+      releaseName: devpilot
+      valueFiles:
+        - ../../deploy/environments/production/values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: devpilot
+  syncPolicy:
+    # Manual sync is intentional: drain active runs before a Recreate deployment.
+    # Automatic sync is opt-in after you add an external maintenance controller.
+    syncOptions:
+      - CreateNamespace=true
+      - PruneLast=true

@@ -1,0 +1,12 @@
+DevPilot {{ .Chart.AppVersion }} is configured as ONE API replica with Recreate upgrades.
+State is persisted on a PVC, which is retained on uninstall. Back it up separately.
+
+Access from this computer:
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "devpilot.name" . }} 8088:{{ .Values.service.port }}
+  kubectl -n {{ .Release.Namespace }} get secret {{ .Values.existingSecret }} -o jsonpath='{.data.api-token}' | base64 --decode; echo
+
+Open http://127.0.0.1:8088 and enter the token.
+
+Runner mode: {{ .Values.runner.mode }}. Namespace: {{ .Values.runner.namespace }}.
+Validate NetworkPolicy enforcement before using non-fixture code. No Docker socket is mounted.
+Read docs/DEVOPS.md, docs/KUBERNETES.md and docs/SECURITY-DEPLOYMENT.md.

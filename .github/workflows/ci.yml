@@ -1,0 +1,76 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  workflow_call:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  python:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        with: {persist-credentials: false}
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: requirements/*.txt
+      - run: python -m pip install -r requirements/dev.txt && python -m pip install --no-deps -e .
+      - run: python -m ruff check devpilot tests scripts runner
+      - run: python -m compileall -q devpilot scripts runner
+      - run: python scripts/validate-configs.py
+      - run: python -m pytest --cov=devpilot --cov-report=term-missing --cov-report=xml:outputs/ci-coverage.xml --junitxml=outputs/ci-junit.xml
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4
+        if: always()
+        with:
+          name: tests-python-${{ matrix.python }}
+          path: outputs/ci-*.xml
+          retention-days: 14
+  containers-and-helm:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        with: {persist-credentials: false}
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c
+        with: {python-version: '3.12'}
+      - run: python -m pip install -r requirements/dev.txt && python -m pip install --no-deps -e .
+      - run: python scripts/bootstrap.py
+      - run: docker compose -f compose.yaml -f compose.monitoring.yaml config --quiet
+      - run: bash scripts/install-helm.sh "$RUNNER_TEMP/bin" && echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+      - run: helm lint helm/devpilot --strict && helm template devpilot helm/devpilot --namespace devpilot > outputs/ci-rendered.yaml
+      - run: python scripts/validate-configs.py --rendered outputs/ci-rendered.yaml
+      - name: Prometheus rule syntax and alert tests
+        run: |
+          docker run --rm --entrypoint promtool -v "$PWD/monitoring/prometheus:/work:ro" -w /work prom/prometheus:v3.5.0 check rules rules/devpilot.yml
+          docker run --rm --entrypoint promtool -v "$PWD/monitoring/prometheus:/work:ro" -w /work prom/prometheus:v3.5.0 test rules test-rules.yml
+      - run: docker build -f Dockerfile.runner -t devpilot-runner:local .
+      - run: DP_TEST_DOCKER=1 python -m pytest tests/test_docker_integration.py -q
+      - run: docker compose up --build --wait --wait-timeout 180
+      - run: python scripts/http_smoke.py --token-file .secrets/api-token --metrics-token-file .secrets/metrics-token
+      - name: Trusted fixture workflow only (not AI accuracy)
+        run: python scripts/cluster-smoke.py --approve-trusted-fixture --out outputs/ci-compose-smoke
+      - name: Diagnostics and cleanup (keep persistent data by default)
+        if: always()
+        run: |
+          docker compose logs --no-color > outputs/ci-compose.log
+          docker compose down
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4
+        if: always()
+        with:
+          name: container-evidence
+          path: |
+            outputs/ci-compose*
+            outputs/ci-rendered.yaml
+          retention-days: 14

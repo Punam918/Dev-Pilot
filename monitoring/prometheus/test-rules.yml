@@ -1,0 +1,23 @@
+rule_files: [rules/devpilot.yml]
+evaluation_interval: 1m
+tests:
+  - interval: 1m
+    input_series:
+      - series: 'up{job="devpilot",instance="devpilot:8080"}'
+        values: '0 0 0 0'
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: DevPilotDown
+        exp_alerts:
+          - exp_labels: {job: devpilot, instance: "devpilot:8080", severity: critical}
+            exp_annotations:
+              summary: DevPilot metrics target is unavailable
+              runbook: docs/OPERATIONS.md#devpilotdown
+  - interval: 1m
+    input_series:
+      - series: 'up{job="devpilot",instance="devpilot:8080"}'
+        values: '1 1 1 1'
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: DevPilotDown
+        exp_alerts: []

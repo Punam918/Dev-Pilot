@@ -1,0 +1,12 @@
+{
+  "status": "completed",
+  "verification": {
+    "verified": true,
+    "tests_executed": true,
+    "last_exit_code": 0,
+    "snapshot_matches_tested": true,
+    "source_unchanged": true,
+    "snapshot_sha256": "05c6e1ec7b8708bf19517d3cbda1bd61b57bd7c2024f3597f1eed405d39e76f2"
+  },
+  "runner": "host-trusted"
+}

@@ -1,0 +1,70 @@
+# docker compose -f compose.yaml -f compose.monitoring.yaml up -d --build
+services:
+  devpilot:
+    environment:
+      DP_OTEL_ENABLED: "true"
+      DP_OTEL_ENDPOINT: http://otel-collector:4318/v1/traces
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    user: "65534:65534"
+    ports: ["127.0.0.1:19090:9090"]
+    command: ["--config.file=/etc/prometheus/prometheus.yml", "--storage.tsdb.path=/prometheus", "--storage.tsdb.retention.time=7d"]
+    secrets: [metrics-token]
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/rules:/etc/prometheus/rules:ro
+      - prometheus-data:/prometheus
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    mem_limit: 512m
+    restart: unless-stopped
+  alertmanager:
+    image: prom/alertmanager:v0.28.1
+    ports: ["127.0.0.1:19093:9093"]
+    command: ["--config.file=/etc/alertmanager/alertmanager.yml", "--storage.path=/alertmanager"]
+    volumes:
+      - ./monitoring/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - alertmanager-data:/alertmanager
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    mem_limit: 128m
+  grafana:
+    image: grafana/grafana:12.1.1
+    ports: ["127.0.0.1:13000:3000"]
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana-password
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+    secrets: [grafana-password]
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    mem_limit: 512m
+    restart: unless-stopped
+  otel-collector:
+    image: otel/opentelemetry-collector:0.133.0
+    command: ["--config=/etc/otel/config.yaml"]
+    volumes: [./monitoring/otel/config.yaml:/etc/otel/config.yaml:ro]
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    mem_limit: 192m
+  tempo:
+    image: grafana/tempo:2.8.2
+    command: ["-config.file=/etc/tempo.yaml"]
+    volumes:
+      - ./monitoring/tempo/tempo.yaml:/etc/tempo.yaml:ro
+      - tempo-data:/var/tempo
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    mem_limit: 384m
+volumes:
+  prometheus-data:
+  alertmanager-data:
+  grafana-data:
+  tempo-data:
+secrets:
+  grafana-password: {file: ./.secrets/grafana-password}

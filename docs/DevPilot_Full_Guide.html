@@ -1,0 +1,591 @@
+<!doctype html><html><head><meta charset="utf-8"><title>DevPilot Complete Learning Guide</title><style>
+@page { margin: 0.75in; }
+body { font-family: Arial, sans-serif; color: #1f2937; line-height: 1.45; font-size: 10.5pt; }
+h1 { color: #0f172a; font-size: 25pt; margin: 0 0 12pt; border-bottom: 3px solid #10b981; padding-bottom: 8pt; }
+h2 { color: #111827; font-size: 17pt; margin-top: 24pt; border-bottom: 1px solid #d1d5db; padding-bottom: 4pt; }
+h3 { color: #1f2937; font-size: 13pt; margin-top: 18pt; }
+p { margin: 7pt 0; }
+ul, ol { margin: 6pt 0 8pt 20pt; }
+li { margin: 3pt 0; }
+code { font-family: DejaVu Sans Mono, Consolas, monospace; background: #eef2f7; padding: 1pt 3pt; border-radius: 3pt; font-size: 9pt; }
+pre { background: #111827; color: #f9fafb; padding: 10pt; border-radius: 6pt; white-space: pre-wrap; font-size: 8.5pt; }
+pre code { background: transparent; color: inherit; padding: 0; }
+table { width: 100%; border-collapse: collapse; margin: 10pt 0; font-size: 9pt; }
+th { background: #e5f7ef; color: #064e3b; text-align: left; }
+th, td { border: 1px solid #cbd5e1; padding: 5pt 6pt; vertical-align: top; }
+blockquote { border-left: 4px solid #10b981; padding-left: 10pt; color: #475569; }
+hr { border: 0; border-top: 1px solid #d1d5db; margin: 14pt 0; }
+</style></head><body><h1>DevPilot Complete Learning Guide</h1>
+<p><strong>Project:</strong> DevPilot  </p>
+<p><strong>Version in this archive:</strong> 0.3.0  </p>
+<p><strong>Purpose:</strong> A local, approval-gated AI debugging workbench for small Python repositories.</p>
+<hr>
+<h2>1. What This Project Is</h2>
+<p>DevPilot is a local engineering tool that helps investigate software bugs. It copies a repository into a disposable workspace, lets an agent inspect files and run tests, asks the human before risky actions, records everything that happened, and exports evidence such as a patch, report, and trace.</p>
+<p>Think of it as a controlled debugging assistant with a browser UI.</p>
+<p>It is not a production SaaS, not a multi-user platform, not a free-form terminal agent, and not a tool that automatically pushes code to GitHub. The core design idea is simple:</p>
+<p>&gt; AI can suggest actions, but the application enforces the safety boundary.</p>
+<p>DevPilot is built for one operator at a time. It is most suitable for small Python projects that use <code>pytest</code>.</p>
+<hr>
+<h2>2. What Problem It Solves</h2>
+<p>Normal AI coding tools can make mistakes, skip evidence, or claim something is fixed without proving it. DevPilot tries to solve that by connecting every step to recorded evidence.</p>
+<p>It can:</p>
+<ul>
+<li>Inspect a repository copy.</li>
+<li>Search code and documentation.</li>
+<li>Read files.</li>
+<li>Ask to run tests.</li>
+<li>Ask before editing files.</li>
+<li>Generate a Git patch.</li>
+<li>Record a trace of every important action.</li>
+<li>Mark a run verified only when tests pass on the final approved snapshot.</li>
+</ul>
+<p>The important part is that verification is not just the model saying “done.” Verification comes from tool results, test exit codes, and snapshot identity.</p>
+<hr>
+<h2>3. What It Does In One Demo Run</h2>
+<p>A typical demo run looks like this:</p>
+<ol>
+<li>You open the browser UI.</li>
+<li>You paste the local access token.</li>
+<li>You select a demo repository such as `demo-redis`.</li>
+<li>You click **Investigate**.</li>
+<li>DevPilot copies the demo repo into a disposable run directory.</li>
+<li>The scripted demo agent lists/searches/reads files.</li>
+<li>It asks for approval before running tests.</li>
+<li>You approve.</li>
+<li>It runs the fixed pytest command.</li>
+<li>It asks for approval before applying a patch.</li>
+<li>You approve.</li>
+<li>It edits only the copied workspace.</li>
+<li>It asks to run tests again.</li>
+<li>You approve.</li>
+<li>It records whether tests passed.</li>
+<li>It exports a patch, report, and JSON trace.</li>
+</ol>
+<p>Your original source repository is not edited directly.</p>
+<hr>
+<h2>4. Current Local Run Command</h2>
+<p>For this machine, the easiest way to run is:</p>
+<pre><code>
+cd &quot;/home/punam/Music/IMPFolder/Project/devpilot-devops-complete (2)/devpilot&quot;
+./run.sh
+</code></pre>
+<p>Then open:</p>
+<pre><code>
+http://127.0.0.1:8091
+</code></pre>
+<p>The script prints the token. Paste it into the UI and click <strong>Connect</strong>.</p>
+<p>To stop:</p>
+<pre><code>
+./stop.sh
+</code></pre>
+<p>If setup has not been done yet:</p>
+<pre><code>
+./setup.sh
+./run.sh
+</code></pre>
+<hr>
+<h2>5. Important Local Files</h2>
+<p>The main project folder contains these important files and directories:</p>
+<table>
+<tr><th>Path</th><th>Meaning</th></tr>
+<tr><td>`README.md`</td><td>Main project overview and official start instructions</td></tr>
+<tr><td>`QUICKSTART.md`</td><td>Short local instructions added for easy learning</td></tr>
+<tr><td>`setup.sh`</td><td>Creates config, virtual environment, and installs dependencies</td></tr>
+<tr><td>`run.sh`</td><td>Starts the app, prints URL and token</td></tr>
+<tr><td>`stop.sh`</td><td>Stops the app started by `run.sh`</td></tr>
+<tr><td>`.env`</td><td>Local runtime configuration</td></tr>
+<tr><td>`.secrets/`</td><td>Generated local tokens</td></tr>
+<tr><td>`.venv/`</td><td>Python virtual environment</td></tr>
+<tr><td>`.devpilot-local/`</td><td>Local app state used by `run.sh`</td></tr>
+<tr><td>`workspace/`</td><td>Repositories available to the app</td></tr>
+<tr><td>`devpilot/`</td><td>Main Python application package</td></tr>
+<tr><td>`devpilot/static/`</td><td>Browser UI HTML, CSS, and JavaScript</td></tr>
+<tr><td>`devpilot/mcp/`</td><td>Minimal MCP client/server implementation</td></tr>
+<tr><td>`devpilot/tools/`</td><td>Tool implementations and runner adapters</td></tr>
+<tr><td>`docs/`</td><td>Architecture, API, operations, model, Kubernetes, and other docs</td></tr>
+<tr><td>`tests/`</td><td>Project test suite</td></tr>
+<tr><td>`compose.yaml`</td><td>Docker Compose demo path</td></tr>
+<tr><td>`helm/`</td><td>Kubernetes Helm chart</td></tr>
+<tr><td>`monitoring/`</td><td>Prometheus, Grafana, Alertmanager, Tempo config</td></tr>
+</table>
+<hr>
+<h2>6. Technology Stack</h2>
+<h3>Backend</h3>
+<ul>
+<li>**Python 3.11+ / 3.12 on this machine**</li>
+<li>**FastAPI** for HTTP API and static UI serving</li>
+<li>**Uvicorn** as the local ASGI server</li>
+<li>**Pydantic Settings** for environment-based configuration</li>
+<li>**SQLite** for local audit/history state</li>
+<li>**pytest** for repository test execution</li>
+</ul>
+<h3>Frontend</h3>
+<ul>
+<li>Plain **HTML**</li>
+<li>Plain **CSS**</li>
+<li>Plain **JavaScript**</li>
+<li>No React/Vue build pipeline</li>
+<li>Browser `fetch` API for backend calls</li>
+<li>Server-Sent Events for streaming trace events</li>
+</ul>
+<h3>Agent / Model</h3>
+<p>Two provider modes exist:</p>
+<table>
+<tr><th>Provider</th><th>Meaning</th></tr>
+<tr><td>`demo`</td><td>Scripted replay. No language model is called. Useful for safe demos.</td></tr>
+<tr><td>`openai`</td><td>OpenAI-compatible local inference endpoint, usually Ollama or vLLM running Qwen.</td></tr>
+</table>
+<p>The name <code>openai</code> here means “OpenAI-compatible API format,” not necessarily OpenAI cloud.</p>
+<h3>Tools / Protocol</h3>
+<ul>
+<li>Minimal **MCP 2025-06-18 subset**</li>
+<li>JSON-RPC over stdio</li>
+<li>Tool servers for files, Git, docs/search, terminal tests, and database query</li>
+</ul>
+<h3>DevOps / Deployment</h3>
+<ul>
+<li>Docker and Docker Compose</li>
+<li>Optional monitoring stack with Prometheus/Grafana/Alertmanager/Tempo</li>
+<li>Kubernetes manifests and Helm chart</li>
+<li>Argo CD examples</li>
+<li>Terraform helper for existing clusters</li>
+</ul>
+<hr>
+<h2>7. Why These Technologies Were Chosen</h2>
+<p>FastAPI is used because the app needs a small, clear HTTP API and browser UI. SQLite is used because the app is single-operator and local/private, so a full database server would add complexity without solving the main problem. MCP-style tools provide a clean boundary between the model and actions. Docker/Kubernetes runner options exist because running tests means executing project code, and project code should be isolated when it is not fully trusted.</p>
+<p>The frontend is intentionally simple. Since the app is an operational workbench, plain HTML/CSS/JS keeps the UI easy to inspect and avoids a heavy frontend build process.</p>
+<p>The approval system exists because prompts are not security boundaries. The model may request a tool, but the app decides whether that request is allowed and whether human approval is required.</p>
+<hr>
+<h2>8. Main Runtime Modes</h2>
+<h3>Demo Mode</h3>
+<p>Demo mode uses predefined scripted actions. It is safe for learning the workflow because it does not require a real LLM.</p>
+<p>Current local mode:</p>
+<pre><code>
+Provider: demo
+Runner: host-trusted
+</code></pre>
+<p>This means the model behavior is scripted, and tests run on the host. Use this only with the bundled trusted demo repositories.</p>
+<h3>Real Model Mode</h3>
+<p>Real model mode connects to an OpenAI-compatible endpoint such as Ollama or vLLM.</p>
+<p>Typical settings:</p>
+<pre><code>
+DP_PROVIDER=openai
+DP_BASE_URL=http://127.0.0.1:11434/v1
+DP_MODEL=qwen3:4b
+DP_LLM_API_KEY=local
+DP_RUNNER=docker
+</code></pre>
+<p>In real model mode, Docker or Kubernetes runner isolation is recommended.</p>
+<h3>Docker Mode</h3>
+<p>Docker Compose is supported:</p>
+<pre><code>
+python3 scripts/bootstrap.py
+docker compose up -d --build
+</code></pre>
+<p>On this machine Docker built the image but failed while starting the container with:</p>
+<pre><code>
+operation not permitted
+</code></pre>
+<p>That is most likely a local Docker/security/runtime restriction, not an application bug. The host Python path avoids it.</p>
+<h3>Kubernetes Mode</h3>
+<p>Kubernetes mode runs tests in separate Kubernetes Jobs. This is the strongest shipped isolation path but requires a working cluster, RBAC, namespace policy, and runner image.</p>
+<hr>
+<h2>9. How The Browser UI Works</h2>
+<p>The UI is served from:</p>
+<pre><code>
+devpilot/static/index.html
+devpilot/static/style.css
+devpilot/static/app.js
+</code></pre>
+<p>The browser flow is:</p>
+<ol>
+<li>User pastes token.</li>
+<li>`app.js` calls `GET /api/config`.</li>
+<li>It stores the token in browser session storage.</li>
+<li>It loads repositories using `GET /api/repos`.</li>
+<li>User clicks **Investigate**.</li>
+<li>UI sends `POST /api/runs`.</li>
+<li>UI streams events from `GET /api/runs/{id}/events`.</li>
+<li>UI polls `GET /api/runs/{id}` for status and approvals.</li>
+<li>If approval is needed, UI shows **Approve this action** and **Deny**.</li>
+<li>User decision is sent to `POST /api/runs/{id}/approvals/{approval_id}`.</li>
+<li>When complete, UI enables artifact downloads.</li>
+</ol>
+<p>The UI does not execute code. It only calls backend APIs.</p>
+<hr>
+<h2>10. Main API Endpoints</h2>
+<table>
+<tr><th>Endpoint</th><th>Purpose</th></tr>
+<tr><td>`GET /`</td><td>Serves the web UI</td></tr>
+<tr><td>`GET /livez`</td><td>Basic process health</td></tr>
+<tr><td>`GET /readyz`</td><td>Readiness and drain state</td></tr>
+<tr><td>`GET /api/config`</td><td>Shows non-secret runtime config</td></tr>
+<tr><td>`GET /api/repos`</td><td>Lists allowed repositories</td></tr>
+<tr><td>`POST /api/runs`</td><td>Starts a run</td></tr>
+<tr><td>`GET /api/runs`</td><td>Lists recent runs</td></tr>
+<tr><td>`GET /api/runs/{id}`</td><td>Gets one run status</td></tr>
+<tr><td>`GET /api/runs/{id}/events`</td><td>Streams trace events</td></tr>
+<tr><td>`POST /api/runs/{id}/approvals/{approval_id}`</td><td>Approves or denies one action</td></tr>
+<tr><td>`POST /api/runs/{id}/cancel`</td><td>Cancels active work</td></tr>
+<tr><td>`GET /api/runs/{id}/artifacts/{kind}`</td><td>Downloads `patch`, `report`, or `trace`</td></tr>
+<tr><td>`GET /metrics`</td><td>Prometheus metrics with separate token</td></tr>
+</table>
+<p>All <code>/api/*</code> calls require:</p>
+<pre><code>
+Authorization: Bearer &lt;token&gt;
+</code></pre>
+<hr>
+<h2>11. Internal Backend Flow</h2>
+<p>The main backend flow is controlled by <code>devpilot/runtime.py</code>.</p>
+<p>Important classes:</p>
+<table>
+<tr><th>Class/File</th><th>Job</th></tr>
+<tr><td>`Settings` in `config.py`</td><td>Reads and validates environment config</td></tr>
+<tr><td>`RunManager` in `runtime.py`</td><td>Owns active runs, approvals, lifecycle</td></tr>
+<tr><td>`Store` in `store.py`</td><td>Writes SQLite audit/history data</td></tr>
+<tr><td>`Gateway` in `mcp/client.py`</td><td>Starts MCP subprocess servers and routes tools</td></tr>
+<tr><td>`DemoModel` in `models.py`</td><td>Scripted demo action sequence</td></tr>
+<tr><td>`OpenAIModel` in `models.py`</td><td>Calls OpenAI-compatible chat completions</td></tr>
+<tr><td>`Workspace` in `safety.py`</td><td>Validates workspace paths and snapshots</td></tr>
+</table>
+<p>Run lifecycle:</p>
+<pre><code>
+POST /api/runs
+  -&gt; validate repository and task
+  -&gt; create run record in SQLite
+  -&gt; copy source repo into data/runs/&lt;run_id&gt;/workspace
+  -&gt; initialize Git in copied workspace
+  -&gt; start model/demo loop
+  -&gt; expose allowed MCP tools
+  -&gt; model asks for tool calls
+  -&gt; app validates tool names and arguments
+  -&gt; risky tools request human approval
+  -&gt; approved tools execute
+  -&gt; results are sent back to model
+  -&gt; final status, verification, and artifacts are saved
+</code></pre>
+<hr>
+<h2>12. MCP Tool System</h2>
+<p>MCP means Model Context Protocol. In this project it provides a structured tool boundary.</p>
+<p>DevPilot starts subprocess servers like:</p>
+<pre><code>
+python -m devpilot.mcp.server files
+python -m devpilot.mcp.server git
+python -m devpilot.mcp.server docs
+python -m devpilot.mcp.server terminal
+python -m devpilot.mcp.server database
+</code></pre>
+<p>The model sees namespaced tool names such as:</p>
+<pre><code>
+files__read_file
+files__replace_text
+docs__search
+git__diff
+terminal__run_tests
+database__query
+</code></pre>
+<p>The model cannot run arbitrary shell commands. The terminal server exposes a fixed test command workflow, not an unrestricted terminal.</p>
+<hr>
+<h2>13. Approval System</h2>
+<p>The approval system is one of the most important parts of DevPilot.</p>
+<p>Actions with risk require approval:</p>
+<ul>
+<li>File edits</li>
+<li>Test execution</li>
+</ul>
+<p>When approval is required, DevPilot records:</p>
+<ul>
+<li>Tool name</li>
+<li>Arguments</li>
+<li>Argument hash</li>
+<li>Workspace snapshot hash</li>
+<li>Preview diff, if it is an edit</li>
+<li>Expiry time</li>
+<li>Warning message</li>
+</ul>
+<p>The UI shows a human checkpoint. The user can approve or deny.</p>
+<p>Approvals are:</p>
+<ul>
+<li>Single-use</li>
+<li>Bound to one run</li>
+<li>Bound to one action</li>
+<li>Bound to one workspace snapshot</li>
+<li>Rejected if stale or already answered</li>
+</ul>
+<p>This prevents the model from obtaining broad permission.</p>
+<hr>
+<h2>14. Verification</h2>
+<p>DevPilot separates claims from evidence.</p>
+<p>The model can write a final explanation, but the <code>verified</code> field comes from the application.</p>
+<p>A run is verified only when:</p>
+<ul>
+<li>Tests were executed.</li>
+<li>The final snapshot matches the tested snapshot.</li>
+<li>The last relevant test exit code is zero.</li>
+</ul>
+<p>This does not prove the whole project is perfect. It only proves the selected tests passed on that snapshot.</p>
+<hr>
+<h2>15. Data Storage</h2>
+<p>DevPilot uses SQLite for local audit/history state.</p>
+<p>Typical local script state:</p>
+<pre><code>
+.devpilot-local/
+  audit.sqlite3
+  service.lock
+  server.pid
+  runs/
+</code></pre>
+<p>The database stores:</p>
+<ul>
+<li>Runs</li>
+<li>Events</li>
+<li>Pending approval data</li>
+<li>Final summary</li>
+<li>Verification state</li>
+<li>Metrics</li>
+</ul>
+<p>Run artifacts are generated from stored state and workspace diffs.</p>
+<hr>
+<h2>16. Workspace Safety</h2>
+<p>The original repo is not edited directly. DevPilot copies the selected repo into a run directory.</p>
+<p>Example:</p>
+<pre><code>
+workspace/demo-redis        original demo repo
+.devpilot-local/runs/&lt;id&gt;/workspace   copied run workspace
+</code></pre>
+<p>Edits happen in the copied run workspace. At the end, DevPilot produces a patch that you can review.</p>
+<p>Repository names are validated. Paths are checked to avoid using arbitrary file paths or symlinks as selected repositories.</p>
+<hr>
+<h2>17. Runner Options</h2>
+<table>
+<tr><th>Runner</th><th>What it does</th><th>When to use</th></tr>
+<tr><td>`disabled`</td><td>Does not run tests</td><td>Safe inspection only</td></tr>
+<tr><td>`host-trusted`</td><td>Runs tests on this computer</td><td>Only bundled trusted demos</td></tr>
+<tr><td>`docker`</td><td>Runs tests in a local container</td><td>Real local projects when Docker works</td></tr>
+<tr><td>`kubernetes`</td><td>Runs tests as Kubernetes Jobs</td><td>Stronger cluster-based isolation</td></tr>
+</table>
+<p>On this machine, Docker had a runtime permission problem, so <code>host-trusted</code> is used for the bundled demo.</p>
+<hr>
+<h2>18. Security Model</h2>
+<p>Trusted:</p>
+<ul>
+<li>Local operator</li>
+<li>DevPilot backend</li>
+<li>Tool implementation code</li>
+<li>Runner configuration</li>
+<li>Local model endpoint configured by the operator</li>
+</ul>
+<p>Untrusted:</p>
+<ul>
+<li>Model text</li>
+<li>Repository contents</li>
+<li>Test output</li>
+<li>Any requested tool arguments from the model</li>
+</ul>
+<p>Key protections:</p>
+<ul>
+<li>Explicit token authentication</li>
+<li>Separate metrics token</li>
+<li>Allowed hosts validation</li>
+<li>No arbitrary shell tool</li>
+<li>Approval-gated writes and tests</li>
+<li>Disposable workspace copies</li>
+<li>Snapshot hashes</li>
+<li>Single active run</li>
+<li>Local state lock</li>
+<li>No automatic push or merge</li>
+</ul>
+<hr>
+<h2>19. Observability</h2>
+<p>DevPilot can expose operational metrics for Prometheus and traces through OpenTelemetry.</p>
+<p>The monitoring stack includes:</p>
+<ul>
+<li>Prometheus</li>
+<li>Grafana</li>
+<li>Alertmanager</li>
+<li>Tempo</li>
+<li>OpenTelemetry Collector</li>
+</ul>
+<p>Metrics are about operational behavior, such as:</p>
+<ul>
+<li>Request rate</li>
+<li>Latency</li>
+<li>Tool errors</li>
+<li>Run outcomes</li>
+<li>Approval waits</li>
+<li>Model timing</li>
+<li>Token usage when returned</li>
+</ul>
+<p>The metrics endpoint requires a separate metrics token.</p>
+<hr>
+<h2>20. DevOps And Deployment Pieces</h2>
+<p>The project includes several deployment-related folders:</p>
+<table>
+<tr><th>Folder</th><th>Purpose</th></tr>
+<tr><td>`.github/`</td><td>GitHub Actions workflows</td></tr>
+<tr><td>`helm/`</td><td>Helm chart for Kubernetes</td></tr>
+<tr><td>`argocd/`</td><td>Argo CD example app/project</td></tr>
+<tr><td>`infra/`</td><td>Kind/Kubernetes helper manifests</td></tr>
+<tr><td>`terraform/`</td><td>Optional installer for existing clusters</td></tr>
+<tr><td>`monitoring/`</td><td>Metrics/tracing/dashboard config</td></tr>
+</table>
+<p>The architecture intentionally uses one app replica. This is because approvals and active task ownership are in memory, while history is SQLite. Multiple replicas could disagree about the active approval state.</p>
+<p>High availability would require a larger redesign: shared database, durable queue, shared approval store, artifact store, and ownership model.</p>
+<hr>
+<h2>21. Demo Repositories</h2>
+<p>The bundled demo repositories are seeded into <code>workspace/</code>.</p>
+<p>Examples:</p>
+<table>
+<tr><th>Demo</th><th>What it demonstrates</th></tr>
+<tr><td>`demo-redis`</td><td>Configuration bug repair</td></tr>
+<tr><td>`demo-pagination`</td><td>Off-by-one pagination bug</td></tr>
+<tr><td>`demo-normalize`</td><td>Unicode/whitespace normalization bug</td></tr>
+</table>
+<p>In demo mode the sequence is scripted. It proves the integration workflow, not model intelligence.</p>
+<hr>
+<h2>22. What Happened In Your Browser Screenshot</h2>
+<p>Your screenshot showed:</p>
+<pre><code>
+Workspace connected
+Provider: Scripted replay
+Runner: host-trusted
+Repository: demo-redis
+Status: Awaiting approval
+Tool: terminal__run_tests
+</code></pre>
+<p>That means:</p>
+<ol>
+<li>The UI connected successfully.</li>
+<li>The backend loaded the demo repo.</li>
+<li>A run started.</li>
+<li>The demo agent reached the test-running step.</li>
+<li>DevPilot paused because tests execute code.</li>
+<li>It asked you to approve `terminal__run_tests`.</li>
+</ol>
+<p>For the bundled demo, approving that action is expected.</p>
+<hr>
+<h2>23. How To Use It Step By Step</h2>
+<h3>Start</h3>
+<pre><code>
+cd &quot;/home/punam/Music/IMPFolder/Project/devpilot-devops-complete (2)/devpilot&quot;
+./run.sh
+</code></pre>
+<h3>Open</h3>
+<pre><code>
+http://127.0.0.1:8091
+</code></pre>
+<h3>Connect</h3>
+<p>Paste the token printed by <code>run.sh</code>.</p>
+<h3>Run Demo</h3>
+<ol>
+<li>Select `demo-redis`.</li>
+<li>Click **Redis configuration** or use the prefilled task.</li>
+<li>Click **Investigate**.</li>
+<li>Approve test execution.</li>
+<li>Approve the patch if shown.</li>
+<li>Approve final test execution.</li>
+<li>Review the summary.</li>
+<li>Download patch/report/trace.</li>
+</ol>
+<h3>Stop</h3>
+<pre><code>
+./stop.sh
+</code></pre>
+<hr>
+<h2>24. Common Problems</h2>
+<h3>Token rejected</h3>
+<p>Use the token printed by <code>./run.sh</code>. Do not use the metrics or Grafana token.</p>
+<h3>Port already used</h3>
+<p>Run on another port:</p>
+<pre><code>
+DP_PORT=8092 ./run.sh
+</code></pre>
+<h3>Already running</h3>
+<p>Stop it:</p>
+<pre><code>
+./stop.sh
+</code></pre>
+<h3>Docker says operation not permitted</h3>
+<p>That is a local Docker/runtime permission issue. Use:</p>
+<pre><code>
+./run.sh
+</code></pre>
+<p>instead of Docker Compose.</p>
+<h3>Approval screen appears</h3>
+<p>That is normal. DevPilot is waiting for your permission before doing something risky.</p>
+<hr>
+<h2>25. How To Explain This Project In An Interview</h2>
+<p>You can say:</p>
+<p>&gt; DevPilot is a local AI debugging workbench built with FastAPI, SQLite, a browser UI, and MCP-style tool subprocesses. It investigates a copied repository, lets an agent request structured tools, gates risky actions through explicit human approval, runs tests through configured runners, records an audit trail, and exports patch/report/trace artifacts. It separates model claims from verification by deriving verified status from test results and workspace snapshot identity.</p>
+<p>Short version:</p>
+<p>&gt; It is a safe local AI debugging tool that proves fixes with tests and human-approved actions.</p>
+<hr>
+<h2>26. What Is Complete And What Is Not</h2>
+<p>Complete enough for demo/portfolio:</p>
+<ul>
+<li>Local UI</li>
+<li>Token auth</li>
+<li>Demo repos</li>
+<li>Scripted workflow</li>
+<li>Approval checkpoints</li>
+<li>Test execution</li>
+<li>SQLite audit history</li>
+<li>Patch/report/trace artifacts</li>
+<li>Docker/Kubernetes/monitoring docs and configs</li>
+<li>Improved local quickstart scripts</li>
+<li>Professional UI polish</li>
+</ul>
+<p>Not complete as a production SaaS:</p>
+<ul>
+<li>No multi-user login system</li>
+<li>No horizontal scaling</li>
+<li>No hosted cloud service</li>
+<li>No automatic GitHub PR creation</li>
+<li>No unrestricted shell</li>
+<li>No production-grade hostile-code sandbox</li>
+<li>No guaranteed live model repair accuracy</li>
+</ul>
+<hr>
+<h2>27. Best Learning Path</h2>
+<ol>
+<li>Run `./run.sh`.</li>
+<li>Complete the `demo-redis` workflow.</li>
+<li>Download the patch and report.</li>
+<li>Open `devpilot/static/app.js` to understand the UI flow.</li>
+<li>Open `devpilot/api.py` to understand routes.</li>
+<li>Open `devpilot/runtime.py` to understand run lifecycle.</li>
+<li>Open `devpilot/models.py` to understand demo vs real model behavior.</li>
+<li>Open `devpilot/mcp/server.py` and `devpilot/mcp/client.py` to understand tools.</li>
+<li>Read `docs/ARCHITECTURE.md`.</li>
+<li>Try `demo-pagination` and `demo-normalize`.</li>
+</ol>
+<hr>
+<h2>28. Quick Command Reference</h2>
+<pre><code>
+# Setup
+./setup.sh
+
+# Run
+./run.sh
+
+# Run on a different port
+DP_PORT=8092 ./run.sh
+
+# Stop
+./stop.sh
+
+# Get token manually
+DP_DATA_DIR=.devpilot-local .venv/bin/python -m devpilot token
+
+# Health check
+curl http://127.0.0.1:8091/livez
+
+# Run tests for DevPilot itself
+.venv/bin/python -m pytest -q
+</code></pre>
+<hr>
+<h2>29. Final Summary</h2>
+<p>DevPilot is a practical project because it combines AI, tool execution, human approval, evidence capture, and DevOps thinking. Its strongest idea is not “AI writes code.” Its strongest idea is:</p>
+<p>&gt; Every important action should be controlled, recorded, and proven.</p>
+<p>That is why the project has approvals, snapshot hashes, copied workspaces, test evidence, and downloadable artifacts.</p></body></html>

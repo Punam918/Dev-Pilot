@@ -1,0 +1,553 @@
+{
+  "schema_version": 1,
+  "project_version": "0.3.0",
+  "python": "3.13.5",
+  "run": {
+    "repo": "demo-pagination",
+    "task": "Fix the pagination off-by-one error while preserving invalid-input checks.",
+    "mode": "repair",
+    "provider": "demo",
+    "model": "scripted-fixture-policy (NOT an LLM)",
+    "runner": "host-trusted",
+    "pending_approval": null,
+    "final": "SCRIPTED DEMO - no language model was called.\n\nEvidence: pagination.py and the captured pytest output.\nApplied the fixture's predefined one-line repair after approval.\nBaseline pytest exit code: 1.\nPost-patch pytest exit code: 0.\nThe original repository was not changed. Download and review the patch.\nThese results validate the integration workflow, not autonomous model quality.",
+    "verification": {
+      "verified": true,
+      "tests_executed": true,
+      "last_exit_code": 0,
+      "snapshot_matches_tested": true,
+      "source_unchanged": true,
+      "snapshot_sha256": "3fcc9373d9921d7d5b48ef49c1bfd5a364422712f7f39ae82a240da47846e31e"
+    },
+    "metrics": {
+      "model_turns": 8,
+      "tool_calls": 7,
+      "tool_errors": 0,
+      "llm_ms": 0,
+      "tool_ms": 2612,
+      "prompt_tokens": null,
+      "completion_tokens": null,
+      "wall_ms": 12099
+    },
+    "patch_available": true,
+    "id": "e79f914f43c24739a1b935930c7f7ecb",
+    "status": "completed",
+    "created_at": "2026-09-16T17:29:25.254+00:00",
+    "updated_at": "2026-09-16T17:29:37.362+00:00"
+  },
+  "events": [
+    {
+      "seq": 1,
+      "kind": "run_started",
+      "created_at": "2026-09-16T17:29:25.256+00:00",
+      "data": {
+        "provider": "demo",
+        "version": "0.3.0",
+        "note": "Scripted integration replay, not model intelligence"
+      }
+    },
+    {
+      "seq": 2,
+      "kind": "snapshot_created",
+      "created_at": "2026-09-16T17:29:25.285+00:00",
+      "data": {
+        "files": 3,
+        "bytes": 1006,
+        "excluded": "symlinks, large files, credentials, caches, .git",
+        "input_sha256": "4e653763212bd3e8914d1881eee8f4ab803c48fa0cece393bf728943ca734e6b"
+      }
+    },
+    {
+      "seq": 3,
+      "kind": "mcp_connected",
+      "created_at": "2026-09-16T17:29:34.033+00:00",
+      "data": {
+        "servers": [
+          "files",
+          "git",
+          "docs",
+          "terminal",
+          "database"
+        ],
+        "tool_count": 10,
+        "protocol": "2025-06-18 stdio subset"
+      }
+    },
+    {
+      "seq": 4,
+      "kind": "model_request",
+      "created_at": "2026-09-16T17:29:34.033+00:00",
+      "data": {
+        "turn": 1
+      }
+    },
+    {
+      "seq": 5,
+      "kind": "model_result",
+      "created_at": "2026-09-16T17:29:34.034+00:00",
+      "data": {
+        "duration_ms": 0,
+        "usage": {}
+      }
+    },
+    {
+      "seq": 6,
+      "kind": "tool_requested",
+      "created_at": "2026-09-16T17:29:34.034+00:00",
+      "data": {
+        "call_id": "demo_1",
+        "tool": "files__list_files",
+        "arguments": {}
+      }
+    },
+    {
+      "seq": 7,
+      "kind": "tool_result",
+      "created_at": "2026-09-16T17:29:34.036+00:00",
+      "data": {
+        "call_id": "demo_1",
+        "tool": "files__list_files",
+        "ok": true,
+        "result": {
+          "files": [
+            "README.md",
+            "pagination.py",
+            "tests/test_pagination.py"
+          ]
+        },
+        "duration_ms": 1
+      }
+    },
+    {
+      "seq": 8,
+      "kind": "model_request",
+      "created_at": "2026-09-16T17:29:34.037+00:00",
+      "data": {
+        "turn": 2
+      }
+    },
+    {
+      "seq": 9,
+      "kind": "model_result",
+      "created_at": "2026-09-16T17:29:34.038+00:00",
+      "data": {
+        "duration_ms": 0,
+        "usage": {}
+      }
+    },
+    {
+      "seq": 10,
+      "kind": "tool_requested",
+      "created_at": "2026-09-16T17:29:34.038+00:00",
+      "data": {
+        "call_id": "demo_2",
+        "tool": "docs__search",
+        "arguments": {
+          "limit": 3,
+          "query": "pagination page size off by one"
+        }
+      }
+    },
+    {
+      "seq": 11,
+      "kind": "tool_result",
+      "created_at": "2026-09-16T17:29:34.043+00:00",
+      "data": {
+        "call_id": "demo_2",
+        "tool": "docs__search",
+        "ok": true,
+        "result": {
+          "chunks_indexed": 3,
+          "matches": [
+            {
+              "end_line": 4,
+              "path": "README.md",
+              "score": 3.45204,
+              "start_line": 1,
+              "symbol": "",
+              "text": "# Pagination fixture\nThe `page` argument is one-based. A full page must contain `page_size` items.\nThe last page may be shorter. Empty input returns an empty list. Invalid page or\npage size must raise ValueError. Fix the off-by-one error without editing tests."
+            },
+            {
+              "end_line": 8,
+              "path": "pagination.py",
+              "score": 1.21355,
+              "start_line": 1,
+              "symbol": "paginate",
+              "text": "\"\"\"One-based pagination for an in-memory sequence.\"\"\"\n\n\ndef paginate(items: list, page: int, page_size: int) -> list:\n    if page < 1 or page_size < 1:\n        raise ValueError(\"page and page_size must be positive\")\n    start = (page - 1) * page_size\n    return items[start : start + page_size - 1]"
+            },
+            {
+              "end_line": 24,
+              "path": "tests/test_pagination.py",
+              "score": 0.57296,
+              "start_line": 1,
+              "symbol": "test_first_page, test_last_partial_page, test_empty_input, test_invalid_page, test_invalid_page_size",
+              "text": "import pytest\nfrom pagination import paginate\n\n\ndef test_first_page():\n    assert paginate([1, 2, 3, 4], 1, 2) == [1, 2]\n\n\ndef test_last_partial_page():\n    assert paginate([1, 2, 3], 2, 2) == [3]\n\n\ndef test_empty_input():\n    assert paginate([], 1, 3) == []\n\n\ndef test_invalid_page():\n    with pytest.raises(ValueError):\n        paginate([1], 0, 1)\n\n\ndef test_invalid_page_size():\n    with pytest.raises(ValueError):\n        paginate([1], 1, 0)"
+            }
+          ],
+          "method": "BM25; rebuilt from current snapshot"
+        },
+        "duration_ms": 4
+      }
+    },
+    {
+      "seq": 12,
+      "kind": "model_request",
+      "created_at": "2026-09-16T17:29:34.044+00:00",
+      "data": {
+        "turn": 3
+      }
+    },
+    {
+      "seq": 13,
+      "kind": "model_result",
+      "created_at": "2026-09-16T17:29:34.045+00:00",
+      "data": {
+        "duration_ms": 0,
+        "usage": {}
+      }
+    },
+    {
+      "seq": 14,
+      "kind": "tool_requested",
+      "created_at": "2026-09-16T17:29:34.045+00:00",
+      "data": {
+        "call_id": "demo_3",
+        "tool": "files__read_file",
+        "arguments": {
+          "path": "pagination.py"
+        }
+      }
+    },
+    {
+      "seq": 15,
+      "kind": "tool_result",
+      "created_at": "2026-09-16T17:29:34.047+00:00",
+      "data": {
+        "call_id": "demo_3",
+        "tool": "files__read_file",
+        "ok": true,
+        "result": {
+          "content": "\"\"\"One-based pagination for an in-memory sequence.\"\"\"\n\n\ndef paginate(items: list, page: int, page_size: int) -> list:\n    if page < 1 or page_size < 1:\n        raise ValueError(\"page and page_size must be positive\")\n    start = (page - 1) * page_size\n    return items[start : start + page_size - 1]",
+          "end_line": 8,
+          "numbered": "1: \"\"\"One-based pagination for an in-memory sequence.\"\"\"\n2: \n3: \n4: def paginate(items: list, page: int, page_size: int) -> list:\n5:     if page < 1 or page_size < 1:\n6:         raise ValueError(\"page and page_size must be positive\")\n7:     start = (page - 1) * page_size\n8:     return items[start : start + page_size - 1]",
+          "path": "pagination.py",
+          "sha256": "f97cbace0dcb5baea43f29db776e2bfc76e1c573070fb9106f0a2559addf66ec",
+          "start_line": 1,
+          "total_lines": 8
+        },
+        "duration_ms": 2
+      }
+    },
+    {
+      "seq": 16,
+      "kind": "model_request",
+      "created_at": "2026-09-16T17:29:34.049+00:00",
+      "data": {
+        "turn": 4
+      }
+    },
+    {
+      "seq": 17,
+      "kind": "model_result",
+      "created_at": "2026-09-16T17:29:34.049+00:00",
+      "data": {
+        "duration_ms": 0,
+        "usage": {}
+      }
+    },
+    {
+      "seq": 18,
+      "kind": "tool_requested",
+      "created_at": "2026-09-16T17:29:34.050+00:00",
+      "data": {
+        "call_id": "demo_4",
+        "tool": "terminal__run_tests",
+        "arguments": {}
+      }
+    },
+    {
+      "seq": 19,
+      "kind": "approval_required",
+      "created_at": "2026-09-16T17:29:34.052+00:00",
+      "data": {
+        "id": "a15a9486f2164a4183960f5cdf03c79b",
+        "tool": "terminal__run_tests",
+        "risk": "execute",
+        "arguments": {},
+        "arguments_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "snapshot_sha256": "4e653763212bd3e8914d1881eee8f4ab803c48fa0cece393bf728943ca734e6b",
+        "preview_diff": "",
+        "expires_in_seconds": 300,
+        "warning": "Tests execute code. Docker isolation is recommended."
+      }
+    },
+    {
+      "seq": 20,
+      "kind": "approval_decision",
+      "created_at": "2026-09-16T17:29:34.091+00:00",
+      "data": {
+        "approval_id": "a15a9486f2164a4183960f5cdf03c79b",
+        "approved": true
+      }
+    },
+    {
+      "seq": 21,
+      "kind": "tool_result",
+      "created_at": "2026-09-16T17:29:35.657+00:00",
+      "data": {
+        "call_id": "demo_4",
+        "tool": "terminal__run_tests",
+        "ok": true,
+        "result": {
+          "command": "python -m pytest -q -p no:cacheprovider -o addopts= -o pythonpath=. tests",
+          "duration_ms": 1562,
+          "exit_code": 1,
+          "output": "F....                                                                    [100%]\n=================================== FAILURES ===================================\n_______________________________ test_first_page ________________________________\n\n    def test_first_page():\n>       assert paginate([1, 2, 3, 4], 1, 2) == [1, 2]\nE       assert [1] == [1, 2]\nE         \nE         Right contains one more item: 2\nE         Use -v to get more diff\n\ntests/test_pagination.py:6: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_pagination.py::test_first_page - assert [1] == [1, 2]\n1 failed, 4 passed in 0.05s\n",
+          "output_limited": false,
+          "runner": "host-trusted",
+          "snapshot_sha256": "4e653763212bd3e8914d1881eee8f4ab803c48fa0cece393bf728943ca734e6b",
+          "snapshot_unchanged": true,
+          "timed_out": false
+        },
+        "duration_ms": 1565
+      }
+    },
+    {
+      "seq": 22,
+      "kind": "model_request",
+      "created_at": "2026-09-16T17:29:35.659+00:00",
+      "data": {
+        "turn": 5
+      }
+    },
+    {
+      "seq": 23,
+      "kind": "model_result",
+      "created_at": "2026-09-16T17:29:35.660+00:00",
+      "data": {
+        "duration_ms": 0,
+        "usage": {}
+      }
+    },
+    {
+      "seq": 24,
+      "kind": "tool_requested",
+      "created_at": "2026-09-16T17:29:35.660+00:00",
+      "data": {
+        "call_id": "demo_5",
+        "tool": "files__replace_text",
+        "arguments": {
+          "expected_sha256": "f97cbace0dcb5baea43f29db776e2bfc76e1c573070fb9106f0a2559addf66ec",
+          "new": "return items[start : start + page_size]",
+          "old": "return items[start : start + page_size - 1]",
+          "path": "pagination.py"
+        }
+      }
+    },
+    {
+      "seq": 25,
+      "kind": "approval_required",
+      "created_at": "2026-09-16T17:29:35.663+00:00",
+      "data": {
+        "id": "ecb8d5a491974c91b45cd2ba5e3255c8",
+        "tool": "files__replace_text",
+        "risk": "write",
+        "arguments": {
+          "expected_sha256": "f97cbace0dcb5baea43f29db776e2bfc76e1c573070fb9106f0a2559addf66ec",
+          "new": "return items[start : start + page_size]",
+          "old": "return items[start : start + page_size - 1]",
+          "path": "pagination.py"
+        },
+        "arguments_sha256": "bfb3ae0886378ea8d4c4ac525df29d7b8b366518e2a9ecd36c43e5b065254e8a",
+        "snapshot_sha256": "4e653763212bd3e8914d1881eee8f4ab803c48fa0cece393bf728943ca734e6b",
+        "preview_diff": "--- a/pagination.py\n+++ b/pagination.py\n@@ -5,4 +5,4 @@\n     if page < 1 or page_size < 1:\n         raise ValueError(\"page and page_size must be positive\")\n     start = (page - 1) * page_size\n-    return items[start : start + page_size - 1]\n+    return items[start : start + page_size]\n",
+        "expires_in_seconds": 300,
+        "warning": "Only the disposable workspace will be edited. Review the exact diff."
+      }
+    },
+    {
+      "seq": 26,
+      "kind": "approval_decision",
+      "created_at": "2026-09-16T17:29:35.683+00:00",
+      "data": {
+        "approval_id": "ecb8d5a491974c91b45cd2ba5e3255c8",
+        "approved": true
+      }
+    },
+    {
+      "seq": 27,
+      "kind": "tool_result",
+      "created_at": "2026-09-16T17:29:35.688+00:00",
+      "data": {
+        "call_id": "demo_5",
+        "tool": "files__replace_text",
+        "ok": true,
+        "result": {
+          "diff": "--- a/pagination.py\n+++ b/pagination.py\n@@ -5,4 +5,4 @@\n     if page < 1 or page_size < 1:\n         raise ValueError(\"page and page_size must be positive\")\n     start = (page - 1) * page_size\n-    return items[start : start + page_size - 1]\n+    return items[start : start + page_size]\n",
+          "path": "pagination.py",
+          "sha256": "f9d5958ae2e3ed9317555cf37f85f70dd27daf80dd4eace21acb9018164f55a2"
+        },
+        "duration_ms": 3
+      }
+    },
+    {
+      "seq": 28,
+      "kind": "model_request",
+      "created_at": "2026-09-16T17:29:35.689+00:00",
+      "data": {
+        "turn": 6
+      }
+    },
+    {
+      "seq": 29,
+      "kind": "model_result",
+      "created_at": "2026-09-16T17:29:35.689+00:00",
+      "data": {
+        "duration_ms": 0,
+        "usage": {}
+      }
+    },
+    {
+      "seq": 30,
+      "kind": "tool_requested",
+      "created_at": "2026-09-16T17:29:35.690+00:00",
+      "data": {
+        "call_id": "demo_6",
+        "tool": "terminal__run_tests",
+        "arguments": {}
+      }
+    },
+    {
+      "seq": 31,
+      "kind": "approval_required",
+      "created_at": "2026-09-16T17:29:35.692+00:00",
+      "data": {
+        "id": "fcee3d10a0ee4019a1e99dcaa39ad9b9",
+        "tool": "terminal__run_tests",
+        "risk": "execute",
+        "arguments": {},
+        "arguments_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "snapshot_sha256": "3fcc9373d9921d7d5b48ef49c1bfd5a364422712f7f39ae82a240da47846e31e",
+        "preview_diff": "",
+        "expires_in_seconds": 300,
+        "warning": "Tests execute code. Docker isolation is recommended."
+      }
+    },
+    {
+      "seq": 32,
+      "kind": "approval_decision",
+      "created_at": "2026-09-16T17:29:35.734+00:00",
+      "data": {
+        "approval_id": "fcee3d10a0ee4019a1e99dcaa39ad9b9",
+        "approved": true
+      }
+    },
+    {
+      "seq": 33,
+      "kind": "tool_result",
+      "created_at": "2026-09-16T17:29:36.769+00:00",
+      "data": {
+        "call_id": "demo_6",
+        "tool": "terminal__run_tests",
+        "ok": true,
+        "result": {
+          "command": "python -m pytest -q -p no:cacheprovider -o addopts= -o pythonpath=. tests",
+          "duration_ms": 1029,
+          "exit_code": 0,
+          "output": ".....                                                                    [100%]\n5 passed in 0.01s\n",
+          "output_limited": false,
+          "runner": "host-trusted",
+          "snapshot_sha256": "3fcc9373d9921d7d5b48ef49c1bfd5a364422712f7f39ae82a240da47846e31e",
+          "snapshot_unchanged": true,
+          "timed_out": false
+        },
+        "duration_ms": 1033
+      }
+    },
+    {
+      "seq": 34,
+      "kind": "model_request",
+      "created_at": "2026-09-16T17:29:36.771+00:00",
+      "data": {
+        "turn": 7
+      }
+    },
+    {
+      "seq": 35,
+      "kind": "model_result",
+      "created_at": "2026-09-16T17:29:36.771+00:00",
+      "data": {
+        "duration_ms": 0,
+        "usage": {}
+      }
+    },
+    {
+      "seq": 36,
+      "kind": "tool_requested",
+      "created_at": "2026-09-16T17:29:36.772+00:00",
+      "data": {
+        "call_id": "demo_7",
+        "tool": "git__diff",
+        "arguments": {}
+      }
+    },
+    {
+      "seq": 37,
+      "kind": "tool_result",
+      "created_at": "2026-09-16T17:29:36.776+00:00",
+      "data": {
+        "call_id": "demo_7",
+        "tool": "git__diff",
+        "ok": true,
+        "result": {
+          "diff": "diff --git a/pagination.py b/pagination.py\nindex 73d086f..d790f8f 100644\n--- a/pagination.py\n+++ b/pagination.py\n@@ -5,4 +5,4 @@ def paginate(items: list, page: int, page_size: int) -> list:\n     if page < 1 or page_size < 1:\n         raise ValueError(\"page and page_size must be positive\")\n     start = (page - 1) * page_size\n-    return items[start : start + page_size - 1]\n+    return items[start : start + page_size]\n"
+        },
+        "duration_ms": 4
+      }
+    },
+    {
+      "seq": 38,
+      "kind": "model_request",
+      "created_at": "2026-09-16T17:29:36.778+00:00",
+      "data": {
+        "turn": 8
+      }
+    },
+    {
+      "seq": 39,
+      "kind": "model_result",
+      "created_at": "2026-09-16T17:29:36.779+00:00",
+      "data": {
+        "duration_ms": 0,
+        "usage": {}
+      }
+    },
+    {
+      "seq": 40,
+      "kind": "run_finished",
+      "created_at": "2026-09-16T17:29:37.362+00:00",
+      "data": {
+        "status": "completed",
+        "verification": {
+          "verified": true,
+          "tests_executed": true,
+          "last_exit_code": 0,
+          "snapshot_matches_tested": true,
+          "source_unchanged": true,
+          "snapshot_sha256": "3fcc9373d9921d7d5b48ef49c1bfd5a364422712f7f39ae82a240da47846e31e"
+        },
+        "metrics": {
+          "model_turns": 8,
+          "tool_calls": 7,
+          "tool_errors": 0,
+          "llm_ms": 0,
+          "tool_ms": 2612,
+          "prompt_tokens": null,
+          "completion_tokens": null,
+          "wall_ms": 12099
+        }
+      }
+    }
+  ],
+  "disclaimer": "Demo provider is scripted. Verification means the fixed test command exited zero on the unchanged final snapshot, not proof of general correctness."
+}

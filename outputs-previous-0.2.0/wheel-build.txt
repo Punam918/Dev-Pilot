@@ -1,0 +1,10 @@
+WARNING: The directory '/home/oai/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Processing /mnt/data/devpilot
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: devpilot-mcp
+  Building wheel for devpilot-mcp (pyproject.toml): started
+  Building wheel for devpilot-mcp (pyproject.toml): finished with status 'done'
+  Created wheel for devpilot-mcp: filename=devpilot_mcp-0.2.0-py3-none-any.whl size=70450 sha256=16400c058fe0c3ebc343d1e8fdf3544f7eed9cc73d8cabe642fedbe9ec368743
+  Stored in directory: /tmp/pip-ephem-wheel-cache-b2kkzut_/wheels/89/6f/23/7e1face3fcf30feb9c5283938b94e4a1fdfe2e36971a05d414
+Successfully built devpilot-mcp

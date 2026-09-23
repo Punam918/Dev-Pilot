@@ -1,0 +1,11 @@
+{
+  "exit_code": 0,
+  "output": "......                                                                   [100%]\n6 passed in 0.01s\n",
+  "timed_out": false,
+  "output_limited": false,
+  "duration_ms": 914,
+  "runner": "host-trusted",
+  "command": "python -m pytest -q -p no:cacheprovider -o addopts= -o pythonpath=. tests",
+  "snapshot_sha256": "7a392809bfb4b05bc8387806712c26c17ffc521e4a29c18ea39187f9f00b937f",
+  "snapshot_unchanged": true
+}
