@@ -25,7 +25,7 @@ jobs:
           mkdir -p outputs
           docker run --rm -v "$PWD:/src:ro" aquasec/trivy:0.66.0 config /src \
             --format json > outputs/ci-iac-scan.json
-      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: always()
         with:
           name: security-report
